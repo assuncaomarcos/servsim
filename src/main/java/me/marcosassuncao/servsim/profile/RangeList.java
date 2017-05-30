@@ -1,10 +1,10 @@
 package me.marcosassuncao.servsim.profile;
 
+import com.google.common.collect.ComparisonChain;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import com.google.common.collect.ComparisonChain;
 
 /**
  * This class represents a list of {@link Range}'s. This is used to represent 
@@ -84,7 +84,7 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
 	}
 	
 	/**
-	 * Merges resource ranges: e.g. [3-5],[5-8],[10-20] => [3-8],[10-20].
+	 * Merges resource ranges: e.g. {@literal [3-5],[5-8],[10-20] >= [3-8],[10-20]}.
 	 */
 	public void mergeRanges() {
 		if (!merged && ranges.size() > 1) {

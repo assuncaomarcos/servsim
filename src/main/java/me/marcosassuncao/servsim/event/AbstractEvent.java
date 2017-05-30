@@ -7,7 +7,7 @@ import static com.google.common.base.MoreObjects.toStringHelper;
  * 
  * @author Marcos Dias de Assuncao
  *
- * @param <T>
+ * @param <T> the event type
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractEvent<T extends Enum, S> implements Event<T, S> {
@@ -19,7 +19,7 @@ public abstract class AbstractEvent<T extends Enum, S> implements Event<T, S> {
      * Creates an event of a given type.
      * @param type the event type
      * @param subject event subject
-     * @time time of occurrence of the event
+     * @param time time of occurrence of the event
      */
     protected AbstractEvent(T type, S subject, long time) {
         this.type = type;

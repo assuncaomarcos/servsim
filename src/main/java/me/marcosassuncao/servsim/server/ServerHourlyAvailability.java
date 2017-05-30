@@ -123,6 +123,9 @@ public class ServerHourlyAvailability implements ServerAvailability {
 	
 	/**
 	 * Returns the availability at the week day and hour
+	 * @param weekDay the day of the week, such that
+	 * 		{@link Calendar#SUNDAY} &gt;= weekDay &lt;= {@link Calendar#SATURDAY}
+	 * @param hour hour of the day, from 0 to 23
 	 * @return a value between (0 and 1) representing the availability
 	 */
 	public float getAvailability(int weekDay, int hour) {

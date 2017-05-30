@@ -1668,6 +1668,8 @@ public class LinkedTreeMap<K,V>
      *             key-order (as determined by the TreeMap's Comparator,
      *             or by the keys' natural ordering if the TreeMap has no
      *             Comparator).
+     * @param s the object to be written
+     * @throws java.io.IOException if the object cannot be written
      */
     private void writeObject(java.io.ObjectOutputStream s)
         throws java.io.IOException {
@@ -1690,6 +1692,9 @@ public class LinkedTreeMap<K,V>
     /**
      * Reconstitute the <tt>TreeMap</tt> instance from a stream (i.e.,
      * deserialize it).
+     * @param s object to be read
+     * @throws java.io.IOException if the object class cannot be read
+     * @throws ClassNotFoundException if the object's class cannot be found
      */
     private void readObject(final java.io.ObjectInputStream s)
         throws java.io.IOException, ClassNotFoundException {

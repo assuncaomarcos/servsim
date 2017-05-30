@@ -38,7 +38,7 @@ public class Reservation extends DefaultWorkUnit {
 	 * <code>startTime</code> and with the given duration and priority
 	 * @param startTime the requested start time for the reservation
 	 * @param duration the duration of the reservation
-	 * @param duration the duration of the reservation
+	 * @param numResources the number of resources to be reserved
 	 * @param priority the reservation priority
 	 */
 	public Reservation(long startTime, 

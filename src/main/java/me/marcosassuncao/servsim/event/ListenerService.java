@@ -5,8 +5,8 @@ package me.marcosassuncao.servsim.event;
  * 
  * @author Marcos Dias de Assuncao
  *
- * @param <E>
- * @param <L>
+ * @param <E> an event type
+ * @param <L> an event listener
  */
 @SuppressWarnings("rawtypes")
 public interface ListenerService <E extends Event, L extends EventListener<E>> {

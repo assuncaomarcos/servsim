@@ -1,14 +1,10 @@
 package me.marcosassuncao.servsim.profile;
 
-import static com.google.common.base.Preconditions.checkElementIndex;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
 import me.marcosassuncao.servsim.job.WorkUnit;
+
+import java.util.*;
+
+import static com.google.common.base.Preconditions.checkElementIndex;
 
 /**
  * This class represents the profile containing the ranges of PEs
@@ -372,7 +368,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 	/**
 	 * Returns the scheduling options for a job in a giving partition of this 
 	 * availability profile within the specified period of time. 
-	 * <b>NOTE:</b> In contrast to {@link PartProfile#getTimeSlots(int, long, long)},
+	 * <b>NOTE:</b> In contrast to {@link #getPartTimeSlots(int, long, long)},
 	 * the time slots returned by this method <b>OVERLAP</b> because they are 
 	 * the scheduling options for jobs.
 	 * 

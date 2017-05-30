@@ -9,7 +9,6 @@ import com.google.common.base.MoreObjects;
  * 
  * @see Simulation
  * @see SimEntity
- * @see ServiceEventType
 
  * @author Marcos Dias de Assuncao
  */

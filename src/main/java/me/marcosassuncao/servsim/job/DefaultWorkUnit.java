@@ -1,9 +1,9 @@
 package me.marcosassuncao.servsim.job;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ComparisonChain;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * This class represents a simple work unit to be processed by a server entity.
@@ -37,9 +37,8 @@ public class DefaultWorkUnit implements WorkUnit, Comparable<DefaultWorkUnit> {
 	
 	/**
 	 * Creates a new work unit
-	 * @param id the work unit id
 	 * @param duration the duration of the work unit
-	 * @param the work unit's priority
+	 * @param priority the work unit's priority
 	 */
 	public DefaultWorkUnit(long duration, int priority) {
 		this(duration);
@@ -68,7 +67,7 @@ public class DefaultWorkUnit implements WorkUnit, Comparable<DefaultWorkUnit> {
 	/**
 	 * Sets the work unit's start time.
 	 * @param time the work unit's start time.
-	 * @throws IllegalArgumentException if time < 0
+	 * @throws IllegalArgumentException if time &lt; 0
 	 */
 	public void setStartTime(long time) {
 		checkArgument(time > 0, "Invalid start time: %s", time);
@@ -78,7 +77,7 @@ public class DefaultWorkUnit implements WorkUnit, Comparable<DefaultWorkUnit> {
 	/**
 	 * Sets the finish time
 	 * @param time the time to be used
-	 * @throws IllegalArgumentException if time < 0
+	 * @throws IllegalArgumentException if time &gt; 0
 	 */
 	public void setFinishTime(long time) {
 		checkArgument(time > 0, "Invalid finish time: %s", time);
@@ -88,7 +87,7 @@ public class DefaultWorkUnit implements WorkUnit, Comparable<DefaultWorkUnit> {
 	/**
 	 * Sets the ID of the owner entity of the work unit
 	 * @param ownerId the ID of the owner of the work unit
-	 * @throws IllegalArgumentException if ownerId < 0
+	 * @throws IllegalArgumentException if ownerId &lt; 0
 	 */
 	public void setOwnerEntityId(int ownerId) {
 		checkArgument(ownerId > 0, "Owner id cannot be smaller than 0");
@@ -127,7 +126,7 @@ public class DefaultWorkUnit implements WorkUnit, Comparable<DefaultWorkUnit> {
 	/**
 	 * Sets the submission time
 	 * @param time the submission time
-	 * @throws IllegalArgumentException if time < 0
+	 * @throws IllegalArgumentException if time &lt; 0
 	 */
 	public void setSubmitTime(long time) {
 		checkArgument(time >= 0, "Invalid submission time: %s", time);

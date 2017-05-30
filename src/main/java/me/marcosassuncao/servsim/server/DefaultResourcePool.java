@@ -129,7 +129,8 @@ public class DefaultResourcePool extends ResourcePool {
 	 * Returns the number of simulation units over which resources
 	 * have been free. This is useful for computing resource utilisation.
 	 * @param startTime start time to consider when computing the units
-	 * @return endTime end time to consider when computing the units
+	 * @param endTime end time to consider when computing the units
+	 * @return the number of free resource units
 	 */
 	public long getNumberFreeUnits(long startTime, long endTime) {
 		Collection<ProfileEntry> avail = profile.getAvailability(startTime, endTime);
@@ -161,7 +162,8 @@ public class DefaultResourcePool extends ResourcePool {
 	 * Returns the number of simulation units over which resources
 	 * have been used. This is useful for computing resource utilisation.
 	 * @param startTime start time to consider when computing the units
-	 * @return endTime end time to consider when computing the units
+	 * @param endTime end time to consider when computing the units
+	 * @return the number of used resource units
 	 */
 	public long getNumberUsedUnits(long startTime, long endTime) {
 		Collection<ProfileEntry> avail = profile.getAvailability(startTime, endTime);

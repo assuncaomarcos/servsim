@@ -5,7 +5,7 @@ package me.marcosassuncao.servsim.event;
  * 
  * @author Marcos Dias de Assuncao
  *
- * @param <T>
+ * @param <T> the event type
  */
 @SuppressWarnings("rawtypes")
 public interface Event<T extends Enum, S> {

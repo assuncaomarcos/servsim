@@ -22,7 +22,6 @@ public class ResourcePartition {
 	 * @param queueId the partition ID
 	 * @param numPE the number of PEs initially assigned to the partition 
 	 * @param predicate the queue predicate
-	 * @see gridsim.turbo.QueuePartitionPredicate
 	 */
    	public ResourcePartition(int queueId, int numPE, 
    			PartitionPredicate predicate) {

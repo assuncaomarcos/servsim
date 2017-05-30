@@ -30,7 +30,7 @@ public class EventSentByEntityPredicate implements Predicate<SimEvent> {
 	}
 
 	/**
-	 * @see {@link EventFilter#match(SimEvent)}
+	 * @see Predicate#test(Object)
 	 */
 	public boolean test(SimEvent ev) {
 		return ev.source() == entityId;

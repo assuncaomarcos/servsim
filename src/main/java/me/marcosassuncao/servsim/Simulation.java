@@ -92,7 +92,7 @@ public abstract class Simulation implements Runnable {
 	 * @param span the duration of the simulation in time units
 	 * @param abruptInterrupt <code>true</code> if the simulation
 	 * should stop abruptly when the time span is lapsed
-	 * @throws IllegalArgumentException if the span is <= 0
+	 * @throws IllegalArgumentException if the span is &lt;= 0
 	 * @throws IllegalStateException if the span has already been set
 	 */
 	public void setTimeSpan(long span, boolean abruptInterrupt) 
@@ -158,7 +158,7 @@ public abstract class Simulation implements Runnable {
 	/**
 	 * Returns the simulation status
 	 * @return the status
-	 * @see SimulationStatus
+	 * @see Status
 	 */
 	public Status getStatus() {
 		return this.status;
@@ -189,9 +189,9 @@ public abstract class Simulation implements Runnable {
 		
 	/**
 	 * Sets the clock unit to be used by the simulator.<br>
-	 * <b>NOTE:</b> the default unit is {@link #SECOND}.
+	 * <b>NOTE:</b> the default unit is {@link TimeUnit#SECONDS}.
 	 * @param unit the clock unit.
-	 * @see {@link ClockUnit}
+	 * @see TimeUnit
 	 * @throws IllegalArgumentException if the unit is invalid.
 	 */
 	public void setClockUnit(TimeUnit unit) {
@@ -238,7 +238,7 @@ public abstract class Simulation implements Runnable {
 	
 	/**
 	 * Returns an entity with a given name
-	 * @param id the entity name
+	 * @param name the entity name
 	 * @return the entity or <code>null</code> if not found.
 	 */
 	public SimEntity getEntity(String name) {
@@ -302,9 +302,9 @@ public abstract class Simulation implements Runnable {
 	 * Cancels the next future event that matches a given 
 	 * filtering criterion
 	 * @param filter the filter to be used
-	 * <br/>
+	 * <br>
 	 * <b>NOTE:</b> if you want to cancel all events that match 
-	 * the provided criterion, use {@link #cancelFutureEvents(EventFilter)}
+	 * the provided criterion, use {@link #cancelFutureEvents(Predicate)}
 	 */
 	public void cancelNextFutureEvent(Predicate<SimEvent> filter) {
 		Iterator<SimEvent> it = future.iterator();

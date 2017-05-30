@@ -37,9 +37,8 @@ public class TimeSlot {
 
 	/**
 	 * Sets the start time of the time slot
-	 * @param startTime the start time
+	 * @param startTime the start time, which must be &gt;= 0
 	 * @return <code>true</code> if set successfully; <code>false</code> otherwise.
-	 * @pre startTime >= 0
 	 */
 	public boolean setStartTime(long startTime) {
 		if(startTime < 0) {
@@ -52,9 +51,8 @@ public class TimeSlot {
 	
 	/**
 	 * Sets the finish time of the time slot
-	 * @param finishTime the finish time
+	 * @param finishTime the finish time, which must be &gt;= 0
 	 * @return <code>true</code> if set successfully; <code>false</code> otherwise.
-	 * @pre finishTime >= 0
 	 */
 	public boolean setFinishTime(long finishTime) {
 		if(finishTime < 0) {
@@ -67,9 +65,8 @@ public class TimeSlot {
 	
 	/**
 	 * Sets the ranges of the time slot
-	 * @param ranges the ranges of this time slot
+	 * @param ranges the ranges of this time slot, which should not be <code>null</code>
 	 * @return <code>true</code> if set successfully; <code>false</code> otherwise.
-	 * @pre ranges != <code>null</code>
 	 */
 	public boolean setResourceRanges(RangeList ranges) {
 		if(ranges == null) {

@@ -8,7 +8,7 @@ import me.marcosassuncao.servsim.Simulation;
 /**
  * Implements a filter that filters entities whose name starts with a given string.
  * 
- * @see Simulation#getEntities(EntityFilter)
+ * @see Simulation#getEntities(Predicate)
  * 
  * @author Marcos Dias de Assuncao
  */
@@ -25,7 +25,7 @@ public class EntityNameStartPredicate implements Predicate<SimEntity> {
 	}
 	
 	/**
-	 * @see {@link EntityFilter#match(SimEntity)}
+	 * @see Predicate#test(Object)
 	 */
 	public boolean test(SimEntity entity) {
 		return entity.getName().startsWith(nameStart);

@@ -1,24 +1,17 @@
 package me.marcosassuncao.servsim.scheduler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.UUID;
-
 import me.marcosassuncao.servsim.job.Job;
 import me.marcosassuncao.servsim.job.WorkUnit;
 import me.marcosassuncao.servsim.profile.RangeList;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.*;
 
 /**
  * This class implements a simple scheduler where the waiting queue 
  * can be ordered in different ways. If no sorting comparator is provided,
  * the scheduler will present a FIFO behaviour.
- * 
- * @see SortAlgorithmMap
  * 
  * @author Marcos Dias de Assuncao
  */
@@ -38,18 +31,19 @@ public class DefaultScheduler extends AbstractScheduler {
 	public DefaultScheduler() {
 		super(DefaultScheduler.class.getSimpleName() + "-" + UUID.randomUUID());
 	}
-	
+
 	/**
-	 * Creates simple scheduler.
-	 * @throws IllegalArgumentException 
+	 * Creates a new scheduler instance.
+	 * @param name a name for the simulation entity
+	 * @throws IllegalArgumentException the name is <code>null</code>
 	 */
 	public DefaultScheduler(String name) throws IllegalArgumentException {
 		super(name);
 	}
-	
+
 	/**
 	 * Sets the comparator used to sort the waiting queue
-	 * @param the comparator used to sort the waiting queue
+	 * @param comp the comparator used to sort the waiting queue
 	 */
 	public void setSortingComparator(Comparator<Job> comp) {
 		this.comparator = comp;

@@ -1,22 +1,22 @@
 package me.marcosassuncao.servsim.util;
 
-import static me.marcosassuncao.servsim.SimEvent.Type.TASK_ARRIVE;
-
-import java.util.LinkedList;
-
 import me.marcosassuncao.servsim.job.Job;
 import me.marcosassuncao.servsim.job.Reservation;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.LinkedList;
+
+import static me.marcosassuncao.servsim.SimEvent.Type.TASK_ARRIVE;
+
 /**
  * Reads a job trace in the Standard Workload Format (SWF) and 
- * creates the corresponding workload.
+ * creates the corresponding workload. For details on the SWF format,
+ * please check: <a href="http://www.cs.huji.ac.il/labs/parallel/workload/swf.html">
+ *     http://www.cs.huji.ac.il/labs/parallel/workload/swf.html</a>
  * 
  * @author Marcos Dias de Assuncao
  *
- * @see {@linkplain http://www.cs.huji.ac.il/labs/parallel/workload/swf.html}
  */
 
 public class SwfWorkloadReader extends EventFileReader {

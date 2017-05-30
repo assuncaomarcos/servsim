@@ -1,10 +1,5 @@
 package me.marcosassuncao.servsim.scheduler;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.UUID;
-
 import me.marcosassuncao.servsim.SimEvent;
 import me.marcosassuncao.servsim.job.Job;
 import me.marcosassuncao.servsim.job.Reservation;
@@ -15,25 +10,22 @@ import me.marcosassuncao.servsim.profile.SingleProfile;
 import me.marcosassuncao.servsim.server.ResourcePool;
 import me.marcosassuncao.servsim.server.Server;
 import me.marcosassuncao.servsim.server.ServerAttributes;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static me.marcosassuncao.servsim.SimEvent.Type.RESERVATION_COMPLETE;
-import static me.marcosassuncao.servsim.SimEvent.Type.RESERVATION_RESPONSE;
-import static me.marcosassuncao.servsim.SimEvent.Type.RESERVATION_START;
-import static me.marcosassuncao.servsim.job.WorkUnit.Status.CANCELLED;
-import static me.marcosassuncao.servsim.job.WorkUnit.Status.COMPLETE;
-import static me.marcosassuncao.servsim.job.WorkUnit.Status.FAILED;
-import static me.marcosassuncao.servsim.job.WorkUnit.Status.IN_EXECUTION;
-import static me.marcosassuncao.servsim.job.WorkUnit.Status.WAITING;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.UUID;
+
+import static me.marcosassuncao.servsim.SimEvent.Type.*;
+import static me.marcosassuncao.servsim.job.WorkUnit.Status.*;
 
 /**
  * {@link ResConsBackfillScheduler} class is an allocation policy for 
- * {@link Server}> that implements conservative backfilling and 
+ * {@link Server} that implements conservative backfilling and
  * supports advance reservations. The policy is based on the conservative 
  * backfilling algorithm described in the following papers:
- * <p>
  * <ul>
  * 		<li> Dror G. Feitelson and Ahuva Mu'alem Weil, Utilization and 
  * 		Predictability in Scheduling the IBM SP2 with Backfilling, in 
@@ -77,15 +69,16 @@ public class ResConsBackfillScheduler extends ConsBackfillScheduler implements R
 	public ResConsBackfillScheduler() {
 		super(ResConsBackfillScheduler.class.getSimpleName() + "-" + UUID.randomUUID());
 	}
-	
+
 	/**
-	 * Creates an AR scheduler.
-	 * @throws IllegalArgumentException 
+	 * Creates a new scheduler instance.
+	 * @param name a name for the simulation entity
+	 * @throws IllegalArgumentException the name is <code>null</code>
 	 */
 	public ResConsBackfillScheduler(String name) throws IllegalArgumentException {
 		super(name);
 	}
-	
+
 	@Override
 	public void initialize(ServerAttributes attr) {
 		super.initialize(attr);
@@ -276,10 +269,10 @@ public class ResConsBackfillScheduler extends ConsBackfillScheduler implements R
 	}
 	
 	/**
-	 * Allocates a resource to a given job and schedules a 
-	 * {@link SimEvent.Type#TASK_COMPLETE} event to be handled at job
+	 * Allocates a resource to a given reservation and schedules a
+	 * {@link SimEvent.Type#RESERVATION_COMPLETE} event to be handled at reservation
 	 * completion
-	 * @param job the job to which the resource will be allocated
+	 * @param r the reservation to which the resources will be allocated
 	 * @param res the resource range list to be allocated.
 	 */
 	protected void allocateResourcesToReservation(Reservation r, RangeList res) {
@@ -287,11 +280,11 @@ public class ResConsBackfillScheduler extends ConsBackfillScheduler implements R
 	}
 	
 	/**
-	 * Allocates a resource to a given job and schedules a 
-	 * {@link SimEvent.Type#TASK_COMPLETE} event to be handled at job
+	 * Allocates a resource to a given reservation and schedules a
+	 * {@link SimEvent.Type#RESERVATION_COMPLETE} event to be handled at reservation
 	 * completion
 	 * @param time the start time of the allocation
-	 * @param job the job to which the resource will be allocated
+	 * @param r the reservation to which the resources will be allocated
 	 * @param res the resource range list to be allocated.
 	 */
 	protected void allocateResourcesToReservation(long time, Reservation r, RangeList res) {

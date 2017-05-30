@@ -31,7 +31,7 @@ public interface WorkUnit {
 	/**
 	 * Sets the submission time
 	 * @param time the submission time
-	 * @throws IllegalArgumentException if time < 0
+	 * @throws IllegalArgumentException if time &lt; 0
 	 */
 	public void setSubmitTime(long time);
 	

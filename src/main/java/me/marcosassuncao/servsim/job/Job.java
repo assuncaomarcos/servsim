@@ -1,14 +1,13 @@
 package me.marcosassuncao.servsim.job;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
+import com.google.common.base.MoreObjects;
+import me.marcosassuncao.servsim.profile.RangeList;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import me.marcosassuncao.servsim.profile.RangeList;
-
-import com.google.common.base.MoreObjects;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * This class represents a job or unit of work. If preempted, the job 
@@ -76,7 +75,7 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
 	/**
 	 * Sets the reservation id for this job
 	 * @param resId the reservation id for this job
-	 * @throws IllegalArgumentException if <code>resId</code> <= 0
+	 * @throws IllegalArgumentException if <code>resId</code> &lt;= 0
 	 */
 	public void setReservationId(int resId) {
 		checkArgument(resId >= 0, "Reservation ID must be >= 0");
@@ -169,11 +168,11 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
 	
 	/**
 	 * Used to configure the resource to whom this job has been assigned.
-	 * @param resource the resource
+	 * @param ranges the range of processor/resouce Ids
 	 * @return <code>true</code> if the id has been set; 
 	 * <code>false</code> otherwise.
 	 * @throws IllegalStateException if this method is called before setting
-	 * the status of the job to {@link WorkUnitStatus#IN_EXECUTION}.
+	 * the status of the job to {@link WorkUnit.Status#IN_EXECUTION}.
 	 */
 	public boolean setResourceRanges(RangeList ranges) {
 		checkState(activities.size() > 0 && !activities.getLast().isFinished(),
@@ -353,7 +352,7 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
     	
     	/**
     	 * Sets the job deadline
-    	 * @param priority the job deadline
+    	 * @param deadline the job deadline
     	 * @return the builder reference
     	 */
     	public Builder setDeadline(int deadline) {

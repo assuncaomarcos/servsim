@@ -206,7 +206,7 @@ public class Server extends SimEntity {
 		
 		/**
 		 * Sets the resource capacity
-		 * @param avail the resource capacity
+		 * @param capacity the resource capacity
 		 * @return the builder
 		 */
 		public Builder setCapacity(int capacity) {

@@ -13,8 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * {@link ReservationServerUser} is an entity that handles making and
- * confirming reservation requests, and notifies a 
- * {@link ReservationKeeperListener} of important events.
+ * confirming reservation requests.
  * 
  * @author Marcos Dias de Assuncao
  */
@@ -55,7 +54,6 @@ public abstract class ReservationServerUser extends ServerUser {
 	/**
 	 * Makes a new reservation
 	 * @param srvId the id of the server whose resources are to be reserved
-	 * @param delay time at which the reservation request show be made
 	 * @param start the expected start time of the reservation
 	 * @param duration the reservation duration
 	 * @param numRes number of required resources

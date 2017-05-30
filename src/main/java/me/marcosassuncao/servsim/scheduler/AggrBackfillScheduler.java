@@ -1,24 +1,23 @@
 package me.marcosassuncao.servsim.scheduler;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.UUID;
-
 import me.marcosassuncao.servsim.SimEvent;
 import me.marcosassuncao.servsim.job.Job;
 import me.marcosassuncao.servsim.job.WorkUnit;
 import me.marcosassuncao.servsim.profile.ProfileEntry;
 import me.marcosassuncao.servsim.profile.RangeList;
 import me.marcosassuncao.servsim.server.ResourcePool;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.UUID;
 
 import static me.marcosassuncao.servsim.SimEvent.Type.TASK_START;
 
 /**
  * {@link AggrBackfillScheduler} class is an allocation policy for 
- * {@link Server} that implements aggressive backfilling. 
+ * {@link me.marcosassuncao.servsim.server.Server} that implements aggressive backfilling.
  * The policy is based on the aggressive backfilling 
  * algorithm described in the following paper: <br>
  * <ul>
@@ -46,15 +45,16 @@ public class AggrBackfillScheduler extends BackfillingScheduler {
 	public AggrBackfillScheduler() {
 		super(AggrBackfillScheduler.class.getSimpleName() + "-" + UUID.randomUUID());
 	}
-	
+
 	/**
-	 * Creates simple scheduler.
-	 * @throws IllegalArgumentException 
+	 * Creates a new scheduler instance.
+	 * @param name a name for the simulation entity
+	 * @throws IllegalArgumentException the name is <code>null</code>
 	 */
 	public AggrBackfillScheduler(String name) throws IllegalArgumentException {
 		super(name);
 	}
-	
+
 	@Override
 	public void doJobCancel(int id) {  
 		Job cjob = null;

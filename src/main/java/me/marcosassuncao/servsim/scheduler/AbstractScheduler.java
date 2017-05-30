@@ -51,7 +51,6 @@ public abstract class AbstractScheduler extends SimEntity implements Scheduler,
 	/**
 	 * Initialise the scheduling policy.
 	 * @param attr the server's attributes
-	 * @param serverId the server's id
 	 */
 	public void initialize(ServerAttributes attr) {
 		this.attr = attr;
@@ -100,9 +99,7 @@ public abstract class AbstractScheduler extends SimEntity implements Scheduler,
 	}
 	
 	/**
-	 * Allocates a resource to a given job and schedules a 
-	 * {@link ServiceEventType.TASK_COMPLETE} event to be handled at job
-	 * completion
+	 * Allocates a resource to a given job
 	 * @param time the start time of the allocation
 	 * @param job the job to which the resource will be allocated
 	 * @param res the resource range list to be allocated.
@@ -120,9 +117,7 @@ public abstract class AbstractScheduler extends SimEntity implements Scheduler,
 	}
 
 	/**
-	 * Allocates a resource to a given job and schedules a 
-	 * {@link ServiceEventType.TASK_COMPLETE} event to be handled at job
-	 * completion
+	 * Allocates a resource to a given job
 	 * @param job the job to which the resource will be allocated
 	 * @param res the resource range list to be allocated.
 	 */
@@ -175,7 +170,7 @@ public abstract class AbstractScheduler extends SimEntity implements Scheduler,
 	
 	/**
 	 * Helper method to fire a job status change
-	 * @param j the job whose status changed
+	 * @param u the job whose status changed
 	 * @param prevSt the previous status
 	 * @param newSt the new status
 	 */

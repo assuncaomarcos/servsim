@@ -1,20 +1,13 @@
 package me.marcosassuncao.servsim.scheduler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.UUID;
-
 import me.marcosassuncao.servsim.job.Job;
 import me.marcosassuncao.servsim.job.WorkUnit;
 import me.marcosassuncao.servsim.profile.RangeList;
 import me.marcosassuncao.servsim.server.ResourcePool;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.*;
 
 /**
  * Abstract class with helper methods common across
@@ -51,7 +44,7 @@ public abstract class BackfillingScheduler extends AbstractScheduler {
 	 * can start execution and how the remaining jobs are place in
 	 * the queue depends on the sorting criteria specified by the
 	 * given comparator
-	 * @param the comparator used to sort the waiting queue
+	 * @param comp the comparator used to sort the waiting queue
 	 */
 	public void setSortingComparator(Comparator<Job> comp) {
 		this.comparator = comp;

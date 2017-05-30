@@ -9,7 +9,7 @@ import me.marcosassuncao.servsim.Simulation;
  * Implements a filter that filters entities whose class 
  * matches what is provided.
  * 
- * @see Simulation#getEntities(EntityFilter)
+ * @see Simulation#getEntities(Predicate)
  * 
  * @author Marcos Dias de Assuncao
  */
@@ -26,7 +26,7 @@ public class EntityClassPredicate implements Predicate<SimEntity> {
 	}
 	
 	/**
-	 * @see {@link EntityFilter#match(SimEntity)}
+	 * @see Predicate#test(Object)
 	 */
 	public boolean test(SimEntity entity) {
 		return theClass.isInstance(entity);

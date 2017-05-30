@@ -1,28 +1,26 @@
 package me.marcosassuncao.servsim.scheduler;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.UUID;
-
 import me.marcosassuncao.servsim.SimEvent;
 import me.marcosassuncao.servsim.job.Job;
 import me.marcosassuncao.servsim.job.WorkUnit;
 import me.marcosassuncao.servsim.profile.ProfileEntry;
 import me.marcosassuncao.servsim.profile.RangeList;
 import me.marcosassuncao.servsim.server.ResourcePool;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.UUID;
 
 import static me.marcosassuncao.servsim.SimEvent.Type.TASK_COMPLETE;
 import static me.marcosassuncao.servsim.SimEvent.Type.TASK_START;
 
 /**
  * {@link ConsBackfillScheduler} class is an allocation policy for 
- * {@link Server} that implements conservative backfilling. 
+ * {@link me.marcosassuncao.servsim.server.Server} that implements conservative backfilling.
  * The policy is based on the conservative backfilling algorithm 
  * described in the following papers:
- * <p>
  * <ul>
  * 		<li> Dror G. Feitelson and Ahuva Mu'alem Weil, Utilization and 
  * 		Predictability in Scheduling the IBM SP2 with Backfilling, in 
@@ -50,10 +48,11 @@ public class ConsBackfillScheduler extends BackfillingScheduler {
 	public ConsBackfillScheduler() {
 		super(ConsBackfillScheduler.class.getSimpleName() + "-" + UUID.randomUUID());
 	}
-	
+
 	/**
-	 * Creates simple scheduler.
-	 * @throws IllegalArgumentException 
+	 * Creates a new scheduler instance.
+	 * @param name a name for the simulation entity
+	 * @throws IllegalArgumentException the name is <code>null</code>
 	 */
 	public ConsBackfillScheduler(String name) throws IllegalArgumentException {
 		super(name);
