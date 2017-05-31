@@ -21,7 +21,7 @@
 
     <scm>
         <connection>scm:git:git://github.com/assuncaomarcos/servsim.git</connection>
-        <developerConnection>scm:git:ssh://github.com:assuncaomarcos/servsim.git</developerConnection>
+        <developerConnection>scm:git:ssh://github.com/assuncaomarcos/servsim.git</developerConnection>
         <url>http://github.com/assuncaomarcos/servsim/tree/master</url>
       <tag>servsim-core-1.0</tag>
   </scm>
