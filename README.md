@@ -136,3 +136,93 @@ public class PingExample {
 }
 ```
 
+### A Simple Server and a User Example
+
+This example implements a user that creates and sends a number of jobs to be 
+treated by a `Server` entity. Hence, we first describe the `User` entity that
+ creates the jobs when `onStart()` is invoked at the beginning of the 
+ simulation.
+
+```
+class User extends ServerUser {
+    private int numJobs;
+    private long interval;
+    private int serverId;
+    
+    public User(String name, int serverId,
+                long interval, int numJobs) throws
+            IllegalArgumentException {
+        super(name);
+        this.numJobs = numJobs;
+        this.interval = interval;
+        this.serverId = serverId;
+    }
+    
+    // The jobs are created and schedules as simulation events 
+    // when the entity starts
+    @Override
+    public void onStart() {
+        for (int i = 1; i <= numJobs; i++) {
+            int duration = 5; // job duration is 5 time units (seconds)
+            Job j = new Job(duration);
+            super.submitJob(serverId, i * this.interval, j);
+        }
+    }
+    
+    @Override
+    public void onJobReceived(int sourceId, Job job) {
+        System.out.println("Received job " + job.getId() + " from " +
+                sourceId + " at " + super.currentTime());
+    }
+}
+```
+Then we implement the main method that extends `Simulation`, wires and 
+registers the entities and starts the simulation. In this case the server has
+ a capacity of 10 resources. As no scheduling policy is specified in this 
+ case, the server assumes that jobs will require only one resource each and 
+ will be treated in a First-Come First-Served (FCFS) manner.
+
+```
+public class ServerExample {
+
+    public static final void main(String[] args) {
+        Simulation sim = new Simulation() {
+
+            @Override
+            public void onConfigure() {
+                long interval = 5;       // job interarrival time in seconds
+                int numberJobs = 3;      // total number of jobs
+                int serverCapacity = 10; // The server has 10 nodes/resources
+
+                Server server = Server.builder()
+                        .setName("Server" + UUID.randomUUID())
+                        .setCapacity(serverCapacity)
+                        .build();
+
+                User user = new User("User-1", server.getId(),
+                        interval, numberJobs);
+
+                registerEntity(server);
+                registerEntity(user);
+            }
+        };
+
+        sim.run();
+    }
+}
+
+```
+The server job scheduling policy can be easily replaced by a conservative 
+backfilling policy. In the above example, for instance, this could be 
+performed by changing the server instantiation in the following manner:
+
+```
+    server = Server.builder()
+        .setName("Server-" + UUID.randomUUID())
+        .setScheduler(new ConsBackfillScheduler())
+        .setCapacity(serverCapacity).build();
+```
+
+Several scheduling policies are provided (e.g. Aggressive backfilling, 
+preemption based scheduler, reservation with backfilling). Please check the 
+documentation on the `me.marcosassuncao.servsim.scheduler` package for details.
