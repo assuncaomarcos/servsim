@@ -36,7 +36,13 @@ public abstract class AbstractScheduler extends SimEntity implements Scheduler,
 		ListenerService<WorkUnitEvent, EventListener<WorkUnitEvent>> {
 	
 	private static final Logger log = LogManager.getLogger(AbstractScheduler.class.getName());
+	/**
+	 * The server attributes, such as availability, cluster resources, etc
+	 */
 	protected ServerAttributes attr;
+	/**
+	 * The listeners registered to events of this scheduler.
+	 */
 	protected LinkedList<EventListener<WorkUnitEvent>> listeners;
 		
 	/**

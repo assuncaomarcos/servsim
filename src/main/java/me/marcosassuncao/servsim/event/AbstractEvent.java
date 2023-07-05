@@ -11,9 +11,9 @@ import static com.google.common.base.MoreObjects.toStringHelper;
  */
 @SuppressWarnings("rawtypes")
 public abstract class AbstractEvent<T extends Enum, S> implements Event<T, S> {
-	private long time;
-    private T type;
-    private S subject;
+	private final long time;
+    private final T type;
+    private final S subject;
     
     /**
      * Creates an event of a given type.

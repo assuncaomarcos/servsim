@@ -18,7 +18,13 @@ import java.util.*;
 
 public class DefaultScheduler extends AbstractScheduler {
 	private static final Logger log = LogManager.getLogger(DefaultScheduler.class.getName());
+	/**
+	 * Queue of jobs waiting to be processed.
+	 */
 	protected ArrayList<Job> waitingQueue = new ArrayList<>();
+	/**
+	 * Queue of running jobs.
+	 */
 	protected ArrayList<Job> runningQueue = new ArrayList<>();
 	private Comparator<Job> comparator;
 	

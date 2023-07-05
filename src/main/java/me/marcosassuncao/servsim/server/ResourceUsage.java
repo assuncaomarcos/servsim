@@ -14,7 +14,7 @@ public class ResourceUsage {
 	/**
 	 * Creates a new usage object
 	 * @param time the time associated with the object
-	 * @param numResources the number of resources in use at <tt>time</tt>
+	 * @param numResources the number of resources in use at <code>time</code>
 	 */
 	public ResourceUsage(long time, int numResources) {
 		this.time = time;

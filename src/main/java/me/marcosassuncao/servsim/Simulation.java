@@ -53,7 +53,10 @@ public abstract class Simulation implements Runnable {
 	private long timeSpan = Long.MAX_VALUE;
 	private boolean abruptInterrupt = false;
 	private long endWarmUp = 0L;
-	
+
+	/**
+	 * Default constructor.
+	 */
 	public Simulation() {  }
 
 	/**
@@ -478,8 +481,16 @@ public abstract class Simulation implements Runnable {
 			ent.onShutdown();
 		}
 	}
-	
+
+	/**
+	 * Interface that a state transition must implement.
+	 * @param <T>
+	 */
 	interface StateTransition<T> {
+		/**
+		 * Returns the next state.
+		 * @return the next state given a current state.
+		 */
 		List<T> nextState();
 	}
 	

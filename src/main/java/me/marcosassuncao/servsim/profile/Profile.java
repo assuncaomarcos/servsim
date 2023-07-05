@@ -16,12 +16,15 @@ import com.google.common.base.MoreObjects;
  */
 
 public abstract class Profile<V extends ProfileEntry> {
+	/**
+	 * Data structure used to track resource usage.
+	 */
 	protected LinkedTreeMap<Long,V> avail = new LinkedTreeMap<>();
 	
 	/**
 	 * Protected constructor.
 	 */
-	protected Profile() {};
+	protected Profile() {}
 
 	/**
 	 * Protected constructor used by the cloning operations.
@@ -29,7 +32,7 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * @see ProfileEntry
 	 */
 	protected Profile(TreeMap<Long,V> avail) {
-		avail.putAll(avail);
+		this.avail.putAll(avail);
 	}
 	
 	/**
@@ -69,7 +72,7 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * @param duration the duration of the job/reservation
 	 * @param acceptLess defines whether less resources than originally requested is allowed
 	 * @return a {@link ProfileEntry} with the start time provided and the 
-	 * ranges available at that time OR <tt>null</tt> if not enough resources are found.
+	 * ranges available at that time OR <code>null</code> if not enough resources are found.
 	 */
 	public ProfileEntry checkAvailability(int reqRes, long startTime, long duration, boolean acceptLess) {
 
@@ -103,7 +106,7 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * @param startTime the start time of the job/reservation
 	 * @param duration the duration of the job/reservation
 	 * @return a {@link ProfileEntry} with the start time provided and the 
-	 * ranges available at that time OR <tt>null</tt> if not enough resources are found.
+	 * ranges available at that time OR <code>null</code> if not enough resources are found.
 	 */
 	public ProfileEntry checkAvailability(int reqRes, long startTime, long duration) {
 		return checkAvailability(reqRes, startTime, duration, false);
@@ -123,8 +126,8 @@ public abstract class Profile<V extends ProfileEntry> {
 		Iterator<V> it = avail.itValuesFromPrec(readyTime);
         RangeList intersect = null;
         long potStartTime = readyTime;
-        long potFinishTime = -1;
-        ProfileEntry anchor = null;
+        long potFinishTime;
+        ProfileEntry anchor;
         
        	// scans the profile until an entry with enough PEs is found
         while (it.hasNext()) {
@@ -196,7 +199,7 @@ public abstract class Profile<V extends ProfileEntry> {
         	last = newAnchor;
         }
 
-        V nextEntry = null;
+        V nextEntry;
         while (it.hasNext()) {
        		nextEntry = it.next();
        		if (nextEntry.getTime() <= finishTime) {
@@ -266,7 +269,7 @@ public abstract class Profile<V extends ProfileEntry> {
 	 */
 	public Collection<TimeSlot> getSchedulingOptions(long startTime, 
 			long finishTime, int duration, int reqPEs) {
-		ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
+		ArrayList<TimeSlot> slots = new ArrayList<>();
 
 		Iterator<V> it = avail.itValuesFromPrec(startTime);
 		ProfileEntry ent = null;
@@ -527,7 +530,13 @@ public abstract class Profile<V extends ProfileEntry> {
 				       .add("numProc", ranges != null ? ranges.getNumItems() : 0)
 				       .add("ranges", ranges != null ? ranges : "{[]}").toString();
 		}
-		
+
+		/**
+		 * Create a profile entry with the provided time and resource ranges.
+		 * @param time the time of the entry
+		 * @param list the resource ranges
+		 * @return the created entry
+		 */
 		public Entry create(long time, RangeList list) {
 			return new Entry(time, list != null ? list.clone() : null);
 		}

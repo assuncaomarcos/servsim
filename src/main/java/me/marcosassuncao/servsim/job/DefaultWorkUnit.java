@@ -15,13 +15,13 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 
 public class DefaultWorkUnit implements WorkUnit, Comparable<DefaultWorkUnit> {
-	private int id;
+	private final int id;
 	private static int nextId = 0;
 	private int ownerId = ID_NOT_SET;
 	private long submitTime = TIME_NOT_SET;
 	private long startTime = TIME_NOT_SET;
 	private long finishTime = TIME_NOT_SET;
-	private long duration;
+	private final long duration;
 	private int priority = 0;
 	private Status status = Status.UNKNOWN;
 	private int nReqResources = 1;

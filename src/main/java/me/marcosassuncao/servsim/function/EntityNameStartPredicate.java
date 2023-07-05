@@ -14,7 +14,7 @@ import me.marcosassuncao.servsim.Simulation;
  */
 
 public class EntityNameStartPredicate implements Predicate<SimEntity> {
-	private String nameStart;
+	private final String nameStart;
 
 	/**
 	 * Creates a new filter.

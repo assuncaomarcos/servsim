@@ -11,7 +11,7 @@ import com.google.common.base.Optional;
  */
 
 public class WorkUnitEvent extends AbstractEvent<WorkUnitEvent.Type, DefaultWorkUnit> {
-	private Optional<WorkUnit.Status> prevStatus;
+	private final Optional<WorkUnit.Status> prevStatus;
 	
 	/**
 	 * Creates a new job event.
@@ -50,6 +50,6 @@ public class WorkUnitEvent extends AbstractEvent<WorkUnitEvent.Type, DefaultWork
 	 */
 	public enum Type {
 		/** The status of a job has changed */
-		STATUS_CHANGED;
+		STATUS_CHANGED
 	}
 }

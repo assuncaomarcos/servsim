@@ -32,23 +32,11 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 	 * @see ResourcePartition
 	 * @see PartitionPredicate
 	 */
-	public PartProfile(Collection<ResourcePartition> parts) {
-		this((ResourcePartition[]) parts.toArray());
-	}
-	
-	/**
-	 * Creates a new {@link PartProfile} object. This constructor receives a
-	 * collection of {@link ResourcePartition} objects which contain the IDs
-	 * of the partitions and the initial assignments of processing elements. 
-	 * @param parts the collection of resource partitions.
-	 * @see ResourcePartition
-	 * @see PartitionPredicate
-	 */
 	public PartProfile(ResourcePartition[] parts) {
 		this(parts.length);
 		PartProfileEntry fe = new PartProfileEntry(0L, parts.length);
 		int firstPE = 0;
-		int lastPE = 0;
+		int lastPE;
 		
 		for (ResourcePartition part: parts) {
 			int partId = part.getPartitionId();
@@ -76,7 +64,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 	 */
 	private PartProfile(LinkedTreeMap<Long,PartProfileEntry> avail,
 										ResourcePartition[] parts) {
-		avail.putAll(avail);
+		this.avail.putAll(avail);
 		partitions = new ResourcePartition[parts.length];
 		
 		for(int i=0; i<parts.length; i++) {
@@ -177,7 +165,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 			return new Entry(startTime);
 		}
 		
-		PartProfileEntry entry = (PartProfileEntry)it.next();
+		PartProfileEntry entry = it.next();
 		RangeList intersec = entry.getAvailRanges(partId).clone(); 
         long finishTime = startTime + duration;
             
@@ -216,12 +204,12 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
         RangeList intersect = null;
 
         long potStartTime = readyTime;
-        long potFinishTime = -1;
-        PartProfileEntry anchor = null;
+        long potFinishTime;
+        PartProfileEntry anchor;
         
         // scans entries until enough PEs are found
         while (it.hasNext()) { 
-          	anchor = (PartProfileEntry)it.next();
+          	anchor = it.next();
            	if (anchor.getNumResources(partId) < reqPE) { 	
            		continue;
            	}
@@ -286,7 +274,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 				"Partition " + partId + " does not exist");
 
 		Iterator<PartProfileEntry> it = avail.itValuesFromPrec(startTime);
-		PartProfileEntry last = (PartProfileEntry)it.next();
+		PartProfileEntry last = it.next();
 		PartProfileEntry newAnchor = null;
         
         // The following is to avoid having to iterate the 
@@ -298,9 +286,9 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
         	last = newAnchor;
         }
 
-        PartProfileEntry nextEntry = null;
+        PartProfileEntry nextEntry;
         while (it.hasNext()) {
-       		nextEntry = (PartProfileEntry)it.next();
+       		nextEntry = it.next();
        		if (nextEntry.getTime() <= finishTime) {
        			last.getAvailRanges(partId).remove(selected);
        			last = nextEntry;
@@ -380,7 +368,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 	 * slots whose time frames are smaller than <code>duration</code> will be ignored.
 	 * If you choose <code>1</code>, then all scheduling options will be returned.
 	 * @param reqPEs the minimum number of PEs of the free time slots. Free 
-	 * time slots whose numbers of PEs are smaller than <tt>numPEs</tt> will be 
+	 * time slots whose numbers of PEs are smaller than <code>numPEs</code> will be 
 	 * ignored. If you choose <code>1</code>, then all scheduling options will be returned.
 	 * @return a collection with the time scheduling options in this availability 
 	 * information object within the specified period of time.
@@ -390,15 +378,15 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 		checkElementIndex(partId, partitions.length, 
 				"Partition " + partId + " does not exist");
 		
-		ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
+		ArrayList<TimeSlot> slots = new ArrayList<>();
 		Iterator<PartProfileEntry> it = avail.itValuesFromPrec(startTime);
-		PartProfileEntry ent = null;
-		PartProfileEntry nxtEnt = null;
-		RangeList slRgs = null;
-		RangeList its = null;
+		PartProfileEntry ent;
+		PartProfileEntry nxtEnt;
+		RangeList slRgs;
+		RangeList its;
 
 		while (it.hasNext()) {
-			ent = (PartProfileEntry)it.next();
+			ent = it.next();
 			if (ent.getTime() >= finishTime) {
 				break;
 			} else if (ent.getNumResources(partId) == 0) {
@@ -414,7 +402,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 				boolean changed = false;
 				
 				while (ita.hasNext() && !changed) {
-					nxtEnt = (PartProfileEntry)ita.next();
+					nxtEnt = ita.next();
 					
 					if (nxtEnt.getTime() >= finishTime) {
 						break;
@@ -458,7 +446,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 	 * @param startTime the start time of the time slot.
 	 * @param finishTime the finish time of the time slot.
 	 * @param list the list of ranges of PEs in the slot.
-	 * @return <tt>true</tt> if the slot was included; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the slot was included; <code>false</code> otherwise.
 	 */
 	public boolean addPartTimeSlot(int partId, long startTime, 
 										long finishTime, RangeList list) {
@@ -468,7 +456,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 		}
 		
 		Iterator<PartProfileEntry> it = avail.itValuesFromPrec(startTime);
-        PartProfileEntry last = (PartProfileEntry)it.next();
+        PartProfileEntry last = it.next();
         PartProfileEntry newAnchor = null;
 
 		// Redundant entries can be removed only if their time is greater than
@@ -485,7 +473,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 
         PartProfileEntry nextEntry = null;
         while (it.hasNext()) {
-       		nextEntry = (PartProfileEntry)it.next();
+       		nextEntry = it.next();
        		if(nextEntry.getTime() <= finishTime) {
        			last.getAvailRanges().remove(list);
        			last.getAvailRanges(partId).addAll(list.clone());
@@ -517,12 +505,13 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 	 * @return an string representation
 	 */
 	public String toString() {
-		String result = "Profile={\n";
+		StringBuilder result = new StringBuilder("Profile={\n");
 		for(ProfileEntry entry : avail.values()){
-			result += entry + "\n";
+			result.append(entry);
+			result.append("\n");
 		}
-		result += "}";
-		return result;
+		result.append("}");
+		return result.toString();
 	}
 	
 	/**
@@ -553,13 +542,13 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 		checkElementIndex(partId, partitions.length, 
 				"Partition " + partId + " does not exist");
 		
-		ArrayList<Entry> subProfile = new ArrayList<Entry>();
+		ArrayList<Entry> subProfile = new ArrayList<>();
 		Iterator<PartProfileEntry> it = avail.itValuesFromPrec(startTime);
-		Entry fe = null;
+		Entry fe;
 
 		// get first entry or create one if the profile is empty
 		if (it.hasNext()) {
-			PartProfileEntry ent = (PartProfileEntry)it.next();
+			PartProfileEntry ent = it.next();
 			RangeList list = ent.getAvailRanges(partId) == null ? 
 					null : ent.getAvailRanges(partId).clone();
 			long entTime = Math.max(startTime, ent.getTime());
@@ -570,7 +559,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 		subProfile.add(fe);
 		
 		while (it.hasNext()) {
-			PartProfileEntry entry = (PartProfileEntry)it.next();
+			PartProfileEntry entry = it.next();
            	if (entry.getTime() > finishTime) {
            		break;
    			}
@@ -594,7 +583,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 	 * @author Marcos Dias de Assuncao
 	 */
 	private class PrivateValueIterator implements Iterator<PartProfileEntry> {
-		private Iterator<PartProfileEntry> it = null;
+		private final Iterator<PartProfileEntry> it;
 
         PrivateValueIterator() {
         	it = avail.values().iterator();

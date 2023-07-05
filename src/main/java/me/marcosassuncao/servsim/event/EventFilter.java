@@ -8,7 +8,7 @@ import java.util.function.Predicate;
  * 
  * @author Marcos Dias de Assuncao
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings(value = "rawtypes")
 public interface EventFilter<E extends Event> extends Predicate<E> { 
 	
 }

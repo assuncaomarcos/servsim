@@ -18,7 +18,7 @@ public class ResourcePartition {
 	private PartitionPredicate predicate;
 	
 	/**
-	 * Creates a new <tt>QueuePartition</tt> object.
+	 * Creates a new <code>QueuePartition</code> object.
 	 * @param queueId the partition ID
 	 * @param numPE the number of PEs initially assigned to the partition 
 	 * @param predicate the queue predicate

@@ -83,7 +83,7 @@ public abstract class ResourcePool extends SimEntity {
 	 * @param startTime the start time of the job/reservation
 	 * @param duration the duration of the job/reservation
 	 * @return a {@link ProfileEntry} with the start time provided and the 
-	 * ranges available at that time OR <tt>null</tt> if not enough resources are found.
+	 * ranges available at that time OR <code>null</code> if not enough resources are found.
 	 */
 	public abstract ProfileEntry checkAvailability(int numRes, long startTime, long duration);
 	
@@ -95,7 +95,7 @@ public abstract class ResourcePool extends SimEntity {
 	 * @param duration the duration of the job/reservation
 	 * @param flexible defines whether less resources than originally requested is allowed
 	 * @return a {@link ProfileEntry} with the start time provided and the 
-	 * ranges available at that time OR <tt>null</tt> if not enough resources are found.
+	 * ranges available at that time OR <code>null</code> if not enough resources are found.
 	 */
 	public abstract ProfileEntry checkAvailability(int numRes, long startTime, 
 			long duration, boolean flexible);
@@ -126,7 +126,7 @@ public abstract class ResourcePool extends SimEntity {
 	 * @param startTime the start time of the time slot.
 	 * @param finishTime the finish time of the time slot.
 	 * @param list the list of ranges of resources in the slot.
-	 * @return <tt>true</tt> if the slot was included; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the slot was included; <code>false</code> otherwise.
 	 */
 	public abstract boolean releaseResources(long startTime, long finishTime, RangeList list);
 	
@@ -134,7 +134,7 @@ public abstract class ResourcePool extends SimEntity {
 	 * Returns the resource utilisation during a given period
 	 * @param startTime the initial time
 	 * @param endTime the finish time
-	 * @return the resource utilisation between <tt>0.0</tt> and <tt>1.0</tt>
+	 * @return the resource utilisation between <code>0.0</code> and <code>1.0</code>
 	 */
 	public abstract double getUtilization(long startTime, long endTime);
 					

@@ -15,7 +15,7 @@ import me.marcosassuncao.servsim.Simulation;
  */
 
 public class EntityClassPredicate implements Predicate<SimEntity> {
-	private Class<? extends SimEntity> theClass;
+	private final Class<? extends SimEntity> theClass;
 
 	/**
 	 * Creates a new filter.

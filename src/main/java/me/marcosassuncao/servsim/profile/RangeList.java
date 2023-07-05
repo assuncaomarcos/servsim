@@ -120,8 +120,8 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
 	/**
 	 * Adds a new resource range to this list
 	 * @param range the range to be added to the list
-	 * @return <tt>true</tt> if the range has been added; 
-	 * <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the range has been added; 
+	 * <code>false</code> otherwise.
 	 */
 	public boolean add(Range range) {
 		boolean success = ranges.add(range);
@@ -136,8 +136,8 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
 	/**
 	 * Adds a list of resource ranges to the list
 	 * @param l the list of ranges to be added to the list
-	 * @return <tt>true</tt> if the ranges have been added; 
-	 * <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the ranges have been added; 
+	 * <code>false</code> otherwise.
 	 */
 	public boolean addAll(RangeList l) {
 		this.remove(l);
@@ -178,7 +178,7 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
 	
 	/**
 	 * Returns the smallest item number in this list.
-	 * @return the smallest item number of <tt>-1</tt> if not found.
+	 * @return the smallest item number of <code>-1</code> if not found.
 	 */
 	public int getLowestItem() {
 		sortRanges();
@@ -187,7 +187,7 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
 	
 	/**
 	 * Returns the greatest item number in this list.
-	 * @return the greatest item number of <tt>-1</tt> if not found.	 
+	 * @return the greatest item number of <code>-1</code> if not found.	 
 	 */
 	public int getHighestItem() {
 		sortRanges();
@@ -361,7 +361,7 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
     /**
      * Checks if the current range list is equals to the provided range
      * @param other the range to compare this range against
-     * @return <tt>true</tt> if they are equal, <tt>false</tt> otherwise.
+     * @return <code>true</code> if they are equal, <code>false</code> otherwise.
      */
     public boolean equals(RangeList other) {
     	if (this == other) {
@@ -390,7 +390,7 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
     /**
      * Selects a range to be used by a request.
      * @param reqRes the number of resources required.
-     * @return the range to be allocated or <tt>null</tt> if no
+     * @return the range to be allocated or <code>null</code> if no
      * range suitable is found.
      */
     public RangeList selectResources(int reqRes) {

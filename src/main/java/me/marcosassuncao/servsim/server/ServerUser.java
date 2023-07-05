@@ -16,6 +16,11 @@ import static me.marcosassuncao.servsim.SimEvent.Type.*;
 
 public abstract class ServerUser extends SimEntity {
 
+	/**
+	 * Creates a user of the server infrastructure.
+	 * @param name the entity name.
+	 * @throws IllegalArgumentException if the name is not provided.
+	 */
 	public ServerUser(String name) throws IllegalArgumentException {
 		super(name);
 	}

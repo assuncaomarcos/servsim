@@ -5,6 +5,7 @@ import static me.marcosassuncao.servsim.job.WorkUnit.Status.IN_EXECUTION;
 import java.util.Comparator;
 
 import me.marcosassuncao.servsim.job.Job;
+import me.marcosassuncao.servsim.job.WorkUnit;
 
 /**
  * An enumerator that maps some sorting algorithms 
@@ -14,12 +15,21 @@ import me.marcosassuncao.servsim.job.Job;
  *
  */
 public enum SortAlgorithm {
+	/**
+	 * Fist-In First-Out / FCFS queuing algorithm.
+	 */
     FIFO ("First In, First Out", new OrderBySubmissionTime()),
+	/**
+	 * Algorithm that sorts jobs in decreasing order of priority.
+	 */
     HPF ("Highest Priority First", new OrderByPriority()),
+	/**
+	 * Sorts jobs by deadline.
+	 */
     EDF ("Earliest Deadline First", new OrderByDeadline());
 
-    private String description;
-    private Comparator<Job> comparator;
+    private final String description;
+    private final Comparator<Job> comparator;
     
     SortAlgorithm (String description, Comparator<Job> comp) {
     	this.description = description;
@@ -62,15 +72,15 @@ class OrderBySubmissionTime implements Comparator<Job> {
  * Comparator used to order a list of jobs according to their priorities. 
  * In case jobs of the same priority, break even as follows: 
  * <ul>
- * <li> If both jobs have the status {@link WorkUnitStatus#IN_EXECUTION},
+ * <li> If both jobs have the status {@link WorkUnit.Status#IN_EXECUTION},
  *  	then their submission times are used to break even.<br>
  *  	<b>NOTE:</b> This indicates that the comparator is being used 
  *  	to order a running queue.
- * <li> If only one of the jobs has the status {@link WorkUnitStatus#IN_EXECUTION},
+ * <li> If only one of the jobs has the status {@link WorkUnit.Status#IN_EXECUTION},
  *  	then they are considered equal.<br>
  *  	<b>NOTE:</b> This indicates that the comparator is being used 
  *  	to select a job for preemption.
- * <li> If none of the jobs has the status {@link WorkUnitStatus#IN_EXECUTION}, 
+ * <li> If none of the jobs has the status {@link WorkUnit.Status#IN_EXECUTION},
  * 		then their submission times are used to break even.<br>
  * 		<b>NOTE:</b> This indicates that the comparator is being used to 
  * 		order a waiting queue.

@@ -56,11 +56,15 @@ import static me.marcosassuncao.servsim.job.WorkUnit.Status.*;
 
 public class ResConsBackfillScheduler extends ConsBackfillScheduler implements ReservationScheduler {
 	private static final Logger log = LogManager.getLogger(ResConsBackfillScheduler.class.getName());
-	protected LinkedHashMap<Integer, Reservation> reservations = 
-			new LinkedHashMap<Integer, Reservation>();
-	
-	// Maintain an availability profile where the time slots 
-	// allocated to reservations are inserted into
+	/**
+	 * The resource reservations.
+	 */
+	protected LinkedHashMap<Integer, Reservation> reservations = new LinkedHashMap<>();
+
+	/**
+	 * Maintain an availability profile where the time slots
+	 * allocated to reservations are inserted into.
+	 */
 	protected SingleProfile profileRes;
 	
 	/**

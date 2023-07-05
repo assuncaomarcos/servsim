@@ -1,6 +1,5 @@
 package me.marcosassuncao.servsim.job;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,8 +9,14 @@ import java.util.List;
  */
 
 public interface WorkUnit {
-	public static final long TIME_NOT_SET = -1;
-	public static final int ID_NOT_SET = -1;
+	/**
+	 * Not-set value for time.
+	 */
+	long TIME_NOT_SET = -1;
+	/**
+	 * Not-set value for id.
+	 */
+	int ID_NOT_SET = -1;
 	
 	/**
 	 * Returns the id of the owner (or user) of the job
@@ -33,7 +38,7 @@ public interface WorkUnit {
 	 * @param time the submission time
 	 * @throws IllegalArgumentException if time &lt; 0
 	 */
-	public void setSubmitTime(long time);
+	void setSubmitTime(long time);
 	
 	/**
 	 * Sets the unit's priority
@@ -82,45 +87,52 @@ public interface WorkUnit {
 	 * @return the unit's priority
 	 */
 	int getPriority();
-		
+
+	/**
+	 * Interface to state transitions of a work unit.
+	 */
 	interface StateTransition<T> {
+		/**
+		 * Conditions/requirements for the transition.
+		 * @return the conditions.
+		 */
 		List<T> getConditions();
 	}
 	
 	/**
 	 * Possible task/job statuses
 	 */
-	public enum Status implements StateTransition<Status> {
+	enum Status implements StateTransition<Status> {
 		
 		/** The unit's status is unknown (the default when the unit is created) */
-		UNKNOWN(Arrays.asList()),
+		UNKNOWN(List.of()),
 		
 		/** The unit arrived at the server, but has not been processed by the scheduler yet */
-		ENQUEUED(Arrays.asList(UNKNOWN)),
+		ENQUEUED(List.of(UNKNOWN)),
 		
 		/** The unit has been submitted and is waiting to be processed by a server */
-		WAITING(Arrays.asList(ENQUEUED)),
+		WAITING(List.of(ENQUEUED)),
 		
 		/** The unit's execution has been paused */
-		PAUSED(Arrays.asList()) {
+		PAUSED(List.of()) {
 			public List<Status> getConditions() {
-				return Arrays.asList(IN_EXECUTION);
+				return List.of(IN_EXECUTION);
 			}
 		},
 		
 		/** Unit is in execution */
-		IN_EXECUTION(Arrays.asList(ENQUEUED, WAITING, PAUSED)),
+		IN_EXECUTION(List.of(ENQUEUED, WAITING, PAUSED)),
 		
 		/** The processing of the unit has finished */
-		COMPLETE(Arrays.asList(IN_EXECUTION, PAUSED)),
+		COMPLETE(List.of(IN_EXECUTION, PAUSED)),
 		
 		/** The processing has been cancelled */
-		CANCELLED(Arrays.asList(ENQUEUED, WAITING, IN_EXECUTION, PAUSED)),
+		CANCELLED(List.of(ENQUEUED, WAITING, IN_EXECUTION, PAUSED)),
 		
 		/** The unit's execution has failed */
-		FAILED(Arrays.asList(ENQUEUED, WAITING, IN_EXECUTION, PAUSED));
+		FAILED(List.of(ENQUEUED, WAITING, IN_EXECUTION, PAUSED));
 		
-		private List<Status> conditions;
+		private final List<Status> conditions;
 
 		Status(List<Status> conditions) {
 			this.conditions = conditions;

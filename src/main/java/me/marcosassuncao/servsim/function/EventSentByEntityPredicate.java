@@ -11,7 +11,7 @@ import me.marcosassuncao.servsim.SimEvent;
  */
 
 public class EventSentByEntityPredicate implements Predicate<SimEvent> {
-	private int entityId;
+	private final int entityId;
 	
 	/**
 	 * Creates a new filter.

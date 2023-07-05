@@ -22,10 +22,10 @@ import static com.google.common.base.Preconditions.checkState;
  */
 
 public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
-	private LinkedList<JobActivity> activities = new LinkedList<JobActivity>();
+	private final LinkedList<JobActivity> activities = new LinkedList<>();
 	private long remainingWork;
 	private long deadlineDuration = TIME_NOT_SET; // deadline duration associated with this job	
-	private boolean preemptable = false; // determines whether the job can be preempted
+	private final boolean preemptable = false; // determines whether the job can be preempted
 	private int userId = ID_NOT_SET;
 	private int reservationId = ID_NOT_SET;
 	
@@ -177,7 +177,7 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
 	public boolean setResourceRanges(RangeList ranges) {
 		checkState(activities.size() > 0 && !activities.getLast().isFinished(),
 				"Job status must be %s before changing resource.", Status.IN_EXECUTION);
-		return ((JobActivity)activities.getLast()).setResourceRanges(ranges);
+		return activities.getLast().setResourceRanges(ranges);
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
 	 * @throws IllegalStateException if this job has not started to execute
 	 */
 	public JobActivity getCurrentActivity() {
-		checkState(activities != null && activities.size() > 0, "No activity being performed");
+		checkState(activities.size() > 0, "No activity being performed");
 		return activities.getLast();
 	}
 
@@ -262,7 +262,7 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
 	 * @return <code>true</code> if it is; <code>false</code> otherwise.
 	 */
 	public boolean isPreemptable() {
-		return preemptable;
+		return this.preemptable;
 	}
 		
 	/**
@@ -275,7 +275,7 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
 	
 	/* Just for preventing a user from modifying 
 	 * the list of activities */
-	class ActivityIterator implements Iterator<JobActivity> {
+	static class ActivityIterator implements Iterator<JobActivity> {
 		Iterator<JobActivity> it;
 		
 		ActivityIterator(Iterator<JobActivity> it) {

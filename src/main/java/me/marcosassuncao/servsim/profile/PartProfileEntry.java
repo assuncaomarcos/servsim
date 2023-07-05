@@ -16,7 +16,7 @@ import static com.google.common.base.Preconditions.checkElementIndex;
  */
 
 public class PartProfileEntry extends ProfileEntry {
-	private RangeList[] rangesParts;
+	private final RangeList[] rangesParts;
 	
 	/**
 	 * Creates a new instance of {@link PartProfileEntry}
@@ -31,7 +31,7 @@ public class PartProfileEntry extends ProfileEntry {
 	/**
 	 * Returns the list of ranges available for a given partition at this entry
 	 * @param partId the id of the partition.
-	 * @return the list of ranges available or <tt>null</tt> if either
+	 * @return the list of ranges available or <code>null</code> if either
 	 * the partition does not have ranges set.
 	 * @throws IndexOutOfBoundsException if the partition id is 
 	 * 			out of the bounds.
@@ -45,7 +45,7 @@ public class PartProfileEntry extends ProfileEntry {
 	/**
 	 * Returns the overall list of ranges available at this entry in all 
 	 * partitions.   
-	 * @return the list of ranges available or <tt>null</tt> if no ranges
+	 * @return the list of ranges available or <code>null</code> if no ranges
 	 * have been set previously.
 	 */
 	public RangeList getAvailRanges() {

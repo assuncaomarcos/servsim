@@ -17,6 +17,9 @@ import me.marcosassuncao.servsim.profile.TimeSlot;
  * @author Marcos Dias de Assuncao
  */
 public class DefaultResourcePool extends ResourcePool {
+	/**
+	 * The resource profile used to track resource usage.
+	 */
 	protected SingleProfile profile;
 	
 	/**
@@ -44,7 +47,7 @@ public class DefaultResourcePool extends ResourcePool {
 	 * @param startTime the start time of the job/reservation
 	 * @param duration the duration of the job/reservation
 	 * @return a {@link ProfileEntry} with the start time provided and the 
-	 * ranges available at that time OR <tt>null</tt> if not enough resources are found.
+	 * ranges available at that time OR <code>null</code> if not enough resources are found.
 	 */
 	public ProfileEntry checkAvailability(int reqRes, long startTime, long duration) {
 		return this.profile.checkAvailability(reqRes, startTime, duration);
@@ -58,7 +61,7 @@ public class DefaultResourcePool extends ResourcePool {
 	 * @param duration the duration of the job/reservation
 	 * @param acceptLessResources defines whether less resources than originally requested is allowed
 	 * @return a {@link ProfileEntry} with the start time provided and the 
-	 * ranges available at that time OR <tt>null</tt> if not enough resources are found.
+	 * ranges available at that time OR <code>null</code> if not enough resources are found.
 	 */
 	public ProfileEntry checkAvailability(int reqRes, long startTime, 
 			long duration, boolean acceptLessResources) {
@@ -119,7 +122,7 @@ public class DefaultResourcePool extends ResourcePool {
 	 * @param startTime the start time of the time slot.
 	 * @param finishTime the finish time of the time slot.
 	 * @param list the list of ranges of resources in the slot.
-	 * @return <tt>true</tt> if the slot was included; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the slot was included; <code>false</code> otherwise.
 	 */
 	public boolean releaseResources(long startTime, long finishTime, RangeList list) {
 		return this.profile.addTimeSlot(startTime, finishTime, list);
@@ -197,7 +200,7 @@ public class DefaultResourcePool extends ResourcePool {
 	 * Returns the resource utilisation during a given period
 	 * @param startTime the initial time
 	 * @param endTime the finish time
-	 * @return the resource utilisation between <tt>0.0</tt> and <tt>1.0</tt>
+	 * @return the resource utilisation between <code>0.0</code> and <code>1.0</code>
 	 */
 	public double getUtilization(long startTime, long endTime) {
 		long totalUnits = super.getCapacity() * (endTime - startTime);

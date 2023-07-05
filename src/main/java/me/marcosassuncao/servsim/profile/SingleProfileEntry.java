@@ -56,7 +56,7 @@ public class SingleProfileEntry extends ProfileEntry {
 	/**
 	 * Adds the ranges provided to the list of ranges available 
 	 * @param list the list to be added
-	 * @return <tt>true</tt> if the ranges changed as result of this call
+	 * @return <code>true</code> if the ranges changed as result of this call
 	 */
 	public boolean addRanges(RangeList list) {
 		return ranges.addAll(list == null ? new RangeList() : list);

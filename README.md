@@ -12,7 +12,7 @@ To use the ServSim simulation core, you can either clone this project or
 include the following dependency in the `pom.xml` file of your Maven 
 project:
 
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>me.marcosassuncao.servsim</groupId>
@@ -43,7 +43,7 @@ event of type `SimEvent.Type.TASK_ARRIVE` is used to indicate a ping. Upon
 receipt of a `TASK_ARRIVE` event, `PongEntity` replies with a `SimEvent.Type
 .TASK_COMPLETE`. To implement this example, we first create the `PongEntity`:
 
-```
+```java
 class PongEntity extends SimEntity {
 
     public PongEntity(String name) throws IllegalArgumentException {
@@ -74,7 +74,7 @@ Then we create the `PingEntity` that will send `TASK_ARRIVE` events (i.e.
 pings) to the `PongEntity`. Note that the constructor receives the
  `PongEntity`'s entity ID as it is required to send the events.
 
-```
+```java
 // Simple entity that sends a task to another
 class PingEntity extends PongEntity {
     private int dstEntity;
@@ -108,7 +108,7 @@ class PingEntity extends PongEntity {
 Then we need to extend `Simulation` and implement the `onConfigure()` method 
 where we wire and register all entities:
 
-```
+```java
 public class PingExample {
 
     public static final void main(String[] args) {
@@ -143,7 +143,7 @@ treated by a `Server` entity. Hence, we first describe the `User` entity that
  creates the jobs when `onStart()` is invoked at the beginning of the 
  simulation.
 
-```
+```java
 class User extends ServerUser {
     private int numJobs;
     private long interval;
@@ -182,12 +182,12 @@ registers the entities and starts the simulation. In this case the server has
  case, the server assumes that jobs will require only one resource each and 
  will be treated in a First-Come First-Served (FCFS) manner.
 
-```
+```java
 public class ServerExample {
 
     public static final void main(String[] args) {
         Simulation sim = new Simulation() {
-
+        
             @Override
             public void onConfigure() {
                 long interval = 5;       // job interarrival time in seconds
@@ -206,7 +206,6 @@ public class ServerExample {
                 registerEntity(user);
             }
         };
-
         sim.run();
     }
 }
@@ -216,8 +215,8 @@ The server job scheduling policy can be easily replaced by a conservative
 backfilling policy. In the above example, for instance, this could be 
 performed by changing the server instantiation in the following manner:
 
-```
-    server = Server.builder()
+```java
+    Server server = Server.builder()
         .setName("Server-" + UUID.randomUUID())
         .setScheduler(new ConsBackfillScheduler())
         .setCapacity(serverCapacity).build();

@@ -17,8 +17,14 @@ import java.util.*;
  */
 public abstract class BackfillingScheduler extends AbstractScheduler {
 	private static final Logger log = LogManager.getLogger(BackfillingScheduler.class.getName());
-	protected ArrayList<Job> waitingQueue = new ArrayList<Job>();
-	protected ArrayList<Job> runningQueue = new ArrayList<Job>();
+	/**
+	 * The queue of jobs waiting for processing.
+	 */
+	protected ArrayList<Job> waitingQueue = new ArrayList<>();
+	/**
+	 * The queue of running jobs.
+	 */
+	protected ArrayList<Job> runningQueue = new ArrayList<>();
 	private FilterJobEventsByIDs filterJobEvents = new FilterJobEventsByIDs();
 	private Comparator<Job> comparator;
 	
@@ -77,7 +83,9 @@ public abstract class BackfillingScheduler extends AbstractScheduler {
 		super.getSimulation().cancelFutureEvents(this.filterJobEvents);
 	}
 
-	/* Helper method to reschedule waiting jobs */
+	/**
+	 * Helper method to reschedule waiting jobs
+	 */
 	protected void rescheduleJobs() {
 		Collections.sort(waitingQueue, comparator);
 		boolean success = true;

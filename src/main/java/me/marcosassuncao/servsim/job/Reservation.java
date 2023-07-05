@@ -16,7 +16,7 @@ import com.google.common.base.MoreObjects;
  */
 
 public class Reservation extends DefaultWorkUnit {
-	private long reqStartTime = WorkUnit.TIME_NOT_SET;	
+	private final long reqStartTime;
 	private RangeList rangeList;
 	
 	/**

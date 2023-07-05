@@ -22,7 +22,7 @@ public class SingleProfile extends Profile<SingleProfileEntry>
 	/**
 	 * Creates an availability profile for a resource providing the number
 	 * of processors in the resource. This constructor will create an initial 
-	 * {@link SingleProfileEntry} with time <tt>0</tt> and an initial PE range 
+	 * {@link SingleProfileEntry} with time <code>0</code> and an initial PE range 
 	 * of [0, numPE-1].
 	 * @param numPE the number of processors in the resource.
 	 * @see SingleProfileEntry
@@ -82,7 +82,7 @@ public class SingleProfile extends Profile<SingleProfileEntry>
 	 * @param startTime the start time of the time slot.
 	 * @param finishTime the finish time of the time slot.
 	 * @param list the list of ranges of resources in the slot.
-	 * @return <tt>true</tt> if the slot was included; <tt>false</tt> otherwise.
+	 * @return <code>true</code> if the slot was included; <code>false</code> otherwise.
 	 */
 	public boolean addTimeSlot(long startTime, long finishTime, RangeList list) {		
 		if(finishTime <= startTime) {

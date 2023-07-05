@@ -1,5 +1,6 @@
 package me.marcosassuncao.servsim.profile;
 
+import java.io.IOException;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -17,28 +18,28 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 
 /**
- * Red-Black tree based implementation of the <tt>SortedMap</tt> interface.
+ * Red-Black tree based implementation of the <code>SortedMap</code> interface.
  * This class guarantees that the map will be in ascending key order, sorted
  * according to the <i>natural order</i> for the key's class (see
- * <tt>Comparable</tt>), or by the comparator provided at creation time,
+ * <code>Comparable</code>), or by the comparator provided at creation time,
  * depending on which constructor is used.<p>
  *
  * This implementation provides guaranteed log(n) time cost for the
- * <tt>containsKey</tt>, <tt>get</tt>, <tt>put</tt> and <tt>remove</tt>
+ * <code>containsKey</code>, <code>get</code>, <code>put</code> and <code>remove</code>
  * operations.  Algorithms are adaptations of those in Cormen, Leiserson, and
  * Rivest's <I>Introduction to Algorithms</I>.<p>
  *
  * Note that the ordering maintained by a sorted map (whether or not an
  * explicit comparator is provided) must be <i>consistent with equals</i> if
- * this sorted map is to correctly implement the <tt>Map</tt> interface.  (See
- * <tt>Comparable</tt> or <tt>Comparator</tt> for a precise definition of
- * <i>consistent with equals</i>.)  This is so because the <tt>Map</tt>
+ * this sorted map is to correctly implement the <code>Map</code> interface.  (See
+ * <code>Comparable</code> or <code>Comparator</code> for a precise definition of
+ * <i>consistent with equals</i>.)  This is so because the <code>Map</code>
  * interface is defined in terms of the equals operation, but a map performs
- * all key comparisons using its <tt>compareTo</tt> (or <tt>compare</tt>)
+ * all key comparisons using its <code>compareTo</code> (or <code>compare</code>)
  * method, so two keys that are deemed equal by this method are, from the
  * standpoint of the sorted map, equal.  The behavior of a sorted map
  * <i>is</i> well-defined even if its ordering is inconsistent with equals; it
- * just fails to obey the general contract of the <tt>Map</tt> interface.<p>
+ * just fails to obey the general contract of the <code>Map</code> interface.<p>
  *
  * <b>Note that this implementation is not synchronized.</b> If multiple
  * threads access a map concurrently, and at least one of the threads modifies
@@ -48,7 +49,7 @@ import java.util.SortedSet;
  * a structural modification.)  This is typically accomplished by
  * synchronizing on some object that naturally encapsulates the map.  If no
  * such object exists, the map should be "wrapped" using the
- * <tt>Collections.synchronizedMap</tt> method.  This is best done at creation
+ * <code>Collections.synchronizedMap</code> method.  This is best done at creation
  * time, to prevent accidental unsynchronized access to the map:
  * <pre>
  *     Map m = Collections.synchronizedMap(new TreeMap(...));
@@ -57,8 +58,8 @@ import java.util.SortedSet;
  * The iterators returned by all of this class's "collection view methods" are
  * <i>fail-fast</i>: if the map is structurally modified at any time after the
  * iterator is created, in any way except through the iterator's own
- * <tt>remove</tt> or <tt>add</tt> methods, the iterator throws a
- * <tt>ConcurrentModificationException</tt>.  Thus, in the face of concurrent
+ * <code>remove</code> or <code>add</code> methods, the iterator throws a
+ * <code>ConcurrentModificationException</code>.  Thus, in the face of concurrent
  * modification, the iterator fails quickly and cleanly, rather than risking
  * arbitrary, non-deterministic behavior at an undetermined time in the
  * future.
@@ -66,7 +67,7 @@ import java.util.SortedSet;
  * <p>Note that the fail-fast behavior of an iterator cannot be guaranteed
  * as it is, generally speaking, impossible to make any hard guarantees in the
  * presence of unsynchronized concurrent modification.  Fail-fast iterators
- * throw <tt>ConcurrentModificationException</tt> on a best-effort basis.
+ * throw <code>ConcurrentModificationException</code> on a best-effort basis.
  * Therefore, it would be wrong to write a program that depended on this
  * exception for its correctness:   <i>the fail-fast behavior of iterators
  * should be used only to detect bugs.</i><p>
@@ -121,13 +122,13 @@ public class LinkedTreeMap<K,V>
     /**
      * Constructs a new, empty map, sorted according to the keys' natural
      * order.  All keys inserted into the map must implement the
-     * <tt>Comparable</tt> interface.  Furthermore, all such keys must be
-     * <i>mutually comparable</i>: <tt>k1.compareTo(k2)</tt> must not throw a
-     * ClassCastException for any elements <tt>k1</tt> and <tt>k2</tt> in the
+     * <code>Comparable</code> interface.  Furthermore, all such keys must be
+     * <i>mutually comparable</i>: <code>k1.compareTo(k2)</code> must not throw a
+     * ClassCastException for any elements <code>k1</code> and <code>k2</code> in the
      * map.  If the user attempts to put a key into the map that violates this
      * constraint (for example, the user attempts to put a string key into a
-     * map whose keys are integers), the <tt>put(Object key, Object
-     * value)</tt> call will throw a <tt>ClassCastException</tt>.
+     * map whose keys are integers), the <code>put(Object key, Object
+     * value)</code> call will throw a <code>ClassCastException</code>.
      *
      * @see Comparable
      */
@@ -137,14 +138,14 @@ public class LinkedTreeMap<K,V>
     /**
      * Constructs a new, empty map, sorted according to the given comparator.
      * All keys inserted into the map must be <i>mutually comparable</i> by
-     * the given comparator: <tt>comparator.compare(k1, k2)</tt> must not
-     * throw a <tt>ClassCastException</tt> for any keys <tt>k1</tt> and
-     * <tt>k2</tt> in the map.  If the user attempts to put a key into the
-     * map that violates this constraint, the <tt>put(Object key, Object
-     * value)</tt> call will throw a <tt>ClassCastException</tt>.
+     * the given comparator: <code>comparator.compare(k1, k2)</code> must not
+     * throw a <code>ClassCastException</code> for any keys <code>k1</code> and
+     * <code>k2</code> in the map.  If the user attempts to put a key into the
+     * map that violates this constraint, the <code>put(Object key, Object
+     * value)</code> call will throw a <code>ClassCastException</code>.
      *
      * @param c the comparator that will be used to sort this map.  A
-     *        <tt>null</tt> value indicates that the keys' <i>natural
+     *        <code>null</code> value indicates that the keys' <i>natural
      *        ordering</i> should be used.
      */
     public LinkedTreeMap(Comparator<? super K> c) {
@@ -154,10 +155,10 @@ public class LinkedTreeMap<K,V>
     /**
      * Constructs a new map containing the same mappings as the given map,
      * sorted according to the keys' <i>natural order</i>.  All keys inserted
-     * into the new map must implement the <tt>Comparable</tt> interface.
+     * into the new map must implement the <code>Comparable</code> interface.
      * Furthermore, all such keys must be <i>mutually comparable</i>:
-     * <tt>k1.compareTo(k2)</tt> must not throw a <tt>ClassCastException</tt>
-     * for any elements <tt>k1</tt> and <tt>k2</tt> in the map.  This method
+     * <code>k1.compareTo(k2)</code> must not throw a <code>ClassCastException</code>
+     * for any elements <code>k1</code> and <code>k2</code> in the map.  This method
      * runs in n*log(n) time.
      *
      * @param  m the map whose mappings are to be placed in this map.
@@ -171,7 +172,7 @@ public class LinkedTreeMap<K,V>
 
     /**
      * Constructs a new map containing the same mappings as the given
-     * <tt>SortedMap</tt>, sorted according to the same ordering.  This method
+     * <code>SortedMap</code>, sorted according to the same ordering.  This method
      * runs in linear time.
      *
      * @param  m the sorted map whose mappings are to be placed in this map,
@@ -199,45 +200,45 @@ public class LinkedTreeMap<K,V>
     }
 
     /**
-     * Returns <tt>true</tt> if this map contains no key-value mappings. <p>
+     * Returns <code>true</code> if this map contains no key-value mappings. <p>
      *
-     * This implementation returns <tt>size() == 0</tt>.
+     * This implementation returns <code>size() == 0</code>.
      *
-     * @return <tt>true</tt> if this map contains no key-value mappings.
+     * @return <code>true</code> if this map contains no key-value mappings.
      */
     public boolean isEmpty() {
     	return size() == 0;
     }
     
     /**
-     * Returns <tt>true</tt> if this map contains a mapping for the specified
+     * Returns <code>true</code> if this map contains a mapping for the specified
      * key.
      *
      * @param key key whose presence in this map is to be tested.
      *
-     * @return <tt>true</tt> if this map contains a mapping for the
+     * @return <code>true</code> if this map contains a mapping for the
      *            specified key.
      * @throws ClassCastException if the key cannot be compared with the keys
      *                  currently in the map.
-     * @throws NullPointerException key is <tt>null</tt> and this map uses
+     * @throws NullPointerException key is <code>null</code> and this map uses
      *                  natural ordering, or its comparator does not tolerate
-     *            <tt>null</tt> keys.
+     *            <code>null</code> keys.
      */
     public boolean containsKey(Object key) {
         return getEntry(key) != null;
     }
 
     /**
-     * Returns <tt>true</tt> if this map maps one or more keys to the
-     * specified value.  More formally, returns <tt>true</tt> if and only if
-     * this map contains at least one mapping to a value <tt>v</tt> such
-     * that <tt>(value==null ? v==null : value.equals(v))</tt>.  This
+     * Returns <code>true</code> if this map maps one or more keys to the
+     * specified value.  More formally, returns <code>true</code> if and only if
+     * this map contains at least one mapping to a value <code>v</code> such
+     * that <code>(value==null ? v==null : value.equals(v))</code>.  This
      * operation will probably require time linear in the Map size for most
      * implementations of Map.
      *
      * @param value value whose presence in this Map is to be tested.
-     * @return  <tt>true</tt> if a mapping to <tt>value</tt> exists;
-     *		<tt>false</tt> otherwise.
+     * @return  <code>true</code> if a mapping to <code>value</code> exists;
+     *		<code>false</code> otherwise.
      * @since 1.2
      */
     public boolean containsValue(Object value) {
@@ -267,20 +268,20 @@ public class LinkedTreeMap<K,V>
 
     /**
      * Returns the value to which this map maps the specified key.  Returns
-     * <tt>null</tt> if the map contains no mapping for this key.  A return
-     * value of <tt>null</tt> does not <i>necessarily</i> indicate that the
+     * <code>null</code> if the map contains no mapping for this key.  A return
+     * value of <code>null</code> does not <i>necessarily</i> indicate that the
      * map contains no mapping for the key; it's also possible that the map
-     * explicitly maps the key to <tt>null</tt>.  The <tt>containsKey</tt>
+     * explicitly maps the key to <code>null</code>.  The <code>containsKey</code>
      * operation may be used to distinguish these two cases.
      *
      * @param key key whose associated value is to be returned.
      * @return the value to which this map maps the specified key, or
-     *               <tt>null</tt> if the map contains no mapping for the key.
+     *               <code>null</code> if the map contains no mapping for the key.
      * @throws    ClassCastException key cannot be compared with the keys
      *                  currently in the map.
-     * @throws NullPointerException key is <tt>null</tt> and this map uses
+     * @throws NullPointerException key is <code>null</code> and this map uses
      *                  natural ordering, or its comparator does not tolerate
-     *                  <tt>null</tt> keys.
+     *                  <code>null</code> keys.
      *
      * @see #containsKey(Object)
      */
@@ -290,11 +291,11 @@ public class LinkedTreeMap<K,V>
     }
 
     /**
-     * Returns the comparator used to order this map, or <tt>null</tt> if this
+     * Returns the comparator used to order this map, or <code>null</code> if this
      * map uses its keys' natural order.
      *
      * @return the comparator associated with this sorted map, or
-     *                <tt>null</tt> if it uses its keys' natural sort method.
+     *                <code>null</code> if it uses its keys' natural sort method.
      */
     public Comparator<? super K> comparator() {
         return comparator;
@@ -329,9 +330,9 @@ public class LinkedTreeMap<K,V>
      * @throws    ClassCastException class of a key or value in the specified
      *                   map prevents it from being stored in this map.
      *
-     * @throws NullPointerException if the given map is <tt>null</tt> or
-     *         this map does not permit <tt>null</tt> keys and a
-     *         key in the specified map is <tt>null</tt>.
+     * @throws NullPointerException if the given map is <code>null</code> or
+     *         this map does not permit <code>null</code> keys and a
+     *         key in the specified map is <code>null</code>.
      */
     public void putAll(Map<? extends K, ? extends V> map) {
         int mapSize = map.size();
@@ -357,16 +358,16 @@ public class LinkedTreeMap<K,V>
     }
 
     /**
-     * Returns this map's entry for the given key, or <tt>null</tt> if the map
+     * Returns this map's entry for the given key, or <code>null</code> if the map
      * does not contain an entry for the key.
      *
-     * @return this map's entry for the given key, or <tt>null</tt> if the map
+     * @return this map's entry for the given key, or <code>null</code> if the map
      *                does not contain an entry for the key.
      * @throws ClassCastException if the key cannot be compared with the keys
      *                  currently in the map.
-     * @throws NullPointerException key is <tt>null</tt> and this map uses
+     * @throws NullPointerException key is <code>null</code> and this map uses
      *                  natural order, or its comparator does not tolerate *
-     *                  <tt>null</tt> keys.
+     *                  <code>null</code> keys.
      */
     private Entry<K,V> getEntry(Object key) {
         Entry<K,V> p = root;
@@ -387,7 +388,7 @@ public class LinkedTreeMap<K,V>
      * Gets the entry corresponding to the specified key; if no such entry
      * exists, returns the entry for the least key greater than the specified
      * key; if no such entry exists (i.e., the greatest key in the Tree is less
-     * than the specified key), returns <tt>null</tt>.
+     * than the specified key), returns <code>null</code>.
      */
     private Entry<K,V> getCeilEntry(K key) {
         Entry<K,V> p = root;
@@ -422,7 +423,7 @@ public class LinkedTreeMap<K,V>
     /**
      * Returns the entry for the greatest key less than the specified key; if
      * no such entry exists (i.e., the least key in the Tree is greater than
-     * the specified key), returns <tt>null</tt>.
+     * the specified key), returns <code>null</code>.
      */
     private Entry<K,V> getPrecedingEntry(K key) {
         Entry<K,V> p = root;
@@ -460,7 +461,7 @@ public class LinkedTreeMap<K,V>
      * Returns the entry for the greatest key less than the specified key; if
      * no such entry exists or the entry for the specified key if it exists
      * (i.e., if the the least key in the Tree is greater than the specified 
-     * key), returns <tt>null</tt>.
+     * key), returns <code>null</code>.
      */
     private Entry<K,V> getPrecedingEntryInclusive(K key) {
         Entry<K,V> p = root;
@@ -521,12 +522,12 @@ public class LinkedTreeMap<K,V>
     
     /**
      * Returns the value of entry whose key is preceding the provided key.
-     * if inclusive is <tt>true</tt> consider the key provided as well in the
+     * if inclusive is <code>true</code> consider the key provided as well in the
      * search.
      * @param key the key to search for
-     * @param inclusive <tt>true</tt> if you want the value for the provided
+     * @param inclusive <code>true</code> if you want the value for the provided
      * key or, if not found, that value whose key is smaller than the key given.
-     * @return the value or <tt>null</tt> if not found
+     * @return the value or <code>null</code> if not found
      */
     public V getPrecValue(K key, boolean inclusive) {
     	Entry<K,V> entry = inclusive ? 
@@ -537,12 +538,12 @@ public class LinkedTreeMap<K,V>
     
     /**
      * Returns an entry whose key is preceding the provided key.
-     * if inclusive is <tt>true</tt> consider the key provided as well in the
+     * if inclusive is <code>true</code> consider the key provided as well in the
      * search.
      * @param key the key to search for
-     * @param inclusive <tt>true</tt> if you want the value for the provided
+     * @param inclusive <code>true</code> if you want the value for the provided
      * key or, if not found, that value whose key is smaller than the key given.
-     * @return the value or <tt>null</tt> if not found
+     * @return the value or <code>null</code> if not found
      */
     public Entry<K,V> getPrecEntry(K key, boolean inclusive) {
     	Entry<K,V> entry = inclusive ? 
@@ -568,7 +569,7 @@ public class LinkedTreeMap<K,V>
     
     /**
      * Returns the key corresponding to the specified Entry.  Throw
-     * NoSuchElementException if the Entry is <tt>null</tt>.
+     * NoSuchElementException if the Entry is <code>null</code>.
      */
     private static <K> K key(Entry<K,?> e) {
         if (e==null)
@@ -584,15 +585,15 @@ public class LinkedTreeMap<K,V>
      * @param key key with which the specified value is to be associated.
      * @param value value to be associated with the specified key.
      *
-     * @return previous value associated with specified key, or <tt>null</tt>
-     *         if there was no mapping for key.  A <tt>null</tt> return can
-     *         also indicate that the map previously associated <tt>null</tt>
+     * @return previous value associated with specified key, or <code>null</code>
+     *         if there was no mapping for key.  A <code>null</code> return can
+     *         also indicate that the map previously associated <code>null</code>
      *         with the specified key.
      * @throws    ClassCastException key cannot be compared with the keys
      *            currently in the map.
-     * @throws NullPointerException key is <tt>null</tt> and this map uses
+     * @throws NullPointerException key is <code>null</code> and this map uses
      *         natural order, or its comparator does not tolerate
-     *         <tt>null</tt> keys.
+     *         <code>null</code> keys.
      */
     public V put(K key, V value) {
         Entry<K,V> t = root;
@@ -659,16 +660,16 @@ public class LinkedTreeMap<K,V>
      * Removes the mapping for this key from this TreeMap if present.
      *
      * @param  key key for which mapping should be removed
-     * @return previous value associated with specified key, or <tt>null</tt>
-     *         if there was no mapping for key.  A <tt>null</tt> return can
+     * @return previous value associated with specified key, or <code>null</code>
+     *         if there was no mapping for key.  A <code>null</code> return can
      *         also indicate that the map previously associated
-     *         <tt>null</tt> with the specified key.
+     *         <code>null</code> with the specified key.
      *
      * @throws    ClassCastException key cannot be compared with the keys
      *            currently in the map.
-     * @throws NullPointerException key is <tt>null</tt> and this map uses
+     * @throws NullPointerException key is <code>null</code> and this map uses
      *         natural order, or its comparator does not tolerate
-     *         <tt>null</tt> keys.
+     *         <code>null</code> keys.
      */
     public V remove(Object key) {
         Entry<K,V> p = getEntry(key);
@@ -690,7 +691,7 @@ public class LinkedTreeMap<K,V>
     }
 
     /**
-     * Returns a shallow copy of this <tt>TreeMap</tt> instance. (The keys and
+     * Returns a shallow copy of this <code>TreeMap</code> instance. (The keys and
      * values themselves are not cloned.)
      *
      * @return a shallow copy of this Map.
@@ -740,12 +741,12 @@ public class LinkedTreeMap<K,V>
     /**
      * Returns a Set view of the keys contained in this map.  The set's
      * iterator will return the keys in ascending order.  The map is backed by
-     * this <tt>TreeMap</tt> instance, so changes to this map are reflected in
+     * this <code>TreeMap</code> instance, so changes to this map are reflected in
      * the Set, and vice-versa.  The Set supports element removal, which
      * removes the corresponding mapping from the map, via the
-     * <tt>Iterator.remove</tt>, <tt>Set.remove</tt>, <tt>removeAll</tt>,
-     * <tt>retainAll</tt>, and <tt>clear</tt> operations.  It does not support
-     * the <tt>add</tt> or <tt>addAll</tt> operations.
+     * <code>Iterator.remove</code>, <code>Set.remove</code>, <code>removeAll</code>,
+     * <code>retainAll</code>, and <code>clear</code> operations.  It does not support
+     * the <code>add</code> or <code>addAll</code> operations.
      *
      * @return a set view of the keys contained in this TreeMap.
      */
@@ -782,12 +783,12 @@ public class LinkedTreeMap<K,V>
      * Returns a collection view of the values contained in this map.  The
      * collection's iterator will return the values in the order that their
      * corresponding keys appear in the tree.  The collection is backed by
-     * this <tt>TreeMap</tt> instance, so changes to this map are reflected in
+     * this <code>TreeMap</code> instance, so changes to this map are reflected in
      * the collection, and vice-versa.  The collection supports element
      * removal, which removes the corresponding mapping from the map through
-     * the <tt>Iterator.remove</tt>, <tt>Collection.remove</tt>,
-     * <tt>removeAll</tt>, <tt>retainAll</tt>, and <tt>clear</tt> operations.
-     * It does not support the <tt>add</tt> or <tt>addAll</tt> operations.
+     * the <code>Iterator.remove</code>, <code>Collection.remove</code>,
+     * <code>removeAll</code>, <code>retainAll</code>, and <code>clear</code> operations.
+     * It does not support the <code>add</code> or <code>addAll</code> operations.
      *
      * @return a collection view of the values contained in this map.
      */
@@ -830,13 +831,13 @@ public class LinkedTreeMap<K,V>
     /**
      * Returns a set view of the mappings contained in this map.  The set's
      * iterator returns the mappings in ascending key order.  Each element in
-     * the returned set is a <tt>Map.Entry</tt>.  The set is backed by this
+     * the returned set is a <code>Map.Entry</code>.  The set is backed by this
      * map, so changes to this map are reflected in the set, and vice-versa.
      * The set supports element removal, which removes the corresponding
-     * mapping from the TreeMap, through the <tt>Iterator.remove</tt>,
-     * <tt>Set.remove</tt>, <tt>removeAll</tt>, <tt>retainAll</tt> and
-     * <tt>clear</tt> operations.  It does not support the <tt>add</tt> or
-     * <tt>addAll</tt> operations.
+     * mapping from the TreeMap, through the <code>Iterator.remove</code>,
+     * <code>Set.remove</code>, <code>removeAll</code>, <code>retainAll</code> and
+     * <code>clear</code> operations.  It does not support the <code>add</code> or
+     * <code>addAll</code> operations.
      *
      * @return a set view of the mappings contained in this map.
      * @see Map.Entry
@@ -885,47 +886,47 @@ public class LinkedTreeMap<K,V>
 
     /**
      * Returns a view of the portion of this map whose keys range from
-     * <tt>fromKey</tt>, inclusive, to <tt>toKey</tt>, exclusive.  (If
-     * <tt>fromKey</tt> and <tt>toKey</tt> are equal, the returned sorted map
+     * <code>fromKey</code>, inclusive, to <code>toKey</code>, exclusive.  (If
+     * <code>fromKey</code> and <code>toKey</code> are equal, the returned sorted map
      * is empty.)  The returned sorted map is backed by this map, so changes
      * in the returned sorted map are reflected in this map, and vice-versa.
      * The returned sorted map supports all optional map operations.<p>
      *
      * The sorted map returned by this method will throw an
-     * <tt>IllegalArgumentException</tt> if the user attempts to insert a key
-     * less than <tt>fromKey</tt> or greater than or equal to
-     * <tt>toKey</tt>.<p>
+     * <code>IllegalArgumentException</code> if the user attempts to insert a key
+     * less than <code>fromKey</code> or greater than or equal to
+     * <code>toKey</code>.<p>
      *
      * Note: this method always returns a <i>half-open range</i> (which
      * includes its low endpoint but not its high endpoint).  If you need a
      * <i>closed range</i> (which includes both endpoints), and the key type
      * allows for calculation of the successor a given key, merely request the
-     * subrange from <tt>lowEndpoint</tt> to <tt>successor(highEndpoint)</tt>.
-     * For example, suppose that <tt>m</tt> is a sorted map whose keys are
+     * subrange from <code>lowEndpoint</code> to <code>successor(highEndpoint)</code>.
+     * For example, suppose that <code>m</code> is a sorted map whose keys are
      * strings.  The following idiom obtains a view containing all of the
-     * key-value mappings in <tt>m</tt> whose keys are between <tt>low</tt>
-     * and <tt>high</tt>, inclusive:
+     * key-value mappings in <code>m</code> whose keys are between <code>low</code>
+     * and <code>high</code>, inclusive:
      *             <pre>    SortedMap sub = m.submap(low, high+"\0");</pre>
      * A similar technique can be used to generate an <i>open range</i> (which
      * contains neither endpoint).  The following idiom obtains a view
-     * containing all of the key-value mappings in <tt>m</tt> whose keys are
-     * between <tt>low</tt> and <tt>high</tt>, exclusive:
+     * containing all of the key-value mappings in <code>m</code> whose keys are
+     * between <code>low</code> and <code>high</code>, exclusive:
      *             <pre>    SortedMap sub = m.subMap(low+"\0", high);</pre>
      *
      * @param fromKey low endpoint (inclusive) of the subMap.
      * @param toKey high endpoint (exclusive) of the subMap.
      *
      * @return a view of the portion of this map whose keys range from
-     *                <tt>fromKey</tt>, inclusive, to <tt>toKey</tt>, exclusive.
+     *                <code>fromKey</code>, inclusive, to <code>toKey</code>, exclusive.
      *
-     * @throws ClassCastException if <tt>fromKey</tt> and <tt>toKey</tt>
+     * @throws ClassCastException if <code>fromKey</code> and <code>toKey</code>
      *         cannot be compared to one another using this map's comparator
      *         (or, if the map has no comparator, using natural ordering).
-     * @throws IllegalArgumentException if <tt>fromKey</tt> is greater than
-     *         <tt>toKey</tt>.
-     * @throws NullPointerException if <tt>fromKey</tt> or <tt>toKey</tt> is
-     *               <tt>null</tt> and this map uses natural order, or its
-     *               comparator does not tolerate <tt>null</tt> keys.
+     * @throws IllegalArgumentException if <code>fromKey</code> is greater than
+     *         <code>toKey</code>.
+     * @throws NullPointerException if <code>fromKey</code> or <code>toKey</code> is
+     *               <code>null</code> and this map uses natural order, or its
+     *               comparator does not tolerate <code>null</code> keys.
      */
     public SortedMap<K,V> subMap(K fromKey, K toKey) {
         return new SubMap(fromKey, toKey);
@@ -933,40 +934,40 @@ public class LinkedTreeMap<K,V>
 
     /**
      * Returns a view of the portion of this map whose keys are strictly less
-     * than <tt>toKey</tt>.  The returned sorted map is backed by this map, so
+     * than <code>toKey</code>.  The returned sorted map is backed by this map, so
      * changes in the returned sorted map are reflected in this map, and
      * vice-versa.  The returned sorted map supports all optional map
      * operations.<p>
      *
      * The sorted map returned by this method will throw an
-     * <tt>IllegalArgumentException</tt> if the user attempts to insert a key
-     * greater than or equal to <tt>toKey</tt>.<p>
+     * <code>IllegalArgumentException</code> if the user attempts to insert a key
+     * greater than or equal to <code>toKey</code>.<p>
      *
      * Note: this method always returns a view that does not contain its
      * (high) endpoint.  If you need a view that does contain this endpoint,
      * and the key type allows for calculation of the successor a given key,
-     * merely request a headMap bounded by <tt>successor(highEndpoint)</tt>.
-     * For example, suppose that suppose that <tt>m</tt> is a sorted map whose
+     * merely request a headMap bounded by <code>successor(highEndpoint)</code>.
+     * For example, suppose that suppose that <code>m</code> is a sorted map whose
      * keys are strings.  The following idiom obtains a view containing all of
-     * the key-value mappings in <tt>m</tt> whose keys are less than or equal
-     * to <tt>high</tt>:
+     * the key-value mappings in <code>m</code> whose keys are less than or equal
+     * to <code>high</code>:
      * <pre>
      *     SortedMap head = m.headMap(high+"\0");
      * </pre>
      *
      * @param toKey high endpoint (exclusive) of the headMap.
      * @return a view of the portion of this map whose keys are strictly
-     *                less than <tt>toKey</tt>.
+     *                less than <code>toKey</code>.
      *
-     * @throws ClassCastException if <tt>toKey</tt> is not compatible
+     * @throws ClassCastException if <code>toKey</code> is not compatible
      *         with this map's comparator (or, if the map has no comparator,
-     *         if <tt>toKey</tt> does not implement <tt>Comparable</tt>).
+     *         if <code>toKey</code> does not implement <code>Comparable</code>).
      * @throws IllegalArgumentException if this map is itself a subMap,
-     *         headMap, or tailMap, and <tt>toKey</tt> is not within the
+     *         headMap, or tailMap, and <code>toKey</code> is not within the
      *         specified range of the subMap, headMap, or tailMap.
-     * @throws NullPointerException if <tt>toKey</tt> is <tt>null</tt> and
+     * @throws NullPointerException if <code>toKey</code> is <code>null</code> and
      *               this map uses natural order, or its comparator does not
-     *               tolerate <tt>null</tt> keys.
+     *               tolerate <code>null</code> keys.
      */
     public SortedMap<K,V> headMap(K toKey) {
         return new SubMap(toKey, true);
@@ -974,38 +975,38 @@ public class LinkedTreeMap<K,V>
 
     /**
      * Returns a view of the portion of this map whose keys are greater than
-     * or equal to <tt>fromKey</tt>.  The returned sorted map is backed by
+     * or equal to <code>fromKey</code>.  The returned sorted map is backed by
      * this map, so changes in the returned sorted map are reflected in this
      * map, and vice-versa.  The returned sorted map supports all optional map
      * operations.<p>
      *
      * The sorted map returned by this method will throw an
-     * <tt>IllegalArgumentException</tt> if the user attempts to insert a key
-     * less than <tt>fromKey</tt>.<p>
+     * <code>IllegalArgumentException</code> if the user attempts to insert a key
+     * less than <code>fromKey</code>.<p>
      *
      * Note: this method always returns a view that contains its (low)
      * endpoint.  If you need a view that does not contain this endpoint, and
      * the element type allows for calculation of the successor a given value,
-     * merely request a tailMap bounded by <tt>successor(lowEndpoint)</tt>.
-     * For example, suppose that <tt>m</tt> is a sorted map whose keys
+     * merely request a tailMap bounded by <code>successor(lowEndpoint)</code>.
+     * For example, suppose that <code>m</code> is a sorted map whose keys
      * are strings.  The following idiom obtains a view containing
-     * all of the key-value mappings in <tt>m</tt> whose keys are strictly
-     * greater than <tt>low</tt>: <pre>
+     * all of the key-value mappings in <code>m</code> whose keys are strictly
+     * greater than <code>low</code>: <pre>
      *     SortedMap tail = m.tailMap(low+"\0");
      * </pre>
      *
      * @param fromKey low endpoint (inclusive) of the tailMap.
      * @return a view of the portion of this map whose keys are greater
-     *                than or equal to <tt>fromKey</tt>.
-     * @throws ClassCastException if <tt>fromKey</tt> is not compatible
+     *                than or equal to <code>fromKey</code>.
+     * @throws ClassCastException if <code>fromKey</code> is not compatible
      *         with this map's comparator (or, if the map has no comparator,
-     *         if <tt>fromKey</tt> does not implement <tt>Comparable</tt>).
+     *         if <code>fromKey</code> does not implement <code>Comparable</code>).
      * @throws IllegalArgumentException if this map is itself a subMap,
-     *         headMap, or tailMap, and <tt>fromKey</tt> is not within the
+     *         headMap, or tailMap, and <code>fromKey</code> is not within the
      *         specified range of the subMap, headMap, or tailMap.
-     * @throws NullPointerException if <tt>fromKey</tt> is <tt>null</tt> and
+     * @throws NullPointerException if <code>fromKey</code> is <code>null</code> and
      *               this map uses natural order, or its comparator does not
-     *               tolerate <tt>null</tt> keys.
+     *               tolerate <code>null</code> keys.
      */
     public SortedMap<K,V> tailMap(K fromKey) {
         return new SubMap(fromKey, false);
@@ -1285,7 +1286,7 @@ public class LinkedTreeMap<K,V>
 
     /**
      * Test two values  for equality.  Differs from o1.equals(o2) only in
-     * that it copes with <tt>null</tt> o1 properly.
+     * that it copes with <code>null</code> o1 properly.
      */
     private static boolean valEquals(Object o1, Object o2) {
         return (o1==null ? o2==null : o1.equals(o2));
@@ -1311,7 +1312,7 @@ public class LinkedTreeMap<K,V>
 
         /**
          * Make a new cell with given key, value, and parent, and with
-         * <tt>null</tt> child links, and BLACK color.
+         * <code>null</code> child links, and BLACK color.
          */
         Entry(K key, V value, Entry<K,V> parent) {
             this.key = key;
@@ -1658,7 +1659,7 @@ public class LinkedTreeMap<K,V>
     private static final long serialVersionUID = 919286545866124006L;
 
     /**
-     * Save the state of the <tt>TreeMap</tt> instance to a stream (i.e.,
+     * Save the state of the <code>TreeMap</code> instance to a stream (i.e.,
      * serialize it).
      *
      * @serialData The <i>size</i> of the TreeMap (the number of key-value
@@ -1690,7 +1691,7 @@ public class LinkedTreeMap<K,V>
 
 
     /**
-     * Reconstitute the <tt>TreeMap</tt> instance from a stream (i.e.,
+     * Reconstitute the <code>TreeMap</code> instance from a stream (i.e.,
      * deserialize it).
      * @param s object to be read
      * @throws java.io.IOException if the object class cannot be read
