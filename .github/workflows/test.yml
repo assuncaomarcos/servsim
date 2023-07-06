@@ -1,0 +1,17 @@
+name: Compile and publish assets
+
+on: [push]
+
+jobs:
+  build_n_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: |
+            16
+            17
+          distribution: 'adopt'
+        run: mvn test

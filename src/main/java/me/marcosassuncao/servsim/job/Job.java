@@ -25,7 +25,7 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
 	private final LinkedList<JobActivity> activities = new LinkedList<>();
 	private long remainingWork;
 	private long deadlineDuration = TIME_NOT_SET; // deadline duration associated with this job	
-	private final boolean preemptable = false; // determines whether the job can be preempted
+	private boolean preempt = false; // determines whether the job can be preempted
 	private int userId = ID_NOT_SET;
 	private int reservationId = ID_NOT_SET;
 	
@@ -258,11 +258,19 @@ public class Job extends DefaultWorkUnit implements Iterable<JobActivity> {
 	}
 
 	/**
+	 * Sets the job's preemptable status.
+	 * @param preempt <code>true</code> if the job can be preempted; <code>false</code> otherwise.
+	 */
+	public void setPreempt(boolean preempt) {
+		this.preempt = preempt;
+	}
+
+	/**
 	 * Checks whether the job can be preempted
 	 * @return <code>true</code> if it is; <code>false</code> otherwise.
 	 */
-	public boolean isPreemptable() {
-		return this.preemptable;
+	public boolean isPreempt() {
+		return this.preempt;
 	}
 		
 	/**
