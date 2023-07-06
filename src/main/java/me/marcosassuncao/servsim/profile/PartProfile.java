@@ -65,11 +65,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
 	private PartProfile(LinkedTreeMap<Long,PartProfileEntry> avail,
 										ResourcePartition[] parts) {
 		this.avail.putAll(avail);
-		partitions = new ResourcePartition[parts.length];
-		
-		for(int i=0; i<parts.length; i++) {
-			partitions[i] = parts[i];
-		}
+		partitions = Arrays.copyOf(parts, parts.length);
 	}
 	
 	/**
@@ -471,7 +467,7 @@ public class PartProfile extends Profile<PartProfileEntry> implements Iterable<P
         	last = newAnchor;
         }
 
-        PartProfileEntry nextEntry = null;
+        PartProfileEntry nextEntry;
         while (it.hasNext()) {
        		nextEntry = it.next();
        		if(nextEntry.getTime() <= finishTime) {

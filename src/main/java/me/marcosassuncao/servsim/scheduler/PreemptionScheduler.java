@@ -20,12 +20,12 @@ import java.util.*;
 
 public class PreemptionScheduler extends AbstractScheduler {
 	private static final Logger log = LogManager.getLogger(PreemptionScheduler.class.getName());
-	private ArrayList<Job> waitingQueue = new ArrayList<Job>();
-	private ArrayList<Job> runningQueue = new ArrayList<Job>();
+	private final ArrayList<Job> waitingQueue = new ArrayList<>();
+	private final ArrayList<Job> runningQueue = new ArrayList<>();
 	private Comparator<Job> sortComp;	// comparator to sort queues
 	
 	// Filter used to remove events created by preempted jobs
-	private FilterJobCompletionEvents filter = new FilterJobCompletionEvents();
+	private final FilterJobCompletionEvents filter = new FilterJobCompletionEvents();
 	
 	/**
 	 * Creates a new scheduler instance
@@ -127,7 +127,7 @@ public class PreemptionScheduler extends AbstractScheduler {
 	@Override
 	public void doJobProcessing(Job job) {
 		log.trace("Arrival of job #" + job.getId() + " at " + super.currentTime());
-		Job prTk = null;
+		Job prTk;
 		if (startJob(job)) {
 			if (!this.runningQueue.add(job)) {
 				log.info("Error adding job #" + job.getId() + " to running queue.");
@@ -181,10 +181,10 @@ public class PreemptionScheduler extends AbstractScheduler {
 				log.trace("There are " + waitingQueue.size() + 
 						" jobs in the waiting queue.");
 			
-				String msg = "";
+				StringBuilder msg = new StringBuilder();
 				for (Job tkr : runningQueue) {
-					msg += "Job #" + tkr.getId() + " completes at " + 
-								(tkr.getStartTime() + tkr.getDuration()) + "\n";
+					msg.append("Job #").append(tkr.getId()).append(" completes at ")
+							.append(tkr.getStartTime() + tkr.getDuration()).append("\n");
 				}
 				
 				log.trace("Current status of the running queue: \n" + msg);

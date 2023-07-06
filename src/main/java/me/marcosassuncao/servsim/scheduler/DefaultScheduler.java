@@ -29,7 +29,7 @@ public class DefaultScheduler extends AbstractScheduler {
 	private Comparator<Job> comparator;
 	
 	// Filter used to remove events created by preempted jobs
-	private FilterJobCompletionEvents filter = new FilterJobCompletionEvents();
+	private final FilterJobCompletionEvents filter = new FilterJobCompletionEvents();
 	
 	/**
 	 * Creates a new scheduler instance
@@ -152,10 +152,10 @@ public class DefaultScheduler extends AbstractScheduler {
 				log.trace("There are " + waitingQueue.size() + 
 						" jobs in the waiting queue.");
 			
-				String msg = "";
+				StringBuilder msg = new StringBuilder();
 				for (Job tkr : runningQueue) {
-					msg += "Job #" + tkr.getId() + " completes at " + 
-								(tkr.getStartTime() + tkr.getDuration()) + "\n";
+					msg.append("Job #").append(tkr.getId()).append(" completes at ")
+							.append(tkr.getStartTime() + tkr.getDuration()).append("\n");
 				}
 				
 				log.trace("Current status of the running queue: \n" + msg);

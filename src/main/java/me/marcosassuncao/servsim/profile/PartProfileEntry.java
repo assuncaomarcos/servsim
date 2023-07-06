@@ -117,17 +117,17 @@ public class PartProfileEntry extends ProfileEntry {
 	 * @return a representation of this entry
 	 */
 	public String toString() {
-		String result = "ProfileEntry={time="+ getTime() + "; gridlets=" + getNumJobs();
-		String rangeStr = "";
+		StringBuilder rangeStr = new StringBuilder();
 		int numPE = 0;
 		for (int i=0; i<rangesParts.length; i++) {
 			RangeList rg = rangesParts[i];
 			if (rg != null) {
 				numPE += rg.getNumItems();
-				rangeStr += "; queue " + i + "=" + rg;
+				rangeStr.append("; queue ").append(i).append("=").append(rg);
 			}
 		}
-		return result + "; numPE=" + numPE + rangeStr + "}";	
+		return String.format("ProfileEntry={time=%s; work_units=%s; numPE=%s %s}",
+				getTime(), getNumJobs(), numPE, rangeStr);
 	}
 	
 	/**

@@ -272,10 +272,10 @@ public abstract class Profile<V extends ProfileEntry> {
 		ArrayList<TimeSlot> slots = new ArrayList<>();
 
 		Iterator<V> it = avail.itValuesFromPrec(startTime);
-		ProfileEntry ent = null;
-		ProfileEntry nxtEnt = null;
-		RangeList slRgs = null;
-		RangeList its = null;
+		ProfileEntry ent;
+		ProfileEntry nxtEnt;
+		RangeList slRgs;
+		RangeList its;
 
 		while(it.hasNext()) {
 			ent = it.next();
@@ -373,17 +373,17 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * @return a collection with the time slots. 
 	 */
 	public Collection<TimeSlot> getTimeSlots(long finishTime, ArrayList<Entry> subProfile) {
-		ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
+		ArrayList<TimeSlot> slots = new ArrayList<>();
 		
-		long slStart = 0;		// the start time of the slot
-		long slEnd = 0;			// the end time of the slot
-		int stIdx = 0;			// index in which a slot starts
-		int endIdx = 0;			// index in which a slot finishes
+		long slStart;		// the start time of the slot
+		long slEnd;			// the end time of the slot
+		int stIdx;			// index in which a slot starts
+		int endIdx;			// index in which a slot finishes
 
-		ProfileEntry ent = null;
-		ProfileEntry nxtEnt = null;
-        RangeList slRgs = null;	// ranges of the slot
-        RangeList its = null;		// the intersection of ranges
+		ProfileEntry ent;
+		ProfileEntry nxtEnt;
+        RangeList slRgs;	// ranges of the slot
+        RangeList its;		// the intersection of ranges
         int size = subProfile.size();
         
         for (int i=0; i<size; i++) {
@@ -435,7 +435,7 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * @return a collection containing the entries
 	 */
 	public Collection<ProfileEntry> getAvailability(long startTime, long finishTime) {
-		return new ArrayList<ProfileEntry>(toArrayList(startTime, finishTime));
+		return new ArrayList<>(toArrayList(startTime, finishTime));
 	}
 	
 	/**
@@ -446,10 +446,10 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * @return part of the availability profile. 
 	 */    
 	public ArrayList<Entry> toArrayList(long startTime, long finishTime) {
-		ArrayList<Entry> subProfile = new ArrayList<Entry>();
+		ArrayList<Entry> subProfile = new ArrayList<>();
 		
 		Iterator<V> it = avail.itValuesFromPrec(startTime);
-		Entry fe = null;
+		Entry fe;
 		
 		// get first entry or create one if the profile is empty
 		if(it.hasNext()) {
@@ -485,8 +485,8 @@ public abstract class Profile<V extends ProfileEntry> {
 	 *  
 	 * @author Marcos Dias de Assuncao
 	 */
-	protected class Entry extends ProfileEntry {
-		private RangeList ranges = null;
+	protected static class Entry extends ProfileEntry {
+		private RangeList ranges;
 		
 		/**
 		 * Creates an entry with null ranges and the time given

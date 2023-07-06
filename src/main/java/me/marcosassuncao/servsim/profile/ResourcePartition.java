@@ -11,11 +11,11 @@ package me.marcosassuncao.servsim.profile;
  */
 
 public class ResourcePartition {
-   	private int partId; 	// this partition's identifier
-	private int numPEs; 	// the initial number of PEs given to the partition
+   	private final int partId; 	// this partition's identifier
+	private final int numPEs; 	// the initial number of PEs given to the partition
 
 	// to check which jobs can be scheduled in this partition
-	private PartitionPredicate predicate;
+	private final PartitionPredicate predicate;
 	
 	/**
 	 * Creates a new <code>QueuePartition</code> object.

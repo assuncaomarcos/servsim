@@ -3,6 +3,7 @@ package me.marcosassuncao.servsim.profile;
 import com.google.common.collect.ComparisonChain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
 
 public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeList> {
 	private int numItems = 0;
-	private ArrayList<Range> ranges = new ArrayList<>();
+	private final ArrayList<Range> ranges = new ArrayList<>();
 	private boolean sorted = true;		// true if the range is sorted
 	private boolean merged = true; 		// true if the range is merged
 	private boolean iterated = false;	// true if the range has been iterated
@@ -25,7 +26,7 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
 	/**
 	 * Default constructor.
 	 */
-	public RangeList() {};
+	public RangeList() {}
 	
 	/**
 	 * Creates a new {@link RangeList} object.
@@ -56,15 +57,14 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
 		}
 
 		str = str.substring(str.indexOf('{') + 1, str.lastIndexOf('}'));
-		String[] parts = str.split(","); 
+		String[] parts = str.split(",");
 
-		for (int i = 0; i < parts.length; i++) {
-			String part = parts[i];
+		Arrays.stream(parts).forEach(part -> {
 			String start = part.substring(part.indexOf('[') + 1, part.indexOf('.'));
 			String end = part.substring(part.lastIndexOf('.') + 1, part.indexOf(']'));
 			Range rg = new Range(Integer.parseInt(start), Integer.parseInt(end));
 			ranges.add(rg);
-		}
+		});
 		
 		sorted = merged = false;
 		iterated = true;
@@ -233,7 +233,7 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
      * Internal Iterator.
      */
     private class PrivateIterator implements Iterator<Range> {
-    	Iterator<Range> it = null;
+    	Iterator<Range> it;
     	Range next = null;
     	Range lastReturned = null;
 
@@ -314,7 +314,7 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
     	list.mergeRanges();
    	
     	int i = 0;
-		RangeList diffRange = null;
+		RangeList diffRange;
     	while(i < ranges.size()) {
     		Range rq = ranges.get(i);
 
@@ -444,11 +444,6 @@ public class RangeList implements Cloneable, Iterable<Range>, Comparable<RangeLi
 			quickSort(array, start, k - 1); 	// quicksort the left partition
 			quickSort(array, k + 1, end); 		// quicksort the right partition
 		} 
-		// if there is only one element in the partition, do not do any sorting
-		else {
-			// the array is sorted, so exit
-			return; 
-		}
 	}
 
 	/*

@@ -16,11 +16,11 @@ import static me.marcosassuncao.servsim.SimEvent.Type.TASK_START;
  * @author Marcos Dias de Assuncao
  */
 class FilterJobEventsByIDs implements EventFilter<SimEvent>  {
-	private HashSet<Integer> jobsId = new HashSet<>();
+	private final HashSet<Integer> jobsId = new HashSet<>();
 	
 	/**
-	 * Sets the reference time
-	 * @param time the reference time for scanning the events
+	 * Sets the jobs ids
+	 * @param jobIds the ids to be set
 	 */
 	public void setJobIDs(Collection<Integer> jobIds) {
 		this.jobsId.addAll(jobIds);

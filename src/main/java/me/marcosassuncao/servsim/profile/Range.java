@@ -92,8 +92,8 @@ public class Range implements Cloneable, Comparable<Range>, Iterable<Integer> {
     		return null;
     	}
     	
-    	int s = (this.begin < rangeb.begin) ? rangeb.begin : this.begin;
-    	int e = (this.end < rangeb.getEnd()) ? this.end : rangeb.getEnd();
+    	int s = Math.max(this.begin, rangeb.begin);
+    	int e = Math.min(this.end, rangeb.getEnd());
     	return (s > e) ? null : new Range(s, e);
     }
     
@@ -106,7 +106,7 @@ public class Range implements Cloneable, Comparable<Range>, Iterable<Integer> {
 	RangeList difference(Range rangeb) {
 		RangeList difference = new RangeList();
 
-		int s = (this.begin < rangeb.begin) ? this.begin : rangeb.begin;
+		int s = Math.min(this.begin, rangeb.begin);
 		int e = (this.end < rangeb.begin) ? this.end : rangeb.begin - 1;
 
 		if (s <= e) {
@@ -114,7 +114,7 @@ public class Range implements Cloneable, Comparable<Range>, Iterable<Integer> {
 		}
 
 		s = (this.begin <= rangeb.end) ? rangeb.end + 1 : this.begin;
-		e = (this.end > rangeb.end) ? this.end : rangeb.end;
+		e = Math.max(this.end, rangeb.end);
 
 		if (s <= e) {
 			difference.add(new Range(s, e));
@@ -130,7 +130,7 @@ public class Range implements Cloneable, Comparable<Range>, Iterable<Integer> {
      * or <tt>false</tt> otherwise.
      */
     boolean intersect(Range rangeb) {
-    	return intersection(rangeb) == null ? false : true;
+    	return intersection(rangeb) != null;
     }
     
 	/**

@@ -41,7 +41,7 @@ public class SingleProfile extends Profile<SingleProfileEntry>
 	 * @see SingleProfileEntry
 	 */
 	protected SingleProfile(LinkedTreeMap<Long,SingleProfileEntry> avail) {
-		avail.putAll(avail);
+		this.avail.putAll(avail);
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class SingleProfile extends Profile<SingleProfileEntry>
 	 * entry with the number of PEs.
 	 * @see SingleProfileEntry
 	 */
-	protected SingleProfile() {};
+	protected SingleProfile() {}
 	
 	// --------------------------- PUBLIC METHODS -----------------------
 
@@ -97,7 +97,7 @@ public class SingleProfile extends Profile<SingleProfileEntry>
         	last = newAnchor;
         }
 
-        SingleProfileEntry nextEntry = null;
+        SingleProfileEntry nextEntry;
         while(it.hasNext()) {
        		nextEntry = it.next();
        		if(nextEntry.getTime() > finishTime) {
@@ -152,7 +152,7 @@ public class SingleProfile extends Profile<SingleProfileEntry>
 	 * @author Marcos Dias de Assuncao
 	 */
 	private class PrivateValueIterator implements Iterator<SingleProfileEntry> {
-		private Iterator<SingleProfileEntry> it = null;
+		private final Iterator<SingleProfileEntry> it;
 
         PrivateValueIterator() {
         	it = avail.values().iterator();

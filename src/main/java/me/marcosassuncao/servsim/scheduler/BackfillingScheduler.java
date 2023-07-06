@@ -25,7 +25,7 @@ public abstract class BackfillingScheduler extends AbstractScheduler {
 	 * The queue of running jobs.
 	 */
 	protected ArrayList<Job> runningQueue = new ArrayList<>();
-	private FilterJobEventsByIDs filterJobEvents = new FilterJobEventsByIDs();
+	private final FilterJobEventsByIDs filterJobEvents = new FilterJobEventsByIDs();
 	private Comparator<Job> comparator;
 	
 	/**
@@ -127,24 +127,21 @@ public abstract class BackfillingScheduler extends AbstractScheduler {
      * @return a collection with the IDs of the affected jobs
      */
     protected Collection<Integer> compressSchedule(long time) {
-    	Collection<Integer> jobIds = new LinkedList<Integer>();
+    	Collection<Integer> jobIds = new LinkedList<>();
     	// jobs with reservation cannot be moved
     	ResourcePool rlist = super.serverAttributes().getResourcePool();
-    	Iterator<Job> it = this.waitingQueue.iterator();
-        while(it.hasNext()) {
-        	Job j = it.next();
-        	
-        	// Skip as it cannot get better than this.
-        	if(j.getStartTime() <= time || j.hasReserved()) {
-        		continue;
-        	}
+		for (Job j : this.waitingQueue) {
+			// Skip as it cannot get better than this.
+			if (j.getStartTime() <= time || j.hasReserved()) {
+				continue;
+			}
 
 			long startTime = Math.max(0, j.getStartTime());
 			long finishTime = j.getStartTime() + j.getDuration();
 			RangeList res = j.getResourceRanges();
 			rlist.releaseResources(startTime, finishTime, res);
 			jobIds.add(j.getId());
-        }
+		}
         
         return jobIds;
     }
