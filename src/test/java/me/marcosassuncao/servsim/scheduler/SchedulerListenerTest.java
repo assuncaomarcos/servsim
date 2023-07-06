@@ -19,9 +19,9 @@ import static org.junit.Assert.assertEquals;
 public class SchedulerListenerTest implements EventListener<WorkUnitEvent>  {
 	private Server srv;
 	private TestUser user;
-	private int capacity = 10;
-	private int jobDuration = 100;
-	private int numJobs = 10;
+	private final int capacity = 10;
+	private final int jobDuration = 100;
+	private final int numJobs = 10;
 	private int inExecEvents = 0;
 	private int completeEvents = 0;
 	

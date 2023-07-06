@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 public abstract class AbstractReport extends SimEntity {
 	private static final Logger log = LogManager.getLogger(AbstractReport.class.getName());
 	private PrintWriter report;
-	private String filePath;
+	private final String filePath;
 	
 	/**
 	 * Creates a new report

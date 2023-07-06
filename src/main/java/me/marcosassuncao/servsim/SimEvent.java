@@ -13,14 +13,15 @@ import com.google.common.base.MoreObjects;
  * @author Marcos Dias de Assuncao
  */
 @SuppressWarnings("rawtypes")
-public class SimEvent extends AbstractEvent<Enum, Object> implements Cloneable, Comparable<SimEvent> {
+public class SimEvent extends AbstractEvent<Enum, Object>
+		implements Cloneable, Comparable<SimEvent> {
 	// These attributes are just to create a serial number for the 
 	// event to maintain their temporal order when they are added to a queue.
 	private static long nextSerial = 0;
-	private long serial;
+	private final long serial;
 	
-	private int srcEntity;			// the entity that created the event
-	private int dstEntity;			// the entity that will process the event
+	private final int srcEntity;			// the entity that created the event
+	private final int dstEntity;			// the entity that will process the event
 	
 	/** A constant to represent the delay of an event that must be scheduled now */
 	public static final long SEND_NOW = 0L;
@@ -145,6 +146,6 @@ public class SimEvent extends AbstractEvent<Enum, Object> implements Cloneable, 
 		RESERVATION_CANCEL,
 		
 		/** Response to a reservation request */
-		RESERVATION_RESPONSE;
+		RESERVATION_RESPONSE
 	}
 }

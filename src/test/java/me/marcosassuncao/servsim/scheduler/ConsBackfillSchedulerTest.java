@@ -18,18 +18,18 @@ import org.junit.Test;
 public class ConsBackfillSchedulerTest {
 	private Server srv;
 	private TestUser user;
-	private int capacity = 10;
-	private int jobDuration = 100;
-	private int numJobs = 10;
 
 	@Test
 	public void runOneServerSimulation() {
+		int capacity = 10;
 		srv = Server.builder()
 				.setName("Server-" + UUID.randomUUID())
 				.setScheduler(new ConsBackfillScheduler())
 				.setCapacity(capacity).build();
 		
 		ArrayList<JobRequest> requests = new ArrayList<>();
+		int jobDuration = 100;
+		int numJobs = 10;
 		for (int i = 0; i < numJobs; i++) {
 			// 100 seconds duration, use half capacity
 			Job j = new Job(jobDuration, 5);
@@ -52,8 +52,8 @@ public class ConsBackfillSchedulerTest {
 		assertEquals(user.receivedJobs().get(requests.get(1).job().getId()).getStartTime(), 0);
 		assertEquals(user.receivedJobs().get(requests.get(2).job().getId()).getStartTime(), jobDuration);
 		assertEquals(user.receivedJobs().get(requests.get(3).job().getId()).getStartTime(), jobDuration);
-		assertEquals(user.receivedJobs().get(requests.get(4).job().getId()).getStartTime(), jobDuration*2);
-		assertEquals(user.receivedJobs().get(requests.get(9).job().getId()).getStartTime(), jobDuration*4);
+		assertEquals(user.receivedJobs().get(requests.get(4).job().getId()).getStartTime(), jobDuration *2);
+		assertEquals(user.receivedJobs().get(requests.get(9).job().getId()).getStartTime(), jobDuration *4);
 		
 		for (int i = 0; i < numJobs; i++) {
 			assertEquals(user.receivedJobs().get(requests.get(i).job().getId()).getStatus(), WorkUnit.Status.COMPLETE);

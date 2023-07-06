@@ -17,20 +17,20 @@ import org.junit.Test;
 public class AggrBackfillSchedulerTest {
 	private Server srv;
 	private TestUser user;
-	private int capacity = 10;
-	private int jobDuration = 100;
-	private int numJobs = 10;
 
 	@Test
 	public void testScheduling() {
+		int capacity = 10;
 		srv = Server.builder()
 				.setName("Server-" + UUID.randomUUID())
 				.setScheduler(new AggrBackfillScheduler())
 				.setCapacity(capacity).build();
 		
 		ArrayList<JobRequest> requests = new ArrayList<>();
+		int numJobs = 10;
 		for (int i = 0; i < numJobs; i++) {
 			// 100 seconds duration, use half capacity
+			int jobDuration = 100;
 			Job j = new Job(jobDuration, 5);
 			requests.add(new JobRequest(j, SimEvent.SEND_NOW));
 		}

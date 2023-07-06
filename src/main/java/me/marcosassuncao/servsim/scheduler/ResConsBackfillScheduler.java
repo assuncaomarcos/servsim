@@ -202,7 +202,7 @@ public class ResConsBackfillScheduler extends ConsBackfillScheduler implements R
 			if (!success) {
 				super.setJobStatus(job, FAILED);
 				sendJobToOwner(job);
-				log.error("Insuficient resources reserved for job: " + job, 
+				log.error("Insuficient resources reserved for job: " + job +
 						" with reservation: " + r);
 			}
 		} else {

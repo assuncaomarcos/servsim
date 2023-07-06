@@ -3,6 +3,7 @@ package me.marcosassuncao.servsim.server;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -23,9 +24,9 @@ import me.marcosassuncao.servsim.SimClock;
  */
 
 public class ServerHourlyAvailability implements ServerAvailability {
-	private float[] avail; 	// stores the avail. for all hours of the week
-	private TimeZone timeZone;
-	private SimClock clock;
+	private final float[] avail; 	// stores the avail. for all hours of the week
+	private final TimeZone timeZone;
+	private final SimClock clock;
 	
 	/**
 	 * Creates a new availability object with the host's time zone
@@ -45,9 +46,7 @@ public class ServerHourlyAvailability implements ServerAvailability {
 	public ServerHourlyAvailability(SimClock clock, TimeZone timeZone) {
 		this.clock = checkNotNull(clock);
 		avail = new float[7 * 24];
-		for (int i = 0; i < avail.length; i++) {
-			avail[i] = 1f;
-		}
+		Arrays.fill(avail, 1f);
 		this.timeZone = timeZone;
 	}
 	
@@ -145,15 +144,15 @@ public class ServerHourlyAvailability implements ServerAvailability {
 	@Override
 	public String toString() {
 		String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-		String result = "--------------Availability---------------\n";
+		StringBuilder result = new StringBuilder("--------------Availability---------------\n");
 		for (int d = Calendar.SUNDAY; d <= Calendar.SATURDAY; d++) {
-			result += days[d - 1] + " ";
+			result.append(days[d - 1]).append(" ");
 			for (int h = 0; h < 24; h++) {
-				result += avail[(d - 1) * 24 + h] + " ";
+				result.append(avail[(d - 1) * 24 + h]).append(" ");
 			}
-			result += "\n";
+			result.append("\n");
 		}
-		result += "-----------------------------------------";
-		return result;
+		result.append("-----------------------------------------");
+		return result.toString();
 	}
 }

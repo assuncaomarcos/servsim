@@ -36,8 +36,8 @@ import org.apache.logging.log4j.Logger;
 
 public class Server extends SimEntity {
 	private static final Logger log = LogManager.getLogger(Server.class.getName());
-	private ServerAttributes attributes;
-	private Scheduler scheduler;
+	private final ServerAttributes attributes;
+	private final Scheduler scheduler;
 
 	/**
 	 * Creates a new server
@@ -86,7 +86,7 @@ public class Server extends SimEntity {
 			}
 		}  else if (ev.type() == TASK_CANCEL) {
 			try {
-				int id = ((Integer)ev.content()).intValue();
+				int id = (Integer)ev.content();
 				scheduler.doJobCancel(id);
 			} catch(ClassCastException cce) {
 				log.error("Invalid job id sent for cancellation.");
@@ -109,7 +109,7 @@ public class Server extends SimEntity {
 			if (this.scheduler instanceof ReservationScheduler) {
 				ReservationScheduler sched = (ReservationScheduler)scheduler;
 				try {
-					int id = ((Integer)ev.content()).intValue();
+					int id = (Integer)ev.content();
 					sched.doReservationCancel(id);
 				} catch(ClassCastException cce) {
 					log.error("Invalid reservation id sent for cancellation.");

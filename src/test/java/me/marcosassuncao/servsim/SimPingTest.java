@@ -1,9 +1,6 @@
 package me.marcosassuncao.servsim;
 
 import static org.junit.Assert.assertEquals;
-import me.marcosassuncao.servsim.SimEntity;
-import me.marcosassuncao.servsim.SimEvent;
-import me.marcosassuncao.servsim.Simulation;
 
 import org.junit.Test;
 
@@ -31,10 +28,10 @@ public class SimPingTest {
 	}
 		
 	// Simple entity that sends a task to another
-	class PingEntity extends SimEntity {
-		private int dstEntity;
-		private long interval;
-		private int numberPing;
+	static class PingEntity extends SimEntity {
+		private final int dstEntity;
+		private final long interval;
+		private final int numberPing;
 		private int pongReceived = 0;
 
 		public PingEntity(String name, int dstEntity, 
@@ -64,7 +61,7 @@ public class SimPingTest {
 	}
 	
 	// Simple entity that received a task and returns it to sender
-	class PongEntity extends SimEntity {
+	static class PongEntity extends SimEntity {
 		private int pingReceived;
 
 		public PongEntity(String name) throws IllegalArgumentException {

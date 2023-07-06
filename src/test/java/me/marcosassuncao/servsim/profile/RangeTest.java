@@ -1,8 +1,6 @@
 package me.marcosassuncao.servsim.profile;
 
 import static org.junit.Assert.*;
-import me.marcosassuncao.servsim.profile.Range;
-import me.marcosassuncao.servsim.profile.RangeList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,18 +21,18 @@ public class RangeTest {
 
 	@Test
 	public void test() {
-		assertTrue(rangeFull.getNumItems() == 100);
+		assertEquals(100, rangeFull.getNumItems());
 		assertTrue(rangeFull.intersect(rangeMiddle));
 		assertFalse(rangeStart.intersect(rangeEnd));
 		
 		// test deletion
 		RangeList newRanges = rangeFull.difference(rangeStart);
-		assertTrue(newRanges.getNumItems() == 90);
+		assertEquals(90, newRanges.getNumItems());
 		assertEquals(newRanges.toString(), "{[10..99]}");
 
 		// test intersection
 		Range intersect = rangeFull.intersection(rangeMiddle);
-		assertTrue(intersect.getNumItems() == rangeMiddle.getNumItems());
+		assertEquals(intersect.getNumItems(), rangeMiddle.getNumItems());
 		assertEquals(intersect.toString(), "[40..59]");
 	}
 }

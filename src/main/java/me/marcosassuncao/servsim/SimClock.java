@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class SimClock {
 	private long time = 0L;
 	private TimeUnit timeUnit = TimeUnit.SECONDS;
-	private Date startDate = null; // date at which the simulation started
+	private Date startDate; // date at which the simulation started
 
 	/**
 	 * Package level constructor

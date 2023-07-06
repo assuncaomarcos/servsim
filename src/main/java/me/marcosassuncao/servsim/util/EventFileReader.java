@@ -23,8 +23,8 @@ import org.apache.logging.log4j.Logger;
 public abstract class EventFileReader extends ReservationServerUser { 
 	private static final Logger log = LogManager.getLogger(EventFileReader.class.getName());
 	private static final String COMMENT = "#";  	// Comment symbol 
-	private String fileName;						// the event file name
-	private String delimiter;
+	private final String fileName;						// the event file name
+	private final String delimiter;
 
 	/**
 	 * Creates a new event file reader.
@@ -55,7 +55,7 @@ public abstract class EventFileReader extends ReservationServerUser {
 	
 	@Override
 	public void onStart() {
-		BufferedReader reader = null;
+		BufferedReader reader;
         String line;
         String[] sp;
         int lineNum = 0;

@@ -217,7 +217,7 @@ public class DefaultResourcePool extends ResourcePool {
 	 */
 	public Collection<ResourceUsage> getPeakResourceUse(long startTime, long finishTime) {
 		Collection<ProfileEntry> avail = profile.getAvailability(startTime, finishTime);
-		ArrayList<ResourceUsage> usage = new ArrayList<ResourceUsage>(avail.size()); 
+		ArrayList<ResourceUsage> usage = new ArrayList<>(avail.size());
 		
 		for (ProfileEntry e : avail) {
 			usage.add(new ResourceUsage(e.getTime(), super.getCapacity() - e.getNumResources()));

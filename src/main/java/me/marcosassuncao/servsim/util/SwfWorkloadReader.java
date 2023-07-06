@@ -21,8 +21,8 @@ import static me.marcosassuncao.servsim.SimEvent.Type.TASK_ARRIVE;
 
 public class SwfWorkloadReader extends EventFileReader {
 	private static final Logger log = LogManager.getLogger(SwfWorkloadReader.class.getName());
-	private LinkedList<Job> jobList = new LinkedList<Job>();
-	private int dstServerId;
+	private final LinkedList<Job> jobList = new LinkedList<>();
+	private final int dstServerId;
 	
 	/**
 	 * Creates a new event file reader.

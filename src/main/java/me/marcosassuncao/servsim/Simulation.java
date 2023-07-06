@@ -39,7 +39,7 @@ public abstract class Simulation implements Runnable {
 	private LinkedList<SimEvent> deferred = new LinkedList<>(); // events handled at a clock tick
 	private EntityList entities = new EntityList();
 	private Comparator<SimEvent> eventPriority = null;
-	private SimClock clock = new SimClock(); 
+	private final SimClock clock = new SimClock();
 	private Status status = Status.NOT_STARTED;
 	
 	// This is to allow a simulation to have a fixed time length.
@@ -283,10 +283,8 @@ public abstract class Simulation implements Runnable {
 	 * 			been found; <code>false</code> otherwise.
 	 */
 	public boolean hasFutureEvent(Predicate<SimEvent> filter) {
-		Iterator<SimEvent> it = future.iterator();
-		while (it.hasNext()) {
-			SimEvent ev = it.next();
-			if(filter.test(ev)) {
+		for (SimEvent ev : future) {
+			if (filter.test(ev)) {
 				return true;
 			}
 		}
@@ -379,7 +377,7 @@ public abstract class Simulation implements Runnable {
 			}
 		}
 		
-		return !isPaused() && this.abruptInterrupt ? true : false;
+		return !isPaused() && this.abruptInterrupt;
 	}
 	
 	/**
@@ -421,7 +419,7 @@ public abstract class Simulation implements Runnable {
 		}
 		
 		if (isPaused()) {
-			return queueEmpty;
+			return false;
 		}
 		
 		// If there are more future events then deal with them
@@ -501,7 +499,7 @@ public abstract class Simulation implements Runnable {
 		/** Simulation is not started */
 		NOT_STARTED {
 			public List<Status> nextState() {
-				return Arrays.asList(RUNNING);
+				return List.of(RUNNING);
 			}
 		},
 		
@@ -514,13 +512,13 @@ public abstract class Simulation implements Runnable {
 		/** Simulation is paused */
 		PAUSED {
 			public List<Status> nextState() {
-				return Arrays.asList(RUNNING);
+				return List.of(RUNNING);
 			}
 		},
 		/** Simulation is finished */
 		COMPLETE {
 			public List<Status> nextState() {
-				return Arrays.asList(NOT_STARTED);
+				return List.of(NOT_STARTED);
 			}
 		}
 	}
@@ -530,7 +528,7 @@ public abstract class Simulation implements Runnable {
 	 * mess up with the number of entities in the system and how they get created or deleted.
 	 * So the whole thing must be managed by Simulation class.
 	 */
-	private class EntityList extends ArrayList<SimEntity> {
+	private static class EntityList extends ArrayList<SimEntity> {
 		private static final long serialVersionUID = 6922342328272754582L;
 
 		// adds an entity to the simulation

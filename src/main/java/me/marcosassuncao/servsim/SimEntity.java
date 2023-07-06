@@ -30,8 +30,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class SimEntity implements EventSink<SimEvent> {
 	// Used to generate a single ID to the entity
 	private static int nextId = 0;
-	private String name;
-	private int id;
+	private final String name;
+	private final int id;
 	private boolean enabled = true;
 	private Simulation sim;
 	

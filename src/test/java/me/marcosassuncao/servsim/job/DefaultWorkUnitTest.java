@@ -1,8 +1,6 @@
 package me.marcosassuncao.servsim.job;
 
 import static org.junit.Assert.*;
-import me.marcosassuncao.servsim.job.DefaultWorkUnit;
-import me.marcosassuncao.servsim.job.WorkUnit;
 
 import org.junit.Before;
 import org.junit.Test;

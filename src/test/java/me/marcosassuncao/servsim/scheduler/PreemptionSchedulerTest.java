@@ -18,8 +18,8 @@ import org.junit.Test;
 public class PreemptionSchedulerTest {
 	private Server srv;
 	private TestUser user;
-	private int capacity = 1;
-	private int jobDuration = 100;
+	private final int capacity = 1;
+	private final int jobDuration = 100;
 
 	@Test
 	public void testPreemption() {

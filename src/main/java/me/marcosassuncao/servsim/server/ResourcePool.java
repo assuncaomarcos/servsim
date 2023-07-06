@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public abstract class ResourcePool extends SimEntity {
 	private ArrayList<ResourceStatusListener> listeners;
-	private int capacity;
+	private final int capacity;
 	
 	/**
 	 * Creates a new resource pool
@@ -162,6 +162,6 @@ public abstract class ResourcePool extends SimEntity {
 		BOOTING,
 		
 		/** Resource is powered on */
-		ON;
+		ON
 	}
 }

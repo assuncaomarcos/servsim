@@ -1,9 +1,6 @@
 package me.marcosassuncao.servsim.profile;
 
 import static org.junit.Assert.*;
-import me.marcosassuncao.servsim.profile.ProfileEntry;
-import me.marcosassuncao.servsim.profile.RangeList;
-import me.marcosassuncao.servsim.profile.SingleProfile;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +46,7 @@ public class SingleProfileTest {
 		// allocate resources in the future
 		pool.allocateResourceRanges(new RangeList(0, numRes - 1), slot + 10, slot + 20);
 		e = pool.checkAvailability(numRes, slot, slot);
-		assertEquals(e, null);
+		assertNull(e);
 		
 		// look for a slot of 10 seconds
 		e = pool.findStartTime(numRes, EPOCH, 10);
