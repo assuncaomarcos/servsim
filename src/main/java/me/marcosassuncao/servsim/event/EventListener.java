@@ -2,8 +2,10 @@ package me.marcosassuncao.servsim.event;
 
 /**
  * Entity capable of receiving and handling events.
- * 
+ *
  * @author Marcos Dias de Assuncao
+ *
+ * @param <E> The event type to which this filter applies
  */
 @SuppressWarnings("rawtypes")
 public interface EventListener<E extends Event> extends EventFilter<E> {
@@ -15,4 +17,3 @@ public interface EventListener<E extends Event> extends EventFilter<E> {
     void event(E event);
 
 }
-

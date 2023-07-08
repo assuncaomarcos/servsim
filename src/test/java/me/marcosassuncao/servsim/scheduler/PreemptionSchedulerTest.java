@@ -29,12 +29,12 @@ public class PreemptionSchedulerTest {
 				.setName("Server-" + UUID.randomUUID())
 				.setScheduler(sched)
 				.setCapacity(capacity).build();
-		
+
 		ArrayList<JobRequest> requests = new ArrayList<>();
 		Job j = new Job(jobDuration);
 		j.setPriority(1);
 		requests.add(new JobRequest(j, SimEvent.SEND_NOW));
-		
+
 		j = new Job(jobDuration);
 		j.setPriority(0);
 		requests.add(new JobRequest(j, 50));
@@ -42,7 +42,7 @@ public class PreemptionSchedulerTest {
 		j = new Job(jobDuration);
 		j.setPriority(0);
 		requests.add(new JobRequest(j, 170));
-		
+
 		user = new TestUser(srv.getId(), requests);
 
 		// Simulation trigger class
@@ -54,11 +54,14 @@ public class PreemptionSchedulerTest {
 			}
 		};
 		sim.run();
-		
+
 		assertTrue(requests.get(0).job().getFinishTime() > requests.get(1).job().getFinishTime());
 		assertTrue(requests.get(0).job().getFinishTime() > requests.get(2).job().getFinishTime());
+
+		assertTrue(requests.get(0).job().getStartTime() < requests.get(1).job().getStartTime());
+		assertTrue(requests.get(0).job().getStartTime() < requests.get(2).job().getStartTime());
 	}
-	
+
 	@Test
 	public void testEDFSorting() {
 		PreemptionScheduler sched = new PreemptionScheduler();
@@ -67,7 +70,7 @@ public class PreemptionSchedulerTest {
 				.setName("Server-" + UUID.randomUUID())
 				.setScheduler(sched)
 				.setCapacity(capacity).build();
-		
+
 		int numJobs = 10;
 		ArrayList<JobRequest> requests = new ArrayList<>();
 		for (int i = 0; i < numJobs; i++) {
@@ -87,9 +90,9 @@ public class PreemptionSchedulerTest {
 			}
 		};
 		sim.run();
-		
+
 		for (int i = 0; i < numJobs-1; i++) {
-			assertTrue(requests.get(i).job().getDeadlineDuration() <= requests.get(i+1).job().getDeadlineDuration());	
+			assertTrue(requests.get(i).job().getDeadlineDuration() <= requests.get(i+1).job().getDeadlineDuration());
 		}
 	}
 }
