@@ -126,10 +126,11 @@
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.5</version>
                 <configuration>
-<!--                      <gpgArguments>-->
-<!--                        <arg>&#45;&#45;pinentry-mode</arg>-->
-<!--                        <arg>loopback</arg>-->
-<!--                    </gpgArguments>-->
+                      <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                          <arg>--batch</arg>
+                    </gpgArguments>
                 </configuration>
                 <executions>
                     <execution>
