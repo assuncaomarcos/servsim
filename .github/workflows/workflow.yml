@@ -2,24 +2,24 @@ name: Compile and publish assets
 on: [push]
 
 jobs:
-  test:
-    name: Test the simulator
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: |
-            16
-            17
-          distribution: 'temurin'
-      - name: Run tests
-        run: mvn test
+#  test:
+#    name: Test the simulator
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Setup Java
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: |
+#            16
+#            17
+#          distribution: 'temurin'
+#      - name: Run tests
+#        run: mvn test
 
   publish:
     name: Publish assets
-    needs: [test]
+#    needs: [test]
     runs-on: ubuntu-latest
     # uploads on every tag starting with 'v'
 #    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
@@ -28,18 +28,21 @@ jobs:
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v3
         with:
-          java-version: |
-                        16
-                        17
+          java-version: 17
           distribution: 'temurin'
           server-id: ossrh
+          settings-path: ${{ github.workspace }}
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: Publish package
+          gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Publish to Apache Maven
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-        run: mvn deploy -e
+#          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
