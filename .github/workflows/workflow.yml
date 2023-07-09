@@ -1,11 +1,28 @@
 name: Compile and publish assets
-on:
-  release:
-    types: [created]
-    
+on: [push]
+
 jobs:
-  publish:
+  test:
+    name: Test the simulator
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: |
+            16
+            17
+          distribution: 'adopt'
+      - name: Run tests
+        run: mvn test
+
+  publish:
+    name: Publish assets
+    needs: [test]
+    runs-on: ubuntu-latest
+    # uploads on every tag starting with 'v'
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v3
       - name: Set up Maven Central Repository
