@@ -4,8 +4,11 @@ import me.marcosassuncao.servsim.event.AbstractEvent;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
- * This class represents a simulation event that is sent by one entity to another.
+ * This class represents a simulation event
+ * that is sent by one entity to another.
  *
  * @see Simulation
  * @see SimEntity
@@ -15,15 +18,29 @@ import com.google.common.base.MoreObjects;
 @SuppressWarnings("rawtypes")
 public class SimEvent extends AbstractEvent<Enum, Object>
         implements Cloneable, Comparable<SimEvent> {
-    // These attributes are just to create a serial number for the
-    // event to maintain their temporal order when they are added to a queue.
-    private static long nextSerial = 0;
+    /**
+     * This is to create a serial number for the event to maintain
+     * their temporal order when they are added to a queue.
+     */
+    private static final AtomicInteger SERIAL_COUNTER = new AtomicInteger(0);
+
+    /**
+     * Serial code to maintain time ordering of events in event queues.
+     */
     private final long serial;
 
-    private final int srcEntity;			// the entity that created the event
-    private final int dstEntity;			// the entity that will process the event
+    /**
+     * The entity that created the event.
+     */
+    private final int srcEntity;
 
-    /** A constant to represent the delay of an event that must be scheduled now */
+    /**
+     * The entity that will process the event.
+     */
+    private final int dstEntity;
+
+    /** A constant to represent the delay of an event
+     *  that must be scheduled now. */
     public static final long SEND_NOW = 0L;
 
     // ------ Package level methods ------
@@ -36,11 +53,15 @@ public class SimEvent extends AbstractEvent<Enum, Object>
      * @param srcEntity the source entity that created the event
      * @param dstEntity the entity that should handle the event
      */
-    public SimEvent(Enum type, Object content, long time, int srcEntity, int dstEntity) {
+    public SimEvent(final Enum type,
+                    final Object content,
+                    final long time,
+                    final int srcEntity,
+                    final int dstEntity) {
         super(type, content, time);
         this.srcEntity = srcEntity;
         this.dstEntity = dstEntity;
-        this.serial = createSerial();
+        this.serial = SERIAL_COUNTER.incrementAndGet();
     }
 
     /**
@@ -60,7 +81,7 @@ public class SimEvent extends AbstractEvent<Enum, Object>
     }
 
     /**
-     * Gets the content of this event
+     * Gets the content of this event.
      * @return the content of this event
      */
     public Object content() {
@@ -68,16 +89,18 @@ public class SimEvent extends AbstractEvent<Enum, Object>
     }
 
     /**
-     * @see Comparable#compareTo(Object)
+     * {@inheritDoc}
      */
-    public int compareTo(SimEvent event) {
+    @Override
+    public int compareTo(final SimEvent event) {
         int comp = Long.compare(time(), event.time());
-        if (comp == 0) {
-            comp = Long.compare(serial, event.serial);
-        }
-        return comp;
+        return comp == 0 ? Long.compare(serial, event.serial) : comp;
     }
 
+    /**
+     * Creates a String representation of this entity.
+     * @return the String representation.
+     */
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -90,16 +113,13 @@ public class SimEvent extends AbstractEvent<Enum, Object>
     }
 
     /**
-     * Returns a clone of this event
+     * Returns a clone of this event.
      * @return a cloned event
      */
     public Object clone() {
-        return new SimEvent(super.type(), super.subject(), super.time(), srcEntity, dstEntity);
-    }
-
-    /* synchronised ID creation */
-    private static synchronized long createSerial() {
-        return ++nextSerial;
+        return new SimEvent(super.type(),
+                super.subject(), super.time(),
+                srcEntity, dstEntity);
     }
 
     /**
@@ -118,7 +138,7 @@ public class SimEvent extends AbstractEvent<Enum, Object>
         /** A task is cancelled by a resource. */
         TASK_CANCEL,
 
-        /** A task is paused by a resource */
+        /** A task is paused by a resource. */
         TASK_PAUSE,
 
         /** Results are received by an entity. */
