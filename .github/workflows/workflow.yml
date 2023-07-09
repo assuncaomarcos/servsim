@@ -56,4 +56,4 @@ jobs:
             --no-transfer-progress \
             --batch-mode \
             -Dgpg.passphrase=$MAVEN_GPG_PASSPHRASE \
-            clean deploy
+            clean deploy 
