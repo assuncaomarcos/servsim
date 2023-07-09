@@ -121,25 +121,42 @@
                 </executions>
             </plugin>
 
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-gpg-plugin</artifactId>-->
+<!--                <version>1.5</version>-->
+<!--                <configuration>-->
+<!--                    &lt;!&ndash; Prevent gpg from using pinentry programs &ndash;&gt;-->
+<!--                    <gpgArguments>-->
+<!--                        <arg>&#45;&#45;pinentry-mode</arg>-->
+<!--                        <arg>loopback</arg>-->
+<!--                    </gpgArguments>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>sign-artifacts</id>-->
+<!--                        <phase>verify</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>sign</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <configuration>
-                      <gpgArguments>
-                        <arg>--pinentry-mode</arg>
-                        <arg>loopback</arg>
-                    </gpgArguments>
-                </configuration>
+                <groupId>org.simplify4u.plugins</groupId>
+                <artifactId>sign-maven-plugin</artifactId>
+                <version>1.0.1</version>
                 <executions>
                     <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                </configuration>
             </plugin>
 
             <plugin>
