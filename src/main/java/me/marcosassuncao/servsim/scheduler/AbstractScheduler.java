@@ -21,7 +21,8 @@ import org.apache.logging.log4j.Logger;
 import static me.marcosassuncao.servsim.SimEvent.Type.RESULT_ARRIVE;
 import static me.marcosassuncao.servsim.SimEvent.Type.TASK_COMPLETE;
 import static me.marcosassuncao.servsim.SimEvent.Type.TASK_START;
-import static me.marcosassuncao.servsim.job.WorkUnit.Status.*;
+import static me.marcosassuncao.servsim.job.WorkUnit.Status.IN_EXECUTION;
+import static me.marcosassuncao.servsim.job.WorkUnit.Status.WAITING;
 import static me.marcosassuncao.servsim.job.WorkUnitEvent.Type.STATUS_CHANGED;
 
 /**
@@ -32,188 +33,250 @@ import static me.marcosassuncao.servsim.job.WorkUnitEvent.Type.STATUS_CHANGED;
  * @author Marcos Dias de Assuncao
  */
 
-public abstract class AbstractScheduler extends SimEntity implements Scheduler,
-		ListenerService<WorkUnitEvent, EventListener<WorkUnitEvent>> {
+public abstract class AbstractScheduler
+        extends SimEntity implements Scheduler,
+        ListenerService<WorkUnitEvent,
+                EventListener<WorkUnitEvent>> {
 
-	private static final Logger log = LogManager.getLogger(AbstractScheduler.class.getName());
-	/**
-	 * The server attributes, such as availability, cluster resources, etc
-	 */
-	protected ServerAttributes attr;
-	/**
-	 * The listeners registered to events of this scheduler.
-	 */
-	protected LinkedList<EventListener<WorkUnitEvent>> listeners;
+    /** Default logger. */
+    private static final Logger LOGGER =
+            LogManager.getLogger(AbstractScheduler.class.getName());
+    /**
+     * The server attributes, such as availability, cluster resources, etc.
+     */
+    private ServerAttributes attr;
+    /**
+     * The listeners registered to events of this scheduler.
+     */
+    private LinkedList<EventListener<WorkUnitEvent>> listeners;
 
-	/**
-	 * Creates a new scheduling policy
-	 * @param name the policy's name
-	 * @throws IllegalArgumentException if name is <code>null</code>
-	 */
-	public AbstractScheduler(String name) throws IllegalArgumentException {
-		super(name);
-	}
+    /**
+     * Filter used to remove completion events of cancelled jobs.
+     */
+    private final FilterJobCompletionEvents filter = new FilterJobCompletionEvents();
 
-	/**
-	 * Initialise the scheduling policy.
-	 * @param attr the server's attributes
-	 */
-	public void initialize(ServerAttributes attr) {
-		this.attr = attr;
-	}
+    /**
+     * Creates a new scheduling policy.
+     * @param name the policy's name
+     * @throws IllegalArgumentException if name is <code>null</code>
+     */
+    public AbstractScheduler(final String name)
+            throws IllegalArgumentException {
+        super(name);
+    }
 
-	/**
-	 * Gets the server attributes
-	 * @return the server attributes
-	 */
-	public ServerAttributes serverAttributes() {
-		return attr;
-	}
+    /**
+     * Initialise the scheduling policy.
+     * @param attr the server's attributes
+     */
+    public void initialize(final ServerAttributes attr) {
+        this.attr = attr;
+    }
 
-	@Override
-	public void addListener(EventListener<WorkUnitEvent> listener) {
-		if (listeners == null) {
-			listeners = new LinkedList<>();
-		}
-		listeners.add(listener);
-	}
+    /**
+     * Gets the server attributes.
+     * @return the server attributes
+     */
+    public ServerAttributes serverAttributes() {
+        return attr;
+    }
 
-	@Override
-	public void removeListener(EventListener<WorkUnitEvent> listener) {
-		if (listeners != null) {
-			listeners.remove(listener);
-		}
-	}
+    /**
+     * Adds a listener for treating events related to status changes jobs.
+     *
+     * @param listener listener to add
+     */
+    @Override
+    public void addListener(
+            final EventListener<WorkUnitEvent> listener) {
+        if (listeners == null) {
+            listeners = new LinkedList<>();
+        }
+        listeners.add(listener);
+    }
 
-	@Override
-	public abstract void onStart();
+    /**
+     * Removes a previously registered job listener.
+     *
+     * @param listener listener to remove
+     */
+    @Override
+    public void removeListener(
+            final EventListener<WorkUnitEvent> listener) {
+        if (listeners != null) {
+            listeners.remove(listener);
+        }
+    }
 
-	@Override
-	public abstract void onShutdown();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract void onStart();
 
-	@Override
-	public void process(SimEvent ev) {
-		if (ev.type() == TASK_COMPLETE) {
-			try {
-				doJobCompletion((Job)ev.content());
-			} catch(ClassCastException cce) {
-				log.error("Invalid job received for completion.");
-			}
-		} else {
-			log.warn("Unknown payload type: " + ev.content());
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract void onShutdown();
 
-	/**
-	 * Allocates a resource to a given job
-	 * @param time the start time of the allocation
-	 * @param job the job to which the resource will be allocated
-	 * @param res the resource range list to be allocated.
-	 */
-	protected void allocateResourcesToJob(long time, Job job, RangeList res) {
-		ResourcePool resources = attr.getResourcePool();
-		long now = super.currentTime();
-		resources.allocateResources(job, res, time);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void process(final SimEvent ev) {
+        if (ev.type() == TASK_COMPLETE) {
+            try {
+                doJobCompletion((Job) ev.content());
+            } catch (ClassCastException cce) {
+                LOGGER.error("Invalid job received for completion.");
+            }
+        } else {
+            LOGGER.warn("Unknown payload type: " + ev.content());
+        }
+    }
 
-		// if start time is in the future, then schedule an event to the
-		// scheduler itself to signal when the task must be started
-		super.send(super.getId(), time - now, TASK_START, job);
-		setJobStatus(job, WAITING);
-		job.setResourceRanges(res);
-	}
+    /**
+     * Allocates a resource to a given job.
+     * @param time the start time of the allocation
+     * @param job the job to which the resource will be allocated
+     * @param res the resource range list to be allocated.
+     */
+    protected void allocateResourcesToJob(final long time,
+                                          final Job job,
+                                          final RangeList res) {
+        ResourcePool resources = attr.getResourcePool();
+        long now = super.currentTime();
+        resources.allocateResources(job, res, time);
 
-	/**
-	 * Allocates a resource to a given job
-	 * @param job the job to which the resource will be allocated
-	 * @param res the resource range list to be allocated.
-	 */
-	protected void allocateResourcesToJob(Job job, RangeList res) {
-		setJobStatus(job, IN_EXECUTION);
+        // if start time is in the future, then schedule an event to the
+        // scheduler itself to signal when the task must be started
+        super.send(super.getId(), time - now, TASK_START, job);
+        setJobStatus(job, WAITING);
+        job.setResourceRanges(res);
+    }
 
-		ResourcePool resources = attr.getResourcePool();
-		long now = super.currentTime();
-		resources.allocateResources(res, now, now + job.getRemainingWork());
+    /**
+     * Allocates a resource to a given job.
+     * @param job the job to which the resource will be allocated
+     * @param res the resource range list to be allocated.
+     */
+    protected void allocateResourcesToJob(final Job job,
+                                          final RangeList res) {
+        setJobStatus(job, IN_EXECUTION);
 
-		// schedule an event to be handled at the completion of the job
-		super.send(super.getId(), job.getRemainingWork(), TASK_COMPLETE, job);
-		job.setResourceRanges(res);
-	}
+        ResourcePool resources = attr.getResourcePool();
+        long now = super.currentTime();
+        resources.allocateResources(res, now, now + job.getRemainingWork());
 
-	/**
-	 * Sends a job back to its owner. That is, schedules an event for the owner
-	 * to receive the job and process it.
-	 * @param job the job to be returned to the owner
-	 */
-	protected void sendJobToOwner(Job job) {
-		if (job.getOwnerEntityId() == -1) {
-			log.trace("Job #" + job.getId() + " does not have an owner.");
-		} else {
-			super.send(job.getOwnerEntityId(), SimEvent.SEND_NOW, RESULT_ARRIVE, job);
-		}
-	}
+        // schedule an event to be handled at the completion of the job
+        super.send(super.getId(), job.getRemainingWork(), TASK_COMPLETE, job);
+        job.setResourceRanges(res);
+    }
 
-	/**
-	 * Tries to start a job on the first available resource and
-	 * allocates required resources for it
-	 * @param j the job to be started
-	 * @return <code>true</code> if the job has been started;
-	 * <code>false</code> otherwise
-	 */
-	protected boolean startJob(Job j) {
-		ResourcePool resources = this.attr.getResourcePool();
-		long now = super.currentTime();
-		ProfileEntry e = resources.checkAvailability(j.getNumReqResources(), now, j.getRemainingWork());
+    /**
+     * Sends a job back to its owner. That is, schedules an event for the owner
+     * to receive the job and process it.
+     * @param job the job to be returned to the owner
+     */
+    protected void sendJobToOwner(final Job job) {
+        if (job.getOwnerEntityId() == -1) {
+            LOGGER.trace("Job #" + job.getId() + " does not have an owner.");
+        } else {
+            super.send(job.getOwnerEntityId(),
+                    SimEvent.SEND_NOW, RESULT_ARRIVE, job);
+        }
+    }
 
-		if (e != null && e.getAvailRanges().getNumItems() >= j.getNumReqResources()) {
-			RangeList selected = e.getAvailRanges().selectResources(j.getNumReqResources());
-			allocateResourcesToJob(j, selected);
+    /**
+     * Tries to start a job on the first available resource and
+     * allocates required resources for it.
+     * @param j the job to be started
+     * @return <code>true</code> if the job has been started;
+     * <code>false</code> otherwise
+     */
+    protected boolean startJob(final Job j) {
+        ResourcePool resources = this.attr.getResourcePool();
+        long now = super.currentTime();
+        ProfileEntry e = resources.checkAvailability(j.getNumReqResources(),
+                now, j.getRemainingWork());
 
-			log.trace("Starting job #" + j.getId() + " at " + super.currentTime());
-			return true;
-		}
-		return false;
-	}
+        if (e != null
+                && e.getAvailRanges().getNumItems() >= j.getNumReqResources()) {
+            RangeList selected =
+                    e.getAvailRanges().selectResources(j.getNumReqResources());
+            allocateResourcesToJob(j, selected);
 
-	/**
-	 * Helper method to fire a job status change
-	 * @param u the job whose status changed
-	 * @param prevSt the previous status
-	 * @param newSt the new status
-	 */
-	protected void fireStatusChange(DefaultWorkUnit u, WorkUnit.Status prevSt, WorkUnit.Status newSt) {
-		if (listeners != null) {
-			WorkUnitEvent ev = new WorkUnitEvent(STATUS_CHANGED, u, super.currentTime(), prevSt);
-			listeners.forEach(l -> l.event(ev));
-		}
-	}
+            LOGGER.trace("Starting job #"
+                    + j.getId() + " at " + super.currentTime());
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Helper method to set a job status
-	 * @param j the job whose status is to be set
-	 * @param status the new job status
-	 */
-	protected void setJobStatus(Job j, WorkUnit.Status status) {
-		WorkUnit.Status prevStatus = j.getStatus();
-		j.setStatus(status, super.currentTime());
-		fireStatusChange(j, prevStatus, status);
-	}
+    /**
+     * Handles job cancellation.
+     * This method returns the used time slot back to the resource
+     * pool and cancels future simulation events related to the job.
+     * @param job the job to be cancelled.
+     */
+    protected void cancelJob(Job job) {
+        long startTime = super.currentTime();
+        long jobStartTime = Math.max(0, job.getStartTime());
+        long finishTime = jobStartTime + job.getRemainingWork();
+        RangeList res = job.getResourceRanges();
+        this.serverAttributes().getResourcePool()
+                .releaseResources(startTime, finishTime, res);
 
-	/**
-	 * Method to handle the job arrival
-	 * @param job the job
-	 */
-	public abstract void doJobProcessing(Job job);
+        // Remove completion events from the simulation queue
+        this.filter.setJobId(job.getId());
+        super.getSimulation().cancelFutureEvents(filter);
+    }
 
-	/**
-	 * Method to handle the completion of a job
-	 * @param job the job
-	 */
-	public abstract void doJobCompletion(Job job);
+    /**
+     * Helper method to fire a job status change.
+     * @param u the job whose status changed
+     * @param prevSt the previous status
+     * @param newSt the new status
+     */
+    protected void fireStatusChange(final DefaultWorkUnit u,
+                                    final WorkUnit.Status prevSt,
+                                    final WorkUnit.Status newSt) {
+        if (listeners != null) {
+            WorkUnitEvent ev = new WorkUnitEvent(STATUS_CHANGED, u,
+                    super.currentTime(), prevSt);
+            listeners.forEach(l -> l.event(ev));
+        }
+    }
 
-	/**
-	 * Method to handle the cancellation of a job
-	 * @param id the job
-	 */
-	public abstract void doJobCancel(int id);
+    /**
+     * Helper method to set a job status.
+     * @param j the job whose status is to be set
+     * @param status the new job status
+     */
+    protected void setJobStatus(final Job j,
+                                final WorkUnit.Status status) {
+        WorkUnit.Status prevStatus = j.getStatus();
+        j.setStatus(status, super.currentTime());
+        fireStatusChange(j, prevStatus, status);
+    }
+
+    /**
+     * Method to handle the job arrival.
+     * @param job the job
+     */
+    public abstract void doJobProcessing(Job job);
+
+    /**
+     * Method to handle the completion of a job.
+     * @param job the job
+     */
+    public abstract void doJobCompletion(Job job);
+
+    /**
+     * Method to handle the cancellation of a job.
+     * @param id the job
+     */
+    public abstract void doJobCancel(int id);
 
 }

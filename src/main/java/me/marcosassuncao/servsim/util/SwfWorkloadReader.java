@@ -31,6 +31,18 @@ public class SwfWorkloadReader extends EventFileReader {
     /** ID of the server to which the jobs will be submitted. */
     private final int dstServerId;
 
+    /** Field in the job trace containing the job id. */
+    private static final int SWF_JOB_ID_FIELD = 0;
+
+    /** Field in the job trace containing the submission time. */
+    private static final int SWF_SUBMIT_TIME_FIELD = 1;
+
+    /** Field in the job trace containing the job duration. */
+    private static final int SWF_DURATION_FIELD = 3;
+
+    /** Field in the job trace containing the number of resources. */
+    private static final int SWF_N_RESOURCES_FIELD = 4;
+
     /**
      * Creates a new event file reader.
      * @param eventFileName the file that contains the event information
@@ -57,10 +69,10 @@ public class SwfWorkloadReader extends EventFileReader {
     public boolean doLineProcessing(final int lineNum,
                                     final String[] fields) {
         try {
-            int jobId = Integer.parseInt(fields[0]);
-            long submitTime = Long.parseLong(fields[1]);
-            int duration = Integer.parseInt(fields[3]);
-            int nResources = Integer.parseInt(fields[4]);
+            int jobId = Integer.parseInt(fields[SWF_JOB_ID_FIELD]);
+            long submitTime = Long.parseLong(fields[SWF_SUBMIT_TIME_FIELD]);
+            int duration = Integer.parseInt(fields[SWF_DURATION_FIELD]);
+            int nResources = Integer.parseInt(fields[SWF_N_RESOURCES_FIELD]);
 
             // some logs have -1 as number of resources
             nResources = nResources > 0 ? nResources : 1;

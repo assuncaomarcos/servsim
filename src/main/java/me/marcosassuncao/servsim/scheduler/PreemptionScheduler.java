@@ -9,7 +9,10 @@ import me.marcosassuncao.servsim.server.ResourcePool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.UUID;
 
 /**
  * This class implements a scheduler with preemption and where the
@@ -19,19 +22,34 @@ import java.util.*;
  */
 
 public class PreemptionScheduler extends AbstractScheduler {
-    private static final Logger log = LogManager.getLogger(PreemptionScheduler.class.getName());
-    private final ArrayList<Job> waitingQueue = new ArrayList<>();
-    private final ArrayList<Job> runningQueue = new ArrayList<>();
-    private Comparator<Job> sortComp;    // comparator to sort queues
 
-    // Filter used to remove events created by preempted jobs
+    /** Default logger. */
+    private static final Logger LOGGER =
+            LogManager.getLogger(PreemptionScheduler.class.getName());
+
+    /** Queue of jobs waiting for execution. */
+    private final ArrayList<Job> waitingQueue = new ArrayList<>();
+
+    /** Queue with jobs in execution. */
+    private final ArrayList<Job> runningQueue = new ArrayList<>();
+
+    /**
+     * Comparator used to sort queues and determine.
+     * the order of job execution. */
+    private Comparator<Job> sortComp;
+
+    /**
+     * Filter used to remove events created by preempted jobs.
+     */
     private final FilterJobCompletionEvents filter = new FilterJobCompletionEvents();
 
     /**
-     * Creates a new scheduler instance
+     * Creates a new scheduler instance.
      */
     public PreemptionScheduler() {
-        super(PreemptionScheduler.class.getSimpleName() + "-" + UUID.randomUUID());
+        super(String.format("%s-%s",
+                PreemptionScheduler.class.getSimpleName(),
+                UUID.randomUUID()));
     }
 
     /**
@@ -40,22 +58,26 @@ public class PreemptionScheduler extends AbstractScheduler {
      * @param name a name for the simulation entity
      * @throws IllegalArgumentException the name is <code>null</code>
      */
-    public PreemptionScheduler(String name) throws IllegalArgumentException {
+    public PreemptionScheduler(final String name)
+            throws IllegalArgumentException {
         super(name);
     }
 
     /**
-     * Sets the comparator used to sort the waiting queue
+     * Sets the comparator used to sort the waiting queue.
      *
      * @param comp the comparator used to sort the waiting queue
      */
-    public void setSortingComparator(Comparator<Job> comp) {
+    public void setSortingComparator(final Comparator<Job> comp) {
         this.sortComp = comp;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void doJobCancel(int id) {
-        log.trace("Cancelling job #" + id);
+    public void doJobCancel(final int id) {
+        LOGGER.trace("Cancelling job #" + id);
 
         Job cjob = null;
         Iterator<Job> it = this.runningQueue.iterator();
@@ -101,7 +123,7 @@ public class PreemptionScheduler extends AbstractScheduler {
 
     /* Helper method to start waiting and paused jobs */
     private void startWaitingJobs() {
-        Collections.sort(waitingQueue, sortComp);
+        waitingQueue.sort(sortComp);
         boolean success = true;
         Iterator<Job> it = waitingQueue.iterator();
         while (it.hasNext() && success) {
@@ -114,33 +136,39 @@ public class PreemptionScheduler extends AbstractScheduler {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doJobCompletion(Job job) {
-        log.trace("Completing job #" + job.getId() + " at " + super.currentTime());
+        LOGGER.trace("Completing job #" + job.getId() + " at " + super.currentTime());
 
         super.setJobStatus(job, WorkUnit.Status.COMPLETE);
         this.runningQueue.remove(job);
-        log.trace("Completed job: \n" + job);
+        LOGGER.trace("Completed job: \n" + job);
 
         startWaitingJobs();
         sendJobToOwner(job);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doJobProcessing(Job job) {
-        log.trace("Arrival of job #" + job.getId() + " at " + super.currentTime());
+        LOGGER.trace("Arrival of job #" + job.getId() + " at " + super.currentTime());
         Job prTk;
         if (startJob(job)) {
             if (!this.runningQueue.add(job)) {
-                log.info("Error adding job #" + job.getId() + " to running queue.");
+                LOGGER.info("Error adding job #" + job.getId() + " to running queue.");
             }
         } else if ((prTk = findJobToPreempt(job)) != null) {
-            log.trace("Preempting job #" + prTk.getId() +
+            LOGGER.trace("Preempting job #" + prTk.getId() +
                     " at time: " + super.currentTime() +
                     " to execute job #" + job.getId());
 
             if (!this.runningQueue.remove(prTk)) {
-                log.trace("Job #" + prTk.getId() + " not found in running queue.");
+                LOGGER.trace("Job #" + prTk.getId() + " not found in running queue.");
             }
             super.setJobStatus(prTk, WorkUnit.Status.PAUSED);
 
@@ -155,7 +183,7 @@ public class PreemptionScheduler extends AbstractScheduler {
             this.filter.setJobId(prTk.getId());
             super.getSimulation().cancelFutureEvents(filter);
 
-            log.trace("Prempted job: " + prTk);
+            LOGGER.trace("Prempted job: " + prTk);
 
             // enqueues the preempted job
             this.waitingQueue.add(prTk);
@@ -164,21 +192,20 @@ public class PreemptionScheduler extends AbstractScheduler {
             if (startJob(job)) {
                 this.runningQueue.add(job);
             } else {
-//				System.out.println(super.serverAttributes().getResourcePool());
-                log.fatal("Job #" + prTk.getId() + " was preempted, but " +
+                LOGGER.fatal("Job #" + prTk.getId() + " was preempted, but " +
                         "job #" + job.getId() + " has not started.");
             }
         } else {
-            if (log.isTraceEnabled()) {
-                log.trace("Adding job #" + job.getId() +
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Adding job #" + job.getId() +
                         " to waiting queue at time " + super.currentTime());
             }
 
             this.waitingQueue.add(job);
             super.setJobStatus(job, WorkUnit.Status.WAITING);
 
-            if (log.isTraceEnabled()) {
-                log.trace("There are " + waitingQueue.size() +
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("There are " + waitingQueue.size() +
                         " jobs in the waiting queue.");
 
                 StringBuilder msg = new StringBuilder();
@@ -187,7 +214,7 @@ public class PreemptionScheduler extends AbstractScheduler {
                             .append(tkr.getStartTime() + tkr.getDuration()).append("\n");
                 }
 
-                log.trace("Current status of the running queue: \n" + msg);
+                LOGGER.trace("Current status of the running queue: \n" + msg);
             }
         }
     }
@@ -219,21 +246,28 @@ public class PreemptionScheduler extends AbstractScheduler {
     private boolean resumeJob(Job j) {
         ResourcePool resources = super.serverAttributes().getResourcePool();
         long now = super.currentTime();
-        ProfileEntry e = resources.checkAvailability(j.getNumReqResources(), now, j.getRemainingWork());
+        ProfileEntry e = resources.checkAvailability(j.getNumReqResources(),
+                now, j.getRemainingWork());
 
         if (e != null) {
             RangeList selected = e.getAvailRanges().selectResources(j.getNumReqResources());
             super.allocateResourcesToJob(j, selected);
-            log.trace("Resuming job #" + j.getId() + " at " + super.currentTime());
+            LOGGER.trace("Resuming job #" + j.getId() + " at " + super.currentTime());
             return true;
         }
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onStart() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onShutdown() {
     }

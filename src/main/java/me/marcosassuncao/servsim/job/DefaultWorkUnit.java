@@ -1,11 +1,13 @@
 package me.marcosassuncao.servsim.job;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.ComparisonChain;
 
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.naturalOrder;
 
 /**
  * This class represents a simple work unit to be processed by a server entity.
@@ -65,6 +67,10 @@ public class DefaultWorkUnit implements WorkUnit, Comparable<DefaultWorkUnit> {
      * Number of resources required by the work unit.
      */
     private int nReqResources = 1;
+
+    private static final Comparator<DefaultWorkUnit> COMPARATOR =
+            comparing((DefaultWorkUnit unit) -> unit.submitTime)
+                    .thenComparing(unit -> unit.id, naturalOrder());
 
     /**
      * Creates a new work unit.
@@ -293,10 +299,8 @@ public class DefaultWorkUnit implements WorkUnit, Comparable<DefaultWorkUnit> {
      * {@inheritDoc}
      */
     @Override
-    public int compareTo(final DefaultWorkUnit o) {
-        return ComparisonChain.start()
-                .compare(this.submitTime, o.submitTime)
-                .compare(this.id, o.id).result();
+    public int compareTo(final DefaultWorkUnit that) {
+        return COMPARATOR.compare(this, that);
     }
 
     /**
