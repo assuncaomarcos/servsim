@@ -6,7 +6,7 @@
     <groupId>me.marcosassuncao.servsim</groupId>
     <artifactId>servsim-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.4</version>
+    <version>1.5</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>This project provides a discrete event simulation API
         that can be used for simulating the scheduling of computational
