@@ -17,7 +17,7 @@ project:
     <dependency>
         <groupId>me.marcosassuncao.servsim</groupId>
         <artifactId>servsim-core</artifactId>
-        <version>LATEST</version>
+        <version>1.5</version>
     </dependency>
     ...
 </dependencies>
