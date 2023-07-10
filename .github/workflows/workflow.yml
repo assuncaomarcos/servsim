@@ -31,8 +31,8 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+          server-username: ${{ secrets.OSSRH_USERNAME }}
+          server-password: ${{ secrets.OSSRH_TOKEN }} 
 #          gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
 #          gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
@@ -47,10 +47,6 @@ jobs:
         run: mvn -B package
 
       - name: Publish to Apache Maven
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
         run: |
           mvn \
             --no-transfer-progress \
