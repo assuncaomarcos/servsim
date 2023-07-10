@@ -35,6 +35,7 @@ jobs:
           server-password: ${{ secrets.OSSRH_TOKEN }} 
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+          settings-path: ${{ github.workspace }}
 
 #       - name: Install gpg secret key
 #         run: |
@@ -54,4 +55,4 @@ jobs:
             --no-transfer-progress \
             --batch-mode \
             -Dgpg.passphrase=$MAVEN_GPG_PASSPHRASE \
-            clean deploy 
+            clean deploy -s $GITHUB_WORKSPACE/settings.xml
