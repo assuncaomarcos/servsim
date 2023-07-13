@@ -10,8 +10,8 @@ import com.google.common.base.MoreObjects;
 
 /**
  * This class represents the profile containing the ranges of PEs
- * available at given simulation times. 
- * 
+ * available at given simulation times.
+ *
  * @author Marcos Dias de Assuncao
  */
 
@@ -20,7 +20,7 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * Data structure used to track resource usage.
 	 */
 	protected LinkedTreeMap<Long,V> avail = new LinkedTreeMap<>();
-	
+
 	/**
 	 * Protected constructor.
 	 */
@@ -34,7 +34,7 @@ public abstract class Profile<V extends ProfileEntry> {
 	protected Profile(TreeMap<Long,V> avail) {
 		this.avail.putAll(avail);
 	}
-	
+
 	/**
 	 * Removes past entries from the availability profile, but keeps the
 	 * entry corresponding to the reference time provided, or the entry preceding
@@ -52,7 +52,7 @@ public abstract class Profile<V extends ProfileEntry> {
 			it.remove();
 		}
 	}
-	
+
 	/**
 	 * Returns a profile entry with the available resources at a given time.
 	 * @param time the time from which the availability is checked
@@ -60,18 +60,18 @@ public abstract class Profile<V extends ProfileEntry> {
 	 */
 	public ProfileEntry checkAvailability(long time) {
 		Map.Entry<Long, V> entry = avail.getPrecEntry(time, true);
-		return entry == null ? 
+		return entry == null ?
 				new Entry(time) : entry.getValue().clone(time);
 	}
-	
+
 	/**
 	 * Returns a profile entry if a given job with the characteristics
-	 * provided can be scheduled. 
+	 * provided can be scheduled.
 	 * @param reqRes the number of resources.
 	 * @param startTime the start time of the job/reservation
 	 * @param duration the duration of the job/reservation
 	 * @param acceptLess defines whether less resources than originally requested is allowed
-	 * @return a {@link ProfileEntry} with the start time provided and the 
+	 * @return a {@link ProfileEntry} with the start time provided and the
 	 * ranges available at that time OR <code>null</code> if not enough resources are found.
 	 */
 	public ProfileEntry checkAvailability(int reqRes, long startTime, long duration, boolean acceptLess) {
@@ -80,12 +80,12 @@ public abstract class Profile<V extends ProfileEntry> {
 		if (!it.hasNext()) {
 			return null;
 		}
-		
+
 		RangeList intersec = it.next().getAvailRanges().clone();
         long finishTime = startTime + duration;
-            
+
         // Scans the availability profile until the expected termination
-        // of the job to check whether enough PEs will be available for it. 
+        // of the job to check whether enough PEs will be available for it.
         while (it.hasNext()) {
         	ProfileEntry entry = it.next();
         	if (entry.getTime() >= finishTime || (!acceptLess && intersec.getNumItems() < reqRes)) {
@@ -93,28 +93,28 @@ public abstract class Profile<V extends ProfileEntry> {
         	}
         	intersec = intersec.intersection(entry.getAvailRanges());
         }
-        
+
         return (intersec.getNumItems() >= reqRes) || acceptLess ?
         		new Entry(startTime, intersec) : null;
 	}
 
-	
+
 	/**
 	 * Returns a profile entry if a given job with the characteristics
-	 * provided can be scheduled. 
+	 * provided can be scheduled.
 	 * @param reqRes the number of resources.
 	 * @param startTime the start time of the job/reservation
 	 * @param duration the duration of the job/reservation
-	 * @return a {@link ProfileEntry} with the start time provided and the 
+	 * @return a {@link ProfileEntry} with the start time provided and the
 	 * ranges available at that time OR <code>null</code> if not enough resources are found.
 	 */
 	public ProfileEntry checkAvailability(int reqRes, long startTime, long duration) {
 		return checkAvailability(reqRes, startTime, duration, false);
 	}
-	
+
 	/**
-	 * Selects an entry able to provide enough processors to handle a job. The method 
-	 * iterates the profile until it finds enough processors for the job, starting 
+	 * Selects an entry able to provide enough processors to handle a job. The method
+	 * iterates the profile until it finds enough processors for the job, starting
 	 * from the current simulation time.
 	 * @param reqPE the number of processors
 	 * @param readyTime entries prior to ready time will not be considered
@@ -128,19 +128,19 @@ public abstract class Profile<V extends ProfileEntry> {
         long potStartTime = readyTime;
         long potFinishTime;
         ProfileEntry anchor;
-        
+
        	// scans the profile until an entry with enough PEs is found
         while (it.hasNext()) {
           	anchor = it.next();
-           	if (anchor.getNumResources() < reqPE) { 	
+           	if (anchor.getNumResources() < reqPE) {
            		continue;
            	}
-           	
+
            	potStartTime = Math.max(readyTime, anchor.getTime());
 			potFinishTime = potStartTime + duration;
 			intersect = anchor.getAvailRanges();
 			Iterator<V> ita = avail.itValuesAfter(potStartTime);
-			
+
 			// Now scan the profile from potStartTime onwards analysing the
 			// intersection of the ranges available in the entries until the
 			// job's expected completion time.
@@ -148,8 +148,8 @@ public abstract class Profile<V extends ProfileEntry> {
 				ProfileEntry nextEntry = ita.next();
 				if (nextEntry.getTime() >= potFinishTime) {
 					break;
-				} 
-					
+				}
+
 				RangeList nextRanges = nextEntry.getAvailRanges();
 				if (nextRanges.getNumItems() < reqPE) {
 					intersect = null;
@@ -165,14 +165,14 @@ public abstract class Profile<V extends ProfileEntry> {
 				break;
 			}
         }
-        
+
         if (intersect == null || intersect.getNumItems() < reqPE) {
         	return null;
         }
-        
+
         return new Entry(potStartTime, intersect.clone());
 	}
-	
+
 	/**
 	 * Allocates a list of resource ranges to a job/reservation.
 	 * @param selected the list of resource ranges selected
@@ -180,9 +180,9 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * @param finishTime the finish time of the job/reservation
 	 */
 	@SuppressWarnings("unchecked")
-	public void allocateResourceRanges(RangeList selected, 
+	public void allocateResourceRanges(RangeList selected,
 			long startTime, long finishTime) {
-		
+
 		// If the time of the last entry is equals to finish time then another
 		// entry is not required. In this case we just increase the number of
 		// work units that rely on that entry to mark either its completion
@@ -191,7 +191,7 @@ public abstract class Profile<V extends ProfileEntry> {
 		Iterator<V> it = avail.itValuesFromPrec(startTime);
 		V last = it.next();
 		V newAnchor = null;
-        
+
         if (last.getTime() == startTime) {
         	last.increaseJob();
         } else {
@@ -216,12 +216,12 @@ public abstract class Profile<V extends ProfileEntry> {
         	add((V)last.clone(finishTime));
         	last.getAvailRanges().remove(selected);
         }
-        
+
         if (newAnchor != null) {
         	add(newAnchor);
         }
 	}
-	
+
 	/**
 	 * Returns the time slots contained in this availability profile
 	 * within a specified period of time. <br>
@@ -230,15 +230,15 @@ public abstract class Profile<V extends ProfileEntry> {
 	 * the windows of availability. Also, they are sorted by start time.
 	 * For example: <br>
 	 * <pre><br>
-	 *   |------------------------------------- 
-  	 *   |    Job 3     |     Time Slot 3     | 
-  	 * P |------------------------------------- 
-	 * E |    Job 2  |      Time Slot 2       | 
-	 * s |------------------------------------- 
-  	 *   |  Job 1 |  Time Slot 1  |   Job 4   | 
-  	 *   +------------------------------------- 
-	 *  Start             Time              Finish 
-	 *  Time                                 Time 
+	 *   |-------------------------------------
+  	 *   |    Job 3     |     Time Slot 3     |
+  	 * P |-------------------------------------
+	 * E |    Job 2  |      Time Slot 2       |
+	 * s |-------------------------------------
+  	 *   |  Job 1 |  Time Slot 1  |   Job 4   |
+  	 *   +-------------------------------------
+	 *  Start             Time              Finish
+	 *  Time                                 Time
 	 * <br></pre>
 	 * @param startTime the start time of the period.
 	 * @param finishTime the finish time of the period.
@@ -249,25 +249,25 @@ public abstract class Profile<V extends ProfileEntry> {
 		ArrayList<Entry> subProfile = toArrayList(startTime, finishTime);
 		return getTimeSlots(finishTime, subProfile);
 	}
-	
+
 	/**
-	 * Returns the scheduling options of this availability profile within the 
-	 * specified period of time. 
-	 * <b>NOTE:</b> The time slots returned by this method <b>OVERLAP</b> 
+	 * Returns the scheduling options of this availability profile within the
+	 * specified period of time.
+	 * <b>NOTE:</b> The time slots returned by this method <b>OVERLAP</b>
 	 * because they are the scheduling options for jobs.
 	 * @param startTime the start time of the period.
 	 * @param finishTime the finish time of the period.
-	 * @param duration the minimum duration of the free time slots. Free time 
+	 * @param duration the minimum duration of the free time slots. Free time
 	 * slots whose time frames are smaller than <code>duration</code> will be ignored.
 	 * If you choose {@code 1}, then all scheduling options will be returned.
-	 * @param reqPEs the minimum number of processors of the free time slots. Free 
-	 * time slots whose numbers of processors are smaller than {@code reqPEs} will be 
+	 * @param reqPEs the minimum number of processors of the free time slots. Free
+	 * time slots whose numbers of processors are smaller than {@code reqPEs} will be
 	 * ignored. If you choose {@code 1}, then all scheduling options will be returned.
-	 * 
+	 *
 	 * @return a collection with the time scheduling options.
 	 * @see TimeSlot
 	 */
-	public Collection<TimeSlot> getSchedulingOptions(long startTime, 
+	public Collection<TimeSlot> getSchedulingOptions(long startTime,
 			long finishTime, int duration, int reqPEs) {
 		ArrayList<TimeSlot> slots = new ArrayList<>();
 
@@ -292,21 +292,21 @@ public abstract class Profile<V extends ProfileEntry> {
 				int initialPE = slRgs.getNumItems();
 				Iterator<V> ita = avail.itValuesAfter(startTime);
 				boolean changed = false;
-				
+
 				while (ita.hasNext() && !changed) {
 					nxtEnt = ita.next();
-					
+
 					if (nxtEnt.getTime() >= finishTime) {
 						break;
 					}
-					
+
 					its = slRgs.intersection(nxtEnt.getAvailRanges());
 					if (its.getNumItems() == slRgs.getNumItems()) {
 						continue;
 					}
-					
-					// if there was a change in the number of PEs, so that less 
-					// PEs are available after the next entry, then considers 
+
+					// if there was a change in the number of PEs, so that less
+					// PEs are available after the next entry, then considers
 					// the next entry as the end of the current time slot
 					long slEnd = Math.min(nxtEnt.getTime(), finishTime);
 					if ((slEnd - sStart) >= duration && slRgs.getNumItems() >= reqPEs) {
@@ -322,10 +322,10 @@ public abstract class Profile<V extends ProfileEntry> {
 						TimeSlot slot = new TimeSlot(sStart, finishTime, slRgs.clone());
 						slots.add(slot);
 					}
-					
+
 					slRgs = null;
 				}
-			} 
+			}
 		}
 		return slots;
 	}
@@ -338,9 +338,9 @@ public abstract class Profile<V extends ProfileEntry> {
 		return MoreObjects.toStringHelper(Profile.class)
 				.add("entries", avail.values()).toString();
 	}
-	
+
 	// ------------------ PROTECTED METHODS -----------------------
-	
+
 	/**
 	 * Adds an entry to the availability profile.
 	 * @param entry the entry to be removed.
@@ -350,7 +350,7 @@ public abstract class Profile<V extends ProfileEntry> {
 	protected ProfileEntry add(V entry) {
 		return avail.put(entry.getTime(), entry);
 	}
-	
+
 	/**
 	 * Returns the entry whose time is closest to the {@code time} given but
 	 * smaller, or whose time is equals to {@code time}
@@ -363,18 +363,18 @@ public abstract class Profile<V extends ProfileEntry> {
 		Map.Entry<Long,V> entry = avail.getPrecEntry(time, true);
 		return entry == null ? null : entry.getValue();
 	}
-	
+
 	/**
-	 * A helper method which actually does the real job for 
+	 * A helper method which actually does the real job for
 	 * {@link Profile#getTimeSlots(long, long)}.
 	 * @param finishTime the finish time of the period.
 	 * @param subProfile the profile already cloned and cut from start time
 	 * and finish time.
-	 * @return a collection with the time slots. 
+	 * @return a collection with the time slots.
 	 */
 	public Collection<TimeSlot> getTimeSlots(long finishTime, ArrayList<Entry> subProfile) {
 		ArrayList<TimeSlot> slots = new ArrayList<>();
-		
+
 		long slStart;		// the start time of the slot
 		long slEnd;			// the end time of the slot
 		int stIdx;			// index in which a slot starts
@@ -385,30 +385,31 @@ public abstract class Profile<V extends ProfileEntry> {
         RangeList slRgs;	// ranges of the slot
         RangeList its;		// the intersection of ranges
         int size = subProfile.size();
-        
+
         for (int i=0; i<size; i++) {
         	ent = subProfile.get(i);
-        	
+
         	if (ent.getNumResources() == 0) {
         		continue;
         	}
-        	
+
         	slStart = ent.getTime();
-        	stIdx = endIdx = i;
-       	
+        	stIdx = i;
+
         	// check all possible time slots starting at slStart
         	while (ent.getNumResources() > 0) {
         		slRgs = its = ent.getAvailRanges();
         		slEnd = finishTime;
+				endIdx = stIdx;
 	        	for(int j=i+1; j<size; j++) {
 	        		nxtEnt = subProfile.get(j);
 	        		its = its.intersection(nxtEnt.getAvailRanges());
-	        		
+
 	        		if(its.getNumItems() == 0) {
 	        			slEnd = nxtEnt.getTime();
 	        			break;
 	        		}
-	        		
+
 	        		slRgs = its;
 	        		endIdx = j;
 	        	}
@@ -417,17 +418,17 @@ public abstract class Profile<V extends ProfileEntry> {
 	        	// will be deleted next
 	        	TimeSlot slot = new TimeSlot(slStart, slEnd, slRgs.clone());
 	        	slots.add(slot);
-	        	
+
 	        	for (int j=stIdx; j<=endIdx; j++) {
 	        		nxtEnt = subProfile.get(j);
 	        		nxtEnt.getAvailRanges().remove(slRgs);
 	        	}
-        	} 
+        	}
         }
-        
+
 		return slots;
 	}
-	
+
 	/**
 	 * Return the a collection with the profile entries over a specified period
 	 * @param startTime the start time for the query
@@ -437,57 +438,57 @@ public abstract class Profile<V extends ProfileEntry> {
 	public Collection<ProfileEntry> getAvailability(long startTime, long finishTime) {
 		return new ArrayList<>(toArrayList(startTime, finishTime));
 	}
-	
+
 	/**
 	 * Returns part of the availability profile.<br>
 	 * <b>NOTE:</b> The returned entries are clones of the original ones.
 	 * @param startTime the start time of the resulting part
 	 * @param finishTime the finish time of the resulting part
-	 * @return part of the availability profile. 
-	 */    
+	 * @return part of the availability profile.
+	 */
 	public ArrayList<Entry> toArrayList(long startTime, long finishTime) {
 		ArrayList<Entry> subProfile = new ArrayList<>();
-		
+
 		Iterator<V> it = avail.itValuesFromPrec(startTime);
 		Entry fe;
-		
+
 		// get first entry or create one if the profile is empty
 		if(it.hasNext()) {
 			ProfileEntry ent = it.next();
-			RangeList list = ent.getAvailRanges() == null ? 
+			RangeList list = ent.getAvailRanges() == null ?
 					null : ent.getAvailRanges().clone();
-			long entTime = Math.max(startTime, ent.getTime()); 
+			long entTime = Math.max(startTime, ent.getTime());
 			fe = new Entry(entTime, list);
 		} else {
 			fe = new Entry(startTime);
 		}
 		subProfile.add(fe);
-		
+
 		while (it.hasNext()) {
 			ProfileEntry entry = it.next();
            	if(entry.getTime() > finishTime) {
            		break;
    			}
-           	
-			RangeList list = entry.getAvailRanges() == null ? 
+
+			RangeList list = entry.getAvailRanges() == null ?
 					null : entry.getAvailRanges().clone();
-           	
+
 			Entry newEntry = new Entry(entry.getTime(), list);
 			subProfile.add(newEntry);
         }
 
 		return subProfile;
     }
-	
+
 	/**
 	 * This class is used to return an entry when the user calls one of
 	 * the methods to query the availability of resources.
-	 *  
+	 *
 	 * @author Marcos Dias de Assuncao
 	 */
 	protected static class Entry extends ProfileEntry {
 		private RangeList ranges;
-		
+
 		/**
 		 * Creates an entry with null ranges and the time given
 		 * @param time the time for the entry
@@ -506,7 +507,7 @@ public abstract class Profile<V extends ProfileEntry> {
 			super(time);
 			ranges = list;
 		}
-		
+
 		@Override
 		public RangeList getAvailRanges() {
 			return ranges;
@@ -523,7 +524,7 @@ public abstract class Profile<V extends ProfileEntry> {
 			clone.ranges = ranges.clone();
 			return clone;
 		}
-		
+
 		public String toString() {
 			return MoreObjects.toStringHelper(ProfileEntry.class)
 				       .add("time", super.getTime())
