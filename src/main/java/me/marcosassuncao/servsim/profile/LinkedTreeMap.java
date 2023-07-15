@@ -23,12 +23,12 @@ import java.util.SortedSet;
  * according to the <i>natural order</i> for the key's class (see
  * <code>Comparable</code>), or by the comparator provided at creation time,
  * depending on which constructor is used.<p>
- *
+ * <p>
  * This implementation provides guaranteed log(n) time cost for the
  * <code>containsKey</code>, <code>get</code>, <code>put</code> and <code>remove</code>
  * operations.  Algorithms are adaptations of those in Cormen, Leiserson, and
  * Rivest's <I>Introduction to Algorithms</I>.<p>
- *
+ * <p>
  * Note that the ordering maintained by a sorted map (whether or not an
  * explicit comparator is provided) must be <i>consistent with equals</i> if
  * this sorted map is to correctly implement the <code>Map</code> interface.  (See
@@ -54,7 +54,7 @@ import java.util.SortedSet;
  * <pre>
  *     Map m = Collections.synchronizedMap(new TreeMap(...));
  * </pre><p>
- *
+ * <p>
  * The iterators returned by all of this class's "collection view methods" are
  * <i>fail-fast</i>: if the map is structurally modified at any time after the
  * iterator is created, in any way except through the iterator's own
@@ -71,18 +71,17 @@ import java.util.SortedSet;
  * Therefore, it would be wrong to write a program that depended on this
  * exception for its correctness:   <i>the fail-fast behavior of iterators
  * should be used only to detect bugs.</i><p>
- *
+ * <p>
  * This class is a member of the
  * <a href="{@docRoot}/../guide/collections/index.html">
  * Java Collections Framework</a>.
  *
- * @author  Josh Bloch and Doug Lea
- * @version 1.65, 02/19/04
- * @author  Marcos Assuncao has modified this class to support a linked list 
- * between the elements of the red black tree and speed up iterations. 
- * In that sense, an element in the tree has one reference to its predecessor 
+ * @author Josh Bloch and Doug Lea
+ * @author Marcos Assuncao has modified this class to support a linked list
+ * between the elements of the red black tree and speed up iterations.
+ * In that sense, an element in the tree has one reference to its predecessor
  * and another to its successor.
- *  
+ * @version 1.65, 02/19/04
  * @see Map
  * @see HashMap
  * @see Hashtable
@@ -93,9 +92,8 @@ import java.util.SortedSet;
  * @since 1.2
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class LinkedTreeMap<K,V>
-	implements SortedMap<K,V>, Cloneable, java.io.Serializable
-{
+public class LinkedTreeMap<K, V>
+        implements SortedMap<K, V>, Cloneable, java.io.Serializable {
     /**
      * The Comparator used to maintain order in this TreeMap, or
      * null if this TreeMap uses its elements natural ordering.
@@ -104,7 +102,7 @@ public class LinkedTreeMap<K,V>
      */
     private Comparator<? super K> comparator = null;
 
-    private transient Entry<K,V> root = null;
+    private transient Entry<K, V> root = null;
 
     /**
      * The number of entries in the tree
@@ -116,8 +114,15 @@ public class LinkedTreeMap<K,V>
      */
     private transient int modCount = 0;
 
-    private void incrementSize()   { modCount++; size++; }
-    private void decrementSize()   { modCount++; size--; }
+    private void incrementSize() {
+        modCount++;
+        size++;
+    }
+
+    private void decrementSize() {
+        modCount++;
+        size--;
+    }
 
     /**
      * Constructs a new, empty map, sorted according to the keys' natural
@@ -145,8 +150,8 @@ public class LinkedTreeMap<K,V>
      * value)</code> call will throw a <code>ClassCastException</code>.
      *
      * @param c the comparator that will be used to sort this map.  A
-     *        <code>null</code> value indicates that the keys' <i>natural
-     *        ordering</i> should be used.
+     *          <code>null</code> value indicates that the keys' <i>natural
+     *          ordering</i> should be used.
      */
     public LinkedTreeMap(Comparator<? super K> c) {
         this.comparator = c;
@@ -161,9 +166,9 @@ public class LinkedTreeMap<K,V>
      * for any elements <code>k1</code> and <code>k2</code> in the map.  This method
      * runs in n*log(n) time.
      *
-     * @param  m the map whose mappings are to be placed in this map.
-     * @throws ClassCastException the keys in t are not Comparable, or
-     *         are not mutually comparable.
+     * @param m the map whose mappings are to be placed in this map.
+     * @throws ClassCastException   the keys in t are not Comparable, or
+     *                              are not mutually comparable.
      * @throws NullPointerException if the specified map is null.
      */
     public LinkedTreeMap(Map<? extends K, ? extends V> m) {
@@ -175,8 +180,8 @@ public class LinkedTreeMap<K,V>
      * <code>SortedMap</code>, sorted according to the same ordering.  This method
      * runs in linear time.
      *
-     * @param  m the sorted map whose mappings are to be placed in this map,
-     *         and whose comparator is to be used to sort this map.
+     * @param m the sorted map whose mappings are to be placed in this map,
+     *          and whose comparator is to be used to sort this map.
      * @throws NullPointerException if the specified sorted map is null.
      */
     public LinkedTreeMap(SortedMap<K, ? extends V> m) {
@@ -201,28 +206,27 @@ public class LinkedTreeMap<K,V>
 
     /**
      * Returns <code>true</code> if this map contains no key-value mappings. <p>
-     *
+     * <p>
      * This implementation returns <code>size() == 0</code>.
      *
      * @return <code>true</code> if this map contains no key-value mappings.
      */
     public boolean isEmpty() {
-    	return size() == 0;
+        return size() == 0;
     }
-    
+
     /**
      * Returns <code>true</code> if this map contains a mapping for the specified
      * key.
      *
      * @param key key whose presence in this map is to be tested.
-     *
      * @return <code>true</code> if this map contains a mapping for the
-     *            specified key.
-     * @throws ClassCastException if the key cannot be compared with the keys
-     *                  currently in the map.
+     * specified key.
+     * @throws ClassCastException   if the key cannot be compared with the keys
+     *                              currently in the map.
      * @throws NullPointerException key is <code>null</code> and this map uses
-     *                  natural ordering, or its comparator does not tolerate
-     *            <code>null</code> keys.
+     *                              natural ordering, or its comparator does not tolerate
+     *                              <code>null</code> keys.
      */
     public boolean containsKey(Object key) {
         return getEntry(key) != null;
@@ -237,33 +241,33 @@ public class LinkedTreeMap<K,V>
      * implementations of Map.
      *
      * @param value value whose presence in this Map is to be tested.
-     * @return  <code>true</code> if a mapping to <code>value</code> exists;
-     *		<code>false</code> otherwise.
+     * @return <code>true</code> if a mapping to <code>value</code> exists;
+     * <code>false</code> otherwise.
      * @since 1.2
      */
     public boolean containsValue(Object value) {
-        return (root==null ? false :
-                (value==null ? valueSearchNull(root)
-                             : valueSearchNonNull(root, value)));
+        return (root == null ? false :
+                (value == null ? valueSearchNull(root)
+                        : valueSearchNonNull(root, value)));
     }
 
-    private boolean valueSearchNull(Entry<K,V> n) {
+    private boolean valueSearchNull(Entry<K, V> n) {
         if (n.value == null)
             return true;
 
         // Check left and right subtrees for value
-        return (n.left  != null && valueSearchNull(n.left)) ||
-               (n.right != null && valueSearchNull(n.right));
+        return (n.left != null && valueSearchNull(n.left)) ||
+                (n.right != null && valueSearchNull(n.right));
     }
 
-    private boolean valueSearchNonNull(Entry<K,V> n, Object value) {
+    private boolean valueSearchNonNull(Entry<K, V> n, Object value) {
         // Check this node for the value
         if (value.equals(n.value))
             return true;
 
         // Check left and right subtrees for value
-        return (n.left  != null && valueSearchNonNull(n.left, value)) ||
-               (n.right != null && valueSearchNonNull(n.right, value));
+        return (n.left != null && valueSearchNonNull(n.left, value)) ||
+                (n.right != null && valueSearchNonNull(n.right, value));
     }
 
     /**
@@ -276,18 +280,17 @@ public class LinkedTreeMap<K,V>
      *
      * @param key key whose associated value is to be returned.
      * @return the value to which this map maps the specified key, or
-     *               <code>null</code> if the map contains no mapping for the key.
-     * @throws    ClassCastException key cannot be compared with the keys
-     *                  currently in the map.
+     * <code>null</code> if the map contains no mapping for the key.
+     * @throws ClassCastException   key cannot be compared with the keys
+     *                              currently in the map.
      * @throws NullPointerException key is <code>null</code> and this map uses
-     *                  natural ordering, or its comparator does not tolerate
-     *                  <code>null</code> keys.
-     *
+     *                              natural ordering, or its comparator does not tolerate
+     *                              <code>null</code> keys.
      * @see #containsKey(Object)
      */
     public V get(Object key) {
-        Entry<K,V> p = getEntry(key);
-        return (p==null ? null : p.value);
+        Entry<K, V> p = getEntry(key);
+        return (p == null ? null : p.value);
     }
 
     /**
@@ -295,7 +298,7 @@ public class LinkedTreeMap<K,V>
      * map uses its keys' natural order.
      *
      * @return the comparator associated with this sorted map, or
-     *                <code>null</code> if it uses its keys' natural sort method.
+     * <code>null</code> if it uses its keys' natural sort method.
      */
     public Comparator<? super K> comparator() {
         return comparator;
@@ -305,17 +308,17 @@ public class LinkedTreeMap<K,V>
      * Returns the first (lowest) key currently in this sorted map.
      *
      * @return the first (lowest) key currently in this sorted map.
-     * @throws    NoSuchElementException Map is empty.
+     * @throws NoSuchElementException Map is empty.
      */
     public K firstKey() {
         return key(firstEntry());
     }
-    
+
     /**
      * Returns the last (highest) key currently in this sorted map.
      *
      * @return the last (highest) key currently in this sorted map.
-     * @throws    NoSuchElementException Map is empty.
+     * @throws NoSuchElementException Map is empty.
      */
     public K lastKey() {
         return key(lastEntry());
@@ -326,35 +329,34 @@ public class LinkedTreeMap<K,V>
      * mappings replace any mappings that this map had for any of the keys
      * currently in the specified map.
      *
-     * @param     map mappings to be stored in this map.
-     * @throws    ClassCastException class of a key or value in the specified
-     *                   map prevents it from being stored in this map.
-     *
+     * @param map mappings to be stored in this map.
+     * @throws ClassCastException   class of a key or value in the specified
+     *                              map prevents it from being stored in this map.
      * @throws NullPointerException if the given map is <code>null</code> or
-     *         this map does not permit <code>null</code> keys and a
-     *         key in the specified map is <code>null</code>.
+     *                              this map does not permit <code>null</code> keys and a
+     *                              key in the specified map is <code>null</code>.
      */
     public void putAll(Map<? extends K, ? extends V> map) {
         int mapSize = map.size();
-        if (size==0 && mapSize!=0 && map instanceof SortedMap) {
-            Comparator c = ((SortedMap)map).comparator();
+        if (size == 0 && mapSize != 0 && map instanceof SortedMap) {
+            Comparator c = ((SortedMap) map).comparator();
             if (c == comparator || (c != null && c.equals(comparator))) {
-            	++modCount;
-            	try {
-            		buildFromSorted(mapSize, map.entrySet().iterator(),
-				    null, null);
-            	} catch (java.io.IOException cannotHappen) {
-            	} catch (ClassNotFoundException cannotHappen) {
-            	}
-            	return;
+                ++modCount;
+                try {
+                    buildFromSorted(mapSize, map.entrySet().iterator(),
+                            null, null);
+                } catch (java.io.IOException cannotHappen) {
+                } catch (ClassNotFoundException cannotHappen) {
+                }
+                return;
             }
         }
 
-    	Iterator<? extends Map.Entry<? extends K, ? extends V>> i = map.entrySet().iterator(); 
-    	while (i.hasNext()) {
-    	    Map.Entry<? extends K, ? extends V> e = i.next();
-    	    put(e.getKey(), e.getValue());
-    	}
+        Iterator<? extends Map.Entry<? extends K, ? extends V>> i = map.entrySet().iterator();
+        while (i.hasNext()) {
+            Map.Entry<? extends K, ? extends V> e = i.next();
+            put(e.getKey(), e.getValue());
+        }
     }
 
     /**
@@ -362,16 +364,16 @@ public class LinkedTreeMap<K,V>
      * does not contain an entry for the key.
      *
      * @return this map's entry for the given key, or <code>null</code> if the map
-     *                does not contain an entry for the key.
-     * @throws ClassCastException if the key cannot be compared with the keys
-     *                  currently in the map.
+     * does not contain an entry for the key.
+     * @throws ClassCastException   if the key cannot be compared with the keys
+     *                              currently in the map.
      * @throws NullPointerException key is <code>null</code> and this map uses
-     *                  natural order, or its comparator does not tolerate *
-     *                  <code>null</code> keys.
+     *                              natural order, or its comparator does not tolerate *
+     *                              <code>null</code> keys.
      */
-    private Entry<K,V> getEntry(Object key) {
-        Entry<K,V> p = root;
-	K k = (K) key;
+    private Entry<K, V> getEntry(Object key) {
+        Entry<K, V> p = root;
+        K k = (K) key;
         while (p != null) {
             int cmp = compare(k, p.key);
             if (cmp == 0)
@@ -383,16 +385,16 @@ public class LinkedTreeMap<K,V>
         }
         return null;
     }
-    
+
     /**
      * Gets the entry corresponding to the specified key; if no such entry
      * exists, returns the entry for the least key greater than the specified
      * key; if no such entry exists (i.e., the greatest key in the Tree is less
      * than the specified key), returns <code>null</code>.
      */
-    private Entry<K,V> getCeilEntry(K key) {
-        Entry<K,V> p = root;
-        if (p==null)
+    private Entry<K, V> getCeilEntry(K key) {
+        Entry<K, V> p = root;
+        if (p == null)
             return null;
 
         while (true) {
@@ -408,8 +410,8 @@ public class LinkedTreeMap<K,V>
                 if (p.right != null) {
                     p = p.right;
                 } else {
-                    Entry<K,V> parent = p.parent;
-                    Entry<K,V> ch = p;
+                    Entry<K, V> parent = p.parent;
+                    Entry<K, V> ch = p;
                     while (parent != null && ch == parent.right) {
                         ch = parent;
                         parent = parent.parent;
@@ -425,9 +427,9 @@ public class LinkedTreeMap<K,V>
      * no such entry exists (i.e., the least key in the Tree is greater than
      * the specified key), returns <code>null</code>.
      */
-    private Entry<K,V> getPrecedingEntry(K key) {
-        Entry<K,V> p = root;
-        if (p==null)
+    private Entry<K, V> getPrecedingEntry(K key) {
+        Entry<K, V> p = root;
+        if (p == null)
             return null;
 
         while (true) {
@@ -441,8 +443,8 @@ public class LinkedTreeMap<K,V>
                 if (p.left != null) {
                     p = p.left;
                 } else {
-                    Entry<K,V> parent = p.parent;
-                    Entry<K,V> ch = p;
+                    Entry<K, V> parent = p.parent;
+                    Entry<K, V> ch = p;
                     while (parent != null && ch == parent.left) {
                         ch = parent;
                         parent = parent.parent;
@@ -452,20 +454,20 @@ public class LinkedTreeMap<K,V>
             }
         }
     }
-    
+
     /*
      * ----------------- Methods inserted by Marcos --------------------
      */
-    
+
     /**
      * Returns the entry for the greatest key less than the specified key; if
      * no such entry exists or the entry for the specified key if it exists
-     * (i.e., if the the least key in the Tree is greater than the specified 
+     * (i.e., if the the least key in the Tree is greater than the specified
      * key), returns <code>null</code>.
      */
-    private Entry<K,V> getPrecedingEntryInclusive(K key) {
-        Entry<K,V> p = root;
-        if (p==null)
+    private Entry<K, V> getPrecedingEntryInclusive(K key) {
+        Entry<K, V> p = root;
+        if (p == null)
             return null;
 
         while (true) {
@@ -475,16 +477,14 @@ public class LinkedTreeMap<K,V>
                     p = p.right;
                 else
                     return p;
-            }
-            else if (cmp == 0) {
-            	return p;
-            }
-            else {
+            } else if (cmp == 0) {
+                return p;
+            } else {
                 if (p.left != null) {
                     p = p.left;
                 } else {
-                    Entry<K,V> parent = p.parent;
-                    Entry<K,V> ch = p;
+                    Entry<K, V> parent = p.parent;
+                    Entry<K, V> ch = p;
                     while (parent != null && ch == parent.left) {
                         ch = parent;
                         parent = parent.parent;
@@ -494,85 +494,89 @@ public class LinkedTreeMap<K,V>
             }
         }
     }
-    
+
     /**
-     * Returns a value iterator whose first element is the entry searched for. 
+     * Returns a value iterator whose first element is the entry searched for.
      * If the entry does not exist, return an iterator with 0 elements
+     *
      * @param key the key from which the iterator starts.
      * @return the value iterator
      */
     public Iterator<V> itValues(K key) {
-    	Entry<K,V> entry = getEntry(key);
+        Entry<K, V> entry = getEntry(key);
         return new ValueIterator(entry);
     }
-    
+
     /**
      * Returns a value iterator whose first element is the entry next
      * to the provided key. If the key does not exist, the first element is
-     * the next element after the preceding key. If none exist, return an 
+     * the next element after the preceding key. If none exist, return an
      * iterator with 0 elements.
+     *
      * @param key the key to search for.
      * @return the value iterator
      */
     public Iterator<V> itValuesAfter(K key) {
-    	Entry<K,V> entry = this.getPrecedingEntryInclusive(key);
-        return new ValueIterator( entry == null ? null : entry.next);
+        Entry<K, V> entry = this.getPrecedingEntryInclusive(key);
+        return new ValueIterator(entry == null ? null : entry.next);
     }
-    
-    
+
+
     /**
      * Returns the value of entry whose key is preceding the provided key.
      * if inclusive is <code>true</code> consider the key provided as well in the
      * search.
-     * @param key the key to search for
+     *
+     * @param key       the key to search for
      * @param inclusive <code>true</code> if you want the value for the provided
-     * key or, if not found, that value whose key is smaller than the key given.
+     *                  key or, if not found, that value whose key is smaller than the key given.
      * @return the value or <code>null</code> if not found
      */
     public V getPrecValue(K key, boolean inclusive) {
-    	Entry<K,V> entry = inclusive ? 
-    			getPrecedingEntryInclusive(key) : 
-    				getPrecedingEntry(key);
-    	return entry == null ? null : entry.value;
+        Entry<K, V> entry = inclusive ?
+                getPrecedingEntryInclusive(key) :
+                getPrecedingEntry(key);
+        return entry == null ? null : entry.value;
     }
-    
+
     /**
      * Returns an entry whose key is preceding the provided key.
      * if inclusive is <code>true</code> consider the key provided as well in the
      * search.
-     * @param key the key to search for
+     *
+     * @param key       the key to search for
      * @param inclusive <code>true</code> if you want the value for the provided
-     * key or, if not found, that value whose key is smaller than the key given.
+     *                  key or, if not found, that value whose key is smaller than the key given.
      * @return the value or <code>null</code> if not found
      */
-    public Entry<K,V> getPrecEntry(K key, boolean inclusive) {
-    	Entry<K,V> entry = inclusive ? 
-    			getPrecedingEntryInclusive(key) : 
-    				getPrecedingEntry(key);
-    	return entry == null ? null : entry;
+    public Entry<K, V> getPrecEntry(K key, boolean inclusive) {
+        return inclusive ?
+                getPrecedingEntryInclusive(key) :
+                getPrecedingEntry(key);
     }
-    
+
     /**
      * Returns a value iterator whose first entry's key is before
      * the key given, or the key given if it exists.
+     *
      * @param key the key to search for.
      * @return the value iterator.
      */
     public Iterator<V> itValuesFromPrec(K key) {
-    	Entry<K,V> entry = getPrecedingEntryInclusive(key);
-    	return new ValueIterator(entry);
+        Entry<K, V> entry = getPrecedingEntryInclusive(key);
+        return new ValueIterator(entry);
     }
-    
+
     /*
      * -------------- End of Methods inserted by Marcos --------------------
      */
-    
+
     /**
      * Returns the key corresponding to the specified Entry.  Throw
      * NoSuchElementException if the Entry is <code>null</code>.
      */
-    private static <K> K key(Entry<K,?> e) {
-        if (e==null)
+    private static <K> K key(Entry<K, ?> e) {
+        if (e == null)
             throw new NoSuchElementException();
         return e.key;
     }
@@ -582,29 +586,28 @@ public class LinkedTreeMap<K,V>
      * If the map previously contained a mapping for this key, the old
      * value is replaced.
      *
-     * @param key key with which the specified value is to be associated.
+     * @param key   key with which the specified value is to be associated.
      * @param value value to be associated with the specified key.
-     *
      * @return previous value associated with specified key, or <code>null</code>
-     *         if there was no mapping for key.  A <code>null</code> return can
-     *         also indicate that the map previously associated <code>null</code>
-     *         with the specified key.
-     * @throws    ClassCastException key cannot be compared with the keys
-     *            currently in the map.
+     * if there was no mapping for key.  A <code>null</code> return can
+     * also indicate that the map previously associated <code>null</code>
+     * with the specified key.
+     * @throws ClassCastException   key cannot be compared with the keys
+     *                              currently in the map.
      * @throws NullPointerException key is <code>null</code> and this map uses
-     *         natural order, or its comparator does not tolerate
-     *         <code>null</code> keys.
+     *                              natural order, or its comparator does not tolerate
+     *                              <code>null</code> keys.
      */
     public V put(K key, V value) {
-        Entry<K,V> t = root;
+        Entry<K, V> t = root;
 
         if (t == null) {
             incrementSize();
-            root = new Entry<K,V>(key, value, null);
+            root = new Entry<K, V>(key, value, null);
             return null;
-       }
+        }
 
-       while (true) {
+        while (true) {
             int cmp = compare(key, t.key);
             if (cmp == 0) {
                 return t.setValue(value);
@@ -613,20 +616,20 @@ public class LinkedTreeMap<K,V>
                     t = t.left;
                 } else {
                     incrementSize();
-                    t.left = new Entry<K,V>(key, value, t);
-                    
+                    t.left = new Entry<K, V>(key, value, t);
+
                     // -------------------
                     t.left.next = t;
-                    
+
                     // internal node
-                    if(t.previous != null) {
-                    	t.left.previous = t.previous;
-                    	t.previous.next = t.left;
+                    if (t.previous != null) {
+                        t.left.previous = t.previous;
+                        t.previous.next = t.left;
                     }
 
                     t.previous = t.left;
                     // ------------------
-                    
+
                     fixAfterInsertion(t.left);
                     return null;
                 }
@@ -635,20 +638,20 @@ public class LinkedTreeMap<K,V>
                     t = t.right;
                 } else {
                     incrementSize();
-                    t.right = new Entry<K,V>(key, value, t);
-                    
+                    t.right = new Entry<K, V>(key, value, t);
+
                     // -------------------
                     t.right.next = t.next;
                     t.right.previous = t;
-                    
+
                     // internal node
-                    if(t.next != null) {
-                    	t.next.previous = t.right;
+                    if (t.next != null) {
+                        t.next.previous = t.right;
                     }
 
                     t.next = t.right;
                     // ------------------
-                    
+
                     fixAfterInsertion(t.right);
                     return null;
                 }
@@ -659,20 +662,19 @@ public class LinkedTreeMap<K,V>
     /**
      * Removes the mapping for this key from this TreeMap if present.
      *
-     * @param  key key for which mapping should be removed
+     * @param key key for which mapping should be removed
      * @return previous value associated with specified key, or <code>null</code>
-     *         if there was no mapping for key.  A <code>null</code> return can
-     *         also indicate that the map previously associated
-     *         <code>null</code> with the specified key.
-     *
-     * @throws    ClassCastException key cannot be compared with the keys
-     *            currently in the map.
+     * if there was no mapping for key.  A <code>null</code> return can
+     * also indicate that the map previously associated
+     * <code>null</code> with the specified key.
+     * @throws ClassCastException   key cannot be compared with the keys
+     *                              currently in the map.
      * @throws NullPointerException key is <code>null</code> and this map uses
-     *         natural order, or its comparator does not tolerate
-     *         <code>null</code> keys.
+     *                              natural order, or its comparator does not tolerate
+     *                              <code>null</code> keys.
      */
     public V remove(Object key) {
-        Entry<K,V> p = getEntry(key);
+        Entry<K, V> p = getEntry(key);
         if (p == null)
             return null;
 
@@ -697,9 +699,9 @@ public class LinkedTreeMap<K,V>
      * @return a shallow copy of this Map.
      */
     public Object clone() {
-        LinkedTreeMap<K,V> clone = null;
+        LinkedTreeMap<K, V> clone = null;
         try {
-            clone = (LinkedTreeMap<K,V>) super.clone();
+            clone = (LinkedTreeMap<K, V>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError();
         }
@@ -728,14 +730,14 @@ public class LinkedTreeMap<K,V>
      * view the first time this view is requested.  The view is stateless,
      * so there's no reason to create more than one.
      */
-    private transient volatile Set<Map.Entry<K,V>> entrySet = null;
-    
+    private transient volatile Set<Map.Entry<K, V>> entrySet = null;
+
     /**
      * Each of these fields are initialized to contain an instance of the
      * appropriate view the first time this view is requested.  The views are
      * stateless, so there's no reason to create more than one of each.
      */
-    transient volatile Set<K>        keySet = null;
+    transient volatile Set<K> keySet = null;
     transient volatile Collection<V> values = null;
 
     /**
@@ -804,14 +806,14 @@ public class LinkedTreeMap<K,V>
                 }
 
                 public boolean contains(Object o) {
-                    for (Entry<K,V> e = firstEntry(); e != null; e = successor(e))
+                    for (Entry<K, V> e = firstEntry(); e != null; e = successor(e))
                         if (valEquals(e.getValue(), o))
                             return true;
                     return false;
                 }
 
                 public boolean remove(Object o) {
-                    for (Entry<K,V> e = firstEntry(); e != null; e = successor(e)) {
+                    for (Entry<K, V> e = firstEntry(); e != null; e = successor(e)) {
                         if (valEquals(e.getValue(), o)) {
                             deleteEntry(e);
                             return true;
@@ -842,29 +844,29 @@ public class LinkedTreeMap<K,V>
      * @return a set view of the mappings contained in this map.
      * @see Map.Entry
      */
-    public Set<Map.Entry<K,V>> entrySet() {
+    public Set<Map.Entry<K, V>> entrySet() {
         if (entrySet == null) {
-            entrySet = new AbstractSet<Map.Entry<K,V>>() {
+            entrySet = new AbstractSet<Map.Entry<K, V>>() {
 
-            	public Iterator<Map.Entry<K,V>> iterator() {
+                public Iterator<Map.Entry<K, V>> iterator() {
                     return new EntryIterator();
                 }
 
                 public boolean contains(Object o) {
                     if (!(o instanceof Map.Entry))
                         return false;
-                    Map.Entry<K,V> entry = (Map.Entry<K,V>) o;
-		    V value = entry.getValue();
-                    Entry<K,V> p = getEntry(entry.getKey());
+                    Map.Entry<K, V> entry = (Map.Entry<K, V>) o;
+                    V value = entry.getValue();
+                    Entry<K, V> p = getEntry(entry.getKey());
                     return p != null && valEquals(p.getValue(), value);
                 }
 
                 public boolean remove(Object o) {
                     if (!(o instanceof Map.Entry))
                         return false;
-                    Map.Entry<K,V> entry = (Map.Entry<K,V>) o;
-		    V value = entry.getValue();
-                    Entry<K,V> p = getEntry(entry.getKey());
+                    Map.Entry<K, V> entry = (Map.Entry<K, V>) o;
+                    V value = entry.getValue();
+                    Entry<K, V> p = getEntry(entry.getKey());
                     if (p != null && valEquals(p.getValue(), value)) {
                         deleteEntry(p);
                         return true;
@@ -891,12 +893,12 @@ public class LinkedTreeMap<K,V>
      * is empty.)  The returned sorted map is backed by this map, so changes
      * in the returned sorted map are reflected in this map, and vice-versa.
      * The returned sorted map supports all optional map operations.<p>
-     *
+     * <p>
      * The sorted map returned by this method will throw an
      * <code>IllegalArgumentException</code> if the user attempts to insert a key
      * less than <code>fromKey</code> or greater than or equal to
      * <code>toKey</code>.<p>
-     *
+     * <p>
      * Note: this method always returns a <i>half-open range</i> (which
      * includes its low endpoint but not its high endpoint).  If you need a
      * <i>closed range</i> (which includes both endpoints), and the key type
@@ -906,29 +908,27 @@ public class LinkedTreeMap<K,V>
      * strings.  The following idiom obtains a view containing all of the
      * key-value mappings in <code>m</code> whose keys are between <code>low</code>
      * and <code>high</code>, inclusive:
-     *             <pre>    SortedMap sub = m.submap(low, high+"\0");</pre>
+     * <pre>    SortedMap sub = m.submap(low, high+"\0");</pre>
      * A similar technique can be used to generate an <i>open range</i> (which
      * contains neither endpoint).  The following idiom obtains a view
      * containing all of the key-value mappings in <code>m</code> whose keys are
      * between <code>low</code> and <code>high</code>, exclusive:
-     *             <pre>    SortedMap sub = m.subMap(low+"\0", high);</pre>
+     * <pre>    SortedMap sub = m.subMap(low+"\0", high);</pre>
      *
      * @param fromKey low endpoint (inclusive) of the subMap.
-     * @param toKey high endpoint (exclusive) of the subMap.
-     *
+     * @param toKey   high endpoint (exclusive) of the subMap.
      * @return a view of the portion of this map whose keys range from
-     *                <code>fromKey</code>, inclusive, to <code>toKey</code>, exclusive.
-     *
-     * @throws ClassCastException if <code>fromKey</code> and <code>toKey</code>
-     *         cannot be compared to one another using this map's comparator
-     *         (or, if the map has no comparator, using natural ordering).
+     * <code>fromKey</code>, inclusive, to <code>toKey</code>, exclusive.
+     * @throws ClassCastException       if <code>fromKey</code> and <code>toKey</code>
+     *                                  cannot be compared to one another using this map's comparator
+     *                                  (or, if the map has no comparator, using natural ordering).
      * @throws IllegalArgumentException if <code>fromKey</code> is greater than
-     *         <code>toKey</code>.
-     * @throws NullPointerException if <code>fromKey</code> or <code>toKey</code> is
-     *               <code>null</code> and this map uses natural order, or its
-     *               comparator does not tolerate <code>null</code> keys.
+     *                                  <code>toKey</code>.
+     * @throws NullPointerException     if <code>fromKey</code> or <code>toKey</code> is
+     *                                  <code>null</code> and this map uses natural order, or its
+     *                                  comparator does not tolerate <code>null</code> keys.
      */
-    public SortedMap<K,V> subMap(K fromKey, K toKey) {
+    public SortedMap<K, V> subMap(K fromKey, K toKey) {
         return new SubMap(fromKey, toKey);
     }
 
@@ -938,11 +938,11 @@ public class LinkedTreeMap<K,V>
      * changes in the returned sorted map are reflected in this map, and
      * vice-versa.  The returned sorted map supports all optional map
      * operations.<p>
-     *
+     * <p>
      * The sorted map returned by this method will throw an
      * <code>IllegalArgumentException</code> if the user attempts to insert a key
      * greater than or equal to <code>toKey</code>.<p>
-     *
+     * <p>
      * Note: this method always returns a view that does not contain its
      * (high) endpoint.  If you need a view that does contain this endpoint,
      * and the key type allows for calculation of the successor a given key,
@@ -957,19 +957,18 @@ public class LinkedTreeMap<K,V>
      *
      * @param toKey high endpoint (exclusive) of the headMap.
      * @return a view of the portion of this map whose keys are strictly
-     *                less than <code>toKey</code>.
-     *
-     * @throws ClassCastException if <code>toKey</code> is not compatible
-     *         with this map's comparator (or, if the map has no comparator,
-     *         if <code>toKey</code> does not implement <code>Comparable</code>).
+     * less than <code>toKey</code>.
+     * @throws ClassCastException       if <code>toKey</code> is not compatible
+     *                                  with this map's comparator (or, if the map has no comparator,
+     *                                  if <code>toKey</code> does not implement <code>Comparable</code>).
      * @throws IllegalArgumentException if this map is itself a subMap,
-     *         headMap, or tailMap, and <code>toKey</code> is not within the
-     *         specified range of the subMap, headMap, or tailMap.
-     * @throws NullPointerException if <code>toKey</code> is <code>null</code> and
-     *               this map uses natural order, or its comparator does not
-     *               tolerate <code>null</code> keys.
+     *                                  headMap, or tailMap, and <code>toKey</code> is not within the
+     *                                  specified range of the subMap, headMap, or tailMap.
+     * @throws NullPointerException     if <code>toKey</code> is <code>null</code> and
+     *                                  this map uses natural order, or its comparator does not
+     *                                  tolerate <code>null</code> keys.
      */
-    public SortedMap<K,V> headMap(K toKey) {
+    public SortedMap<K, V> headMap(K toKey) {
         return new SubMap(toKey, true);
     }
 
@@ -979,11 +978,11 @@ public class LinkedTreeMap<K,V>
      * this map, so changes in the returned sorted map are reflected in this
      * map, and vice-versa.  The returned sorted map supports all optional map
      * operations.<p>
-     *
+     * <p>
      * The sorted map returned by this method will throw an
      * <code>IllegalArgumentException</code> if the user attempts to insert a key
      * less than <code>fromKey</code>.<p>
-     *
+     * <p>
      * Note: this method always returns a view that contains its (low)
      * endpoint.  If you need a view that does not contain this endpoint, and
      * the element type allows for calculation of the successor a given value,
@@ -997,24 +996,24 @@ public class LinkedTreeMap<K,V>
      *
      * @param fromKey low endpoint (inclusive) of the tailMap.
      * @return a view of the portion of this map whose keys are greater
-     *                than or equal to <code>fromKey</code>.
-     * @throws ClassCastException if <code>fromKey</code> is not compatible
-     *         with this map's comparator (or, if the map has no comparator,
-     *         if <code>fromKey</code> does not implement <code>Comparable</code>).
+     * than or equal to <code>fromKey</code>.
+     * @throws ClassCastException       if <code>fromKey</code> is not compatible
+     *                                  with this map's comparator (or, if the map has no comparator,
+     *                                  if <code>fromKey</code> does not implement <code>Comparable</code>).
      * @throws IllegalArgumentException if this map is itself a subMap,
-     *         headMap, or tailMap, and <code>fromKey</code> is not within the
-     *         specified range of the subMap, headMap, or tailMap.
-     * @throws NullPointerException if <code>fromKey</code> is <code>null</code> and
-     *               this map uses natural order, or its comparator does not
-     *               tolerate <code>null</code> keys.
+     *                                  headMap, or tailMap, and <code>fromKey</code> is not within the
+     *                                  specified range of the subMap, headMap, or tailMap.
+     * @throws NullPointerException     if <code>fromKey</code> is <code>null</code> and
+     *                                  this map uses natural order, or its comparator does not
+     *                                  tolerate <code>null</code> keys.
      */
-    public SortedMap<K,V> tailMap(K fromKey) {
+    public SortedMap<K, V> tailMap(K fromKey) {
         return new SubMap(fromKey, false);
     }
 
     private class SubMap
-	extends AbstractMap<K,V>
-	implements SortedMap<K,V>, java.io.Serializable {
+            extends AbstractMap<K, V>
+            implements SortedMap<K, V>, java.io.Serializable {
         private static final long serialVersionUID = -6520786458950516097L;
 
         /**
@@ -1045,7 +1044,7 @@ public class LinkedTreeMap<K,V>
 
         SubMap(boolean fromStart, K fromKey, boolean toEnd, K toKey) {
             this.fromStart = fromStart;
-            this.fromKey= fromKey;
+            this.fromKey = fromKey;
             this.toEnd = toEnd;
             this.toKey = toKey;
         }
@@ -1075,33 +1074,34 @@ public class LinkedTreeMap<K,V>
         }
 
         public K firstKey() {
-	    LinkedTreeMap.Entry<K,V> e = fromStart ? firstEntry() : getCeilEntry(fromKey);
+            LinkedTreeMap.Entry<K, V> e = fromStart ? firstEntry() : getCeilEntry(fromKey);
             K first = key(e);
             if (!toEnd && compare(first, toKey) >= 0)
-                throw(new NoSuchElementException());
+                throw (new NoSuchElementException());
             return first;
         }
 
         public K lastKey() {
-	    LinkedTreeMap.Entry<K,V> e = toEnd ? lastEntry() : getPrecedingEntry(toKey);
+            LinkedTreeMap.Entry<K, V> e = toEnd ? lastEntry() : getPrecedingEntry(toKey);
             K last = key(e);
             if (!fromStart && compare(last, fromKey) < 0)
-                throw(new NoSuchElementException());
+                throw (new NoSuchElementException());
             return last;
         }
 
-        private transient Set<Map.Entry<K,V>> entrySet = new EntrySetView();
+        private transient Set<Map.Entry<K, V>> entrySet = new EntrySetView();
 
-        public Set<Map.Entry<K,V>> entrySet() {
+        public Set<Map.Entry<K, V>> entrySet() {
             return entrySet;
         }
 
-        private class EntrySetView extends AbstractSet<Map.Entry<K,V>> {
+        private class EntrySetView extends AbstractSet<Map.Entry<K, V>> {
             private transient int size = -1, sizeModCount;
 
             public int size() {
                 if (size == -1 || sizeModCount != LinkedTreeMap.this.modCount) {
-                    size = 0;  sizeModCount = LinkedTreeMap.this.modCount;
+                    size = 0;
+                    sizeModCount = LinkedTreeMap.this.modCount;
                     Iterator i = iterator();
                     while (i.hasNext()) {
                         size++;
@@ -1118,38 +1118,38 @@ public class LinkedTreeMap<K,V>
             public boolean contains(Object o) {
                 if (!(o instanceof Map.Entry))
                     return false;
-                Map.Entry<K,V> entry = (Map.Entry<K,V>) o;
+                Map.Entry<K, V> entry = (Map.Entry<K, V>) o;
                 K key = entry.getKey();
                 if (!inRange(key))
                     return false;
                 LinkedTreeMap.Entry node = getEntry(key);
                 return node != null &&
-                       valEquals(node.getValue(), entry.getValue());
+                        valEquals(node.getValue(), entry.getValue());
             }
 
             public boolean remove(Object o) {
                 if (!(o instanceof Map.Entry))
                     return false;
-                Map.Entry<K,V> entry = (Map.Entry<K,V>) o;
+                Map.Entry<K, V> entry = (Map.Entry<K, V>) o;
                 K key = entry.getKey();
                 if (!inRange(key))
                     return false;
-                LinkedTreeMap.Entry<K,V> node = getEntry(key);
-                if (node!=null && valEquals(node.getValue(),entry.getValue())){
+                LinkedTreeMap.Entry<K, V> node = getEntry(key);
+                if (node != null && valEquals(node.getValue(), entry.getValue())) {
                     deleteEntry(node);
                     return true;
                 }
                 return false;
             }
 
-            public Iterator<Map.Entry<K,V>> iterator() {
+            public Iterator<Map.Entry<K, V>> iterator() {
                 return new SubMapEntryIterator(
-                    (fromStart ? firstEntry() : getCeilEntry(fromKey)),
-                    (toEnd     ? null         : getCeilEntry(toKey)));
+                        (fromStart ? firstEntry() : getCeilEntry(fromKey)),
+                        (toEnd ? null : getCeilEntry(toKey)));
             }
         }
 
-        public SortedMap<K,V> subMap(K fromKey, K toKey) {
+        public SortedMap<K, V> subMap(K fromKey, K toKey) {
             if (!inRange2(fromKey))
                 throw new IllegalArgumentException("fromKey out of range");
             if (!inRange2(toKey))
@@ -1157,13 +1157,13 @@ public class LinkedTreeMap<K,V>
             return new SubMap(fromKey, toKey);
         }
 
-        public SortedMap<K,V> headMap(K toKey) {
+        public SortedMap<K, V> headMap(K toKey) {
             if (!inRange2(toKey))
                 throw new IllegalArgumentException("toKey out of range");
             return new SubMap(fromStart, fromKey, false, toKey);
         }
 
-        public SortedMap<K,V> tailMap(K fromKey) {
+        public SortedMap<K, V> tailMap(K fromKey) {
             if (!inRange2(fromKey))
                 throw new IllegalArgumentException("fromKey out of range");
             return new SubMap(false, fromKey, toEnd, toKey);
@@ -1171,13 +1171,13 @@ public class LinkedTreeMap<K,V>
 
         private boolean inRange(K key) {
             return (fromStart || compare(key, fromKey) >= 0) &&
-                   (toEnd     || compare(key, toKey)   <  0);
+                    (toEnd || compare(key, toKey) < 0);
         }
 
         // This form allows the high endpoint (as well as all legit keys)
         private boolean inRange2(K key) {
             return (fromStart || compare(key, fromKey) >= 0) &&
-                   (toEnd     || compare(key, toKey)   <= 0);
+                    (toEnd || compare(key, toKey) <= 0);
         }
     }
 
@@ -1186,15 +1186,15 @@ public class LinkedTreeMap<K,V>
      */
     private abstract class PrivateEntryIterator<T> implements Iterator<T> {
         private int expectedModCount = LinkedTreeMap.this.modCount;
-        private Entry<K,V> lastReturned = null;
-        Entry<K,V> next;
+        private Entry<K, V> lastReturned = null;
+        Entry<K, V> next;
 
         PrivateEntryIterator() {
             next = firstEntry();
         }
 
         // Used by SubMapEntryIterator
-        PrivateEntryIterator(Entry<K,V> first) {
+        PrivateEntryIterator(Entry<K, V> first) {
             next = first;
         }
 
@@ -1202,7 +1202,7 @@ public class LinkedTreeMap<K,V>
             return next != null;
         }
 
-        final Entry<K,V> nextEntry() {
+        final Entry<K, V> nextEntry() {
             if (next == null)
                 throw new NoSuchElementException();
             if (modCount != expectedModCount)
@@ -1220,16 +1220,16 @@ public class LinkedTreeMap<K,V>
                 throw new ConcurrentModificationException();
             if (lastReturned.left != null && lastReturned.right != null)
                 next = lastReturned;
-            
+
             deleteEntry(lastReturned);
             expectedModCount++;
             lastReturned = null;
         }
     }
-    
-    
-       private class EntryIterator extends PrivateEntryIterator<Map.Entry<K,V>> {
-        public Map.Entry<K,V> next() {
+
+
+    private class EntryIterator extends PrivateEntryIterator<Map.Entry<K, V>> {
+        public Map.Entry<K, V> next() {
             return nextEntry();
         }
     }
@@ -1239,37 +1239,37 @@ public class LinkedTreeMap<K,V>
             return nextEntry().key;
         }
     }
-    
+
     private class ValueIterator extends PrivateEntryIterator<V> {
-    	
-    	ValueIterator() {
-    		super();
-    	}
-    	
-    	ValueIterator(Entry<K,V> first) {
-    		super(first);
-    	}
-    	
+
+        ValueIterator() {
+            super();
+        }
+
+        ValueIterator(Entry<K, V> first) {
+            super(first);
+        }
+
         public V next() {
             return nextEntry().value;
         }
     }
 
-    private class SubMapEntryIterator extends PrivateEntryIterator<Map.Entry<K,V>> {
+    private class SubMapEntryIterator extends PrivateEntryIterator<Map.Entry<K, V>> {
         private final K firstExcludedKey;
 
-        SubMapEntryIterator(Entry<K,V> first, Entry<K,V> firstExcluded) {
+        SubMapEntryIterator(Entry<K, V> first, Entry<K, V> firstExcluded) {
             super(first);
             firstExcludedKey = (firstExcluded == null
-				? null
-				: firstExcluded.key);
+                    ? null
+                    : firstExcluded.key);
         }
 
         public boolean hasNext() {
             return next != null && next.key != firstExcludedKey;
         }
 
-        public Map.Entry<K,V> next() {
+        public Map.Entry<K, V> next() {
             if (next == null || next.key == firstExcludedKey)
                 throw new NoSuchElementException();
             return nextEntry();
@@ -1280,8 +1280,8 @@ public class LinkedTreeMap<K,V>
      * Compares two keys using the correct comparison method for this TreeMap.
      */
     private int compare(K k1, K k2) {
-        return (comparator==null ? ((Comparable</*-*/K>)k1).compareTo(k2)
-                                 : comparator.compare((K)k1, (K)k2));
+        return (comparator == null ? ((Comparable</*-*/K>) k1).compareTo(k2)
+                : comparator.compare((K) k1, (K) k2));
     }
 
     /**
@@ -1289,10 +1289,10 @@ public class LinkedTreeMap<K,V>
      * that it copes with <code>null</code> o1 properly.
      */
     private static boolean valEquals(Object o1, Object o2) {
-        return (o1==null ? o2==null : o1.equals(o2));
+        return (o1 == null ? o2 == null : o1.equals(o2));
     }
 
-    private static final boolean RED   = false;
+    private static final boolean RED = false;
     private static final boolean BLACK = true;
 
     /**
@@ -1300,26 +1300,26 @@ public class LinkedTreeMap<K,V>
      * user (see Map.Entry).
      */
 
-    static class Entry<K,V> implements Map.Entry<K,V> {
-	K key;
+    static class Entry<K, V> implements Map.Entry<K, V> {
+        K key;
         V value;
-        Entry<K,V> left = null;
-        Entry<K,V> right = null;
-        Entry<K,V> parent;
-        Entry<K,V> next = null;
-        Entry<K,V> previous = null;
+        Entry<K, V> left = null;
+        Entry<K, V> right = null;
+        Entry<K, V> parent;
+        Entry<K, V> next = null;
+        Entry<K, V> previous = null;
         boolean color = BLACK;
 
         /**
          * Make a new cell with given key, value, and parent, and with
          * <code>null</code> child links, and BLACK color.
          */
-        Entry(K key, V value, Entry<K,V> parent) {
+        Entry(K key, V value, Entry<K, V> parent) {
             this.key = key;
             this.value = value;
             this.parent = parent;
         }
-        
+
         /**
          * Returns the key.
          *
@@ -1343,7 +1343,7 @@ public class LinkedTreeMap<K,V>
          * value.
          *
          * @return the value associated with the key before this method was
-         *           called.
+         * called.
          */
         public V setValue(V value) {
             V oldValue = this.value;
@@ -1354,14 +1354,14 @@ public class LinkedTreeMap<K,V>
         public boolean equals(Object o) {
             if (!(o instanceof Map.Entry))
                 return false;
-            Map.Entry e = (Map.Entry)o;
+            Map.Entry e = (Map.Entry) o;
 
-            return valEquals(key,e.getKey()) && valEquals(value,e.getValue());
+            return valEquals(key, e.getKey()) && valEquals(value, e.getValue());
         }
 
         public int hashCode() {
-            int keyHash = (key==null ? 0 : key.hashCode());
-            int valueHash = (value==null ? 0 : value.hashCode());
+            int keyHash = (key == null ? 0 : key.hashCode());
+            int valueHash = (value == null ? 0 : value.hashCode());
             return keyHash ^ valueHash;
         }
 
@@ -1374,8 +1374,8 @@ public class LinkedTreeMap<K,V>
      * Returns the first Entry in the TreeMap (according to the TreeMap's
      * key-sort function).  Returns null if the TreeMap is empty.
      */
-    private Entry<K,V> firstEntry() {
-        Entry<K,V> p = root;
+    private Entry<K, V> firstEntry() {
+        Entry<K, V> p = root;
         if (p != null)
             while (p.left != null)
                 p = p.left;
@@ -1386,8 +1386,8 @@ public class LinkedTreeMap<K,V>
      * Returns the last Entry in the TreeMap (according to the TreeMap's
      * key-sort function).  Returns null if the TreeMap is empty.
      */
-    private Entry<K,V> lastEntry() {
-        Entry<K,V> p = root;
+    private Entry<K, V> lastEntry() {
+        Entry<K, V> p = root;
         if (p != null)
             while (p.right != null)
                 p = p.right;
@@ -1397,17 +1397,17 @@ public class LinkedTreeMap<K,V>
     /**
      * Returns the successor of the specified Entry, or null if no such.
      */
-    private Entry<K,V> successor(Entry<K,V> t) {
+    private Entry<K, V> successor(Entry<K, V> t) {
         if (t == null)
             return null;
         else if (t.right != null) {
-            Entry<K,V> p = t.right;
+            Entry<K, V> p = t.right;
             while (p.left != null)
                 p = p.left;
             return p;
         } else {
-            Entry<K,V> p = t.parent;
-            Entry<K,V> ch = t;
+            Entry<K, V> p = t.parent;
+            Entry<K, V> ch = t;
             while (p != null && ch == p.right) {
                 ch = p;
                 p = p.parent;
@@ -1418,7 +1418,7 @@ public class LinkedTreeMap<K,V>
 
     /**
      * Balancing operations.
-     *
+     * <p>
      * Implementations of rebalancings during insertion and deletion are
      * slightly different than the CLR version.  Rather than using dummy
      * nilnodes, we use a set of accessors that deal properly with null.  They
@@ -1426,30 +1426,32 @@ public class LinkedTreeMap<K,V>
      * algorithms.
      */
 
-    private static <K,V> boolean colorOf(Entry<K,V> p) {
+    private static <K, V> boolean colorOf(Entry<K, V> p) {
         return (p == null ? BLACK : p.color);
     }
 
-    private static <K,V> Entry<K,V> parentOf(Entry<K,V> p) {
-        return (p == null ? null: p.parent);
+    private static <K, V> Entry<K, V> parentOf(Entry<K, V> p) {
+        return (p == null ? null : p.parent);
     }
 
-    private static <K,V> void setColor(Entry<K,V> p, boolean c) {
+    private static <K, V> void setColor(Entry<K, V> p, boolean c) {
         if (p != null)
-	    p.color = c;
+            p.color = c;
     }
 
-    private static <K,V> Entry<K,V> leftOf(Entry<K,V> p) {
-        return (p == null) ? null: p.left;
+    private static <K, V> Entry<K, V> leftOf(Entry<K, V> p) {
+        return (p == null) ? null : p.left;
     }
 
-    private static <K,V> Entry<K,V> rightOf(Entry<K,V> p) {
-        return (p == null) ? null: p.right;
+    private static <K, V> Entry<K, V> rightOf(Entry<K, V> p) {
+        return (p == null) ? null : p.right;
     }
 
-    /** From CLR **/
-    private void rotateLeft(Entry<K,V> p) {
-        Entry<K,V> r = p.right;
+    /**
+     * From CLR
+     **/
+    private void rotateLeft(Entry<K, V> p) {
+        Entry<K, V> r = p.right;
         p.right = r.left;
         if (r.left != null)
             r.left.parent = p;
@@ -1464,9 +1466,11 @@ public class LinkedTreeMap<K,V>
         p.parent = r;
     }
 
-    /** From CLR **/
-    private void rotateRight(Entry<K,V> p) {
-        Entry<K,V> l = p.left;
+    /**
+     * From CLR
+     **/
+    private void rotateRight(Entry<K, V> p) {
+        Entry<K, V> l = p.left;
         p.left = l.right;
         if (l.right != null) l.right.parent = p;
         l.parent = p.parent;
@@ -1480,13 +1484,15 @@ public class LinkedTreeMap<K,V>
     }
 
 
-    /** From CLR **/
-    private void fixAfterInsertion(Entry<K,V> x) {
+    /**
+     * From CLR
+     **/
+    private void fixAfterInsertion(Entry<K, V> x) {
         x.color = RED;
 
         while (x != null && x != root && x.parent.color == RED) {
             if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
-                Entry<K,V> y = rightOf(parentOf(parentOf(x)));
+                Entry<K, V> y = rightOf(parentOf(parentOf(x)));
                 if (colorOf(y) == RED) {
                     setColor(parentOf(x), BLACK);
                     setColor(y, BLACK);
@@ -1503,7 +1509,7 @@ public class LinkedTreeMap<K,V>
                         rotateRight(parentOf(parentOf(x)));
                 }
             } else {
-                Entry<K,V> y = leftOf(parentOf(parentOf(x)));
+                Entry<K, V> y = leftOf(parentOf(parentOf(x)));
                 if (colorOf(y) == RED) {
                     setColor(parentOf(x), BLACK);
                     setColor(y, BLACK);
@@ -1514,7 +1520,7 @@ public class LinkedTreeMap<K,V>
                         x = parentOf(x);
                         rotateRight(x);
                     }
-                    setColor(parentOf(x),  BLACK);
+                    setColor(parentOf(x), BLACK);
                     setColor(parentOf(parentOf(x)), RED);
                     if (parentOf(parentOf(x)) != null)
                         rotateLeft(parentOf(parentOf(x)));
@@ -1528,38 +1534,38 @@ public class LinkedTreeMap<K,V>
      * Delete node p, and then rebalance the tree.
      */
 
-    private void deleteEntry(Entry<K,V> p) {
+    private void deleteEntry(Entry<K, V> p) {
         decrementSize();
-        
+
         // If strictly internal, copy successor's element to p and then make p
         // point to successor.
         if (p.left != null && p.right != null) {
 //            Entry<K,V> s = successor(p);
-            Entry<K,V> s = p.next;
+            Entry<K, V> s = p.next;
             p.key = s.key;
             p.value = s.value;
-            
+
             // ----- Required to keep the linked list --------
             p.next = s.next;
-            if(p.next != null) {
-            	p.next.previous = p;
+            if (p.next != null) {
+                p.next.previous = p;
             }
             // -----------------------------------------------
-            
+
             p = s;
         } // p has 2 children
         else {
-        	if(p.next != null) {
-            	p.next.previous = p.previous;
+            if (p.next != null) {
+                p.next.previous = p.previous;
             }
-            
-            if(p.previous != null) {
-            	p.previous.next = p.next;
-            }	
+
+            if (p.previous != null) {
+                p.previous.next = p.next;
+            }
         }
-        
+
         // Start fixup at replacement node, if it exists.
-        Entry<K,V> replacement = (p.left != null ? p.left : p.right);
+        Entry<K, V> replacement = (p.left != null ? p.left : p.right);
 
         if (replacement != null) {
             // Link replacement to parent
@@ -1567,7 +1573,7 @@ public class LinkedTreeMap<K,V>
             if (p.parent == null)
                 root = replacement;
             else if (p == p.parent.left)
-                p.parent.left  = replacement;
+                p.parent.left = replacement;
             else
                 p.parent.right = replacement;
 
@@ -1593,11 +1599,13 @@ public class LinkedTreeMap<K,V>
         }
     }
 
-    /** From CLR **/
-    private void fixAfterDeletion(Entry<K,V> x) {
+    /**
+     * From CLR
+     **/
+    private void fixAfterDeletion(Entry<K, V> x) {
         while (x != root && colorOf(x) == BLACK) {
             if (x == leftOf(parentOf(x))) {
-                Entry<K,V> sib = rightOf(parentOf(x));
+                Entry<K, V> sib = rightOf(parentOf(x));
 
                 if (colorOf(sib) == RED) {
                     setColor(sib, BLACK);
@@ -1606,9 +1614,9 @@ public class LinkedTreeMap<K,V>
                     sib = rightOf(parentOf(x));
                 }
 
-                if (colorOf(leftOf(sib))  == BLACK &&
-                    colorOf(rightOf(sib)) == BLACK) {
-                    setColor(sib,  RED);
+                if (colorOf(leftOf(sib)) == BLACK &&
+                        colorOf(rightOf(sib)) == BLACK) {
+                    setColor(sib, RED);
                     x = parentOf(x);
                 } else {
                     if (colorOf(rightOf(sib)) == BLACK) {
@@ -1624,7 +1632,7 @@ public class LinkedTreeMap<K,V>
                     x = root;
                 }
             } else { // symmetric
-                Entry<K,V> sib = leftOf(parentOf(x));
+                Entry<K, V> sib = leftOf(parentOf(x));
 
                 if (colorOf(sib) == RED) {
                     setColor(sib, BLACK);
@@ -1634,8 +1642,8 @@ public class LinkedTreeMap<K,V>
                 }
 
                 if (colorOf(rightOf(sib)) == BLACK &&
-                    colorOf(leftOf(sib)) == BLACK) {
-                    setColor(sib,  RED);
+                        colorOf(leftOf(sib)) == BLACK) {
+                    setColor(sib, RED);
                     x = parentOf(x);
                 } else {
                     if (colorOf(leftOf(sib)) == BLACK) {
@@ -1662,18 +1670,18 @@ public class LinkedTreeMap<K,V>
      * Save the state of the <code>TreeMap</code> instance to a stream (i.e.,
      * serialize it).
      *
-     * @serialData The <i>size</i> of the TreeMap (the number of key-value
-     *             mappings) is emitted (int), followed by the key (Object)
-     *             and value (Object) for each key-value mapping represented
-     *             by the TreeMap. The key-value mappings are emitted in
-     *             key-order (as determined by the TreeMap's Comparator,
-     *             or by the keys' natural ordering if the TreeMap has no
-     *             Comparator).
      * @param s the object to be written
      * @throws java.io.IOException if the object cannot be written
+     * @serialData The <i>size</i> of the TreeMap (the number of key-value
+     * mappings) is emitted (int), followed by the key (Object)
+     * and value (Object) for each key-value mapping represented
+     * by the TreeMap. The key-value mappings are emitted in
+     * key-order (as determined by the TreeMap's Comparator,
+     * or by the keys' natural ordering if the TreeMap has no
+     * Comparator).
      */
     private void writeObject(java.io.ObjectOutputStream s)
-        throws java.io.IOException {
+            throws java.io.IOException {
         // Write out the Comparator and any hidden stuff
         s.defaultWriteObject();
 
@@ -1681,24 +1689,24 @@ public class LinkedTreeMap<K,V>
         s.writeInt(size);
 
         // Write out keys and values (alternating)
-        for (Iterator<Map.Entry<K,V>> i = entrySet().iterator(); i.hasNext(); ) {
-            Map.Entry<K,V> e = i.next();
+        for (Iterator<Map.Entry<K, V>> i = entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry<K, V> e = i.next();
             s.writeObject(e.getKey());
             s.writeObject(e.getValue());
         }
     }
 
 
-
     /**
      * Reconstitute the <code>TreeMap</code> instance from a stream (i.e.,
      * deserialize it).
+     *
      * @param s object to be read
-     * @throws java.io.IOException if the object class cannot be read
+     * @throws java.io.IOException    if the object class cannot be read
      * @throws ClassNotFoundException if the object's class cannot be found
      */
     private void readObject(final java.io.ObjectInputStream s)
-        throws java.io.IOException, ClassNotFoundException {
+            throws java.io.IOException, ClassNotFoundException {
         // Read in the Comparator and any hidden stuff
         s.defaultReadObject();
 
@@ -1708,19 +1716,23 @@ public class LinkedTreeMap<K,V>
         buildFromSorted(size, null, s, null);
     }
 
-    /** Intended to be called only from TreeSet.readObject **/
+    /**
+     * Intended to be called only from TreeSet.readObject
+     **/
     void readTreeSet(int size, java.io.ObjectInputStream s, V defaultVal)
-        throws java.io.IOException, ClassNotFoundException {
+            throws java.io.IOException, ClassNotFoundException {
         buildFromSorted(size, null, s, defaultVal);
     }
 
-    /** Intended to be called only from TreeSet.addAll **/
-    void addAllForTreeSet(SortedSet<Map.Entry<K,V>> set, V defaultVal) {
-	try {
-	    buildFromSorted(set.size(), set.iterator(), null, defaultVal);
-	} catch (java.io.IOException cannotHappen) {
-	} catch (ClassNotFoundException cannotHappen) {
-	}
+    /**
+     * Intended to be called only from TreeSet.addAll
+     **/
+    void addAllForTreeSet(SortedSet<Map.Entry<K, V>> set, V defaultVal) {
+        try {
+            buildFromSorted(set.size(), set.iterator(), null, defaultVal);
+        } catch (java.io.IOException cannotHappen) {
+        } catch (ClassNotFoundException cannotHappen) {
+        }
     }
 
 
@@ -1729,38 +1741,38 @@ public class LinkedTreeMap<K,V>
      * and/or values from iterator or stream. This leads to too many
      * parameters, but seems better than alternatives.  The four formats
      * that this method accepts are:
-     *
-     *    1) An iterator of Map.Entries.  (it != null, defaultVal == null).
-     *    2) An iterator of keys.         (it != null, defaultVal != null).
-     *    3) A stream of alternating serialized keys and values.
-     *                                   (it == null, defaultVal == null).
-     *    4) A stream of serialized keys. (it == null, defaultVal != null).
-     *
+     * <p>
+     * 1) An iterator of Map.Entries.  (it != null, defaultVal == null).
+     * 2) An iterator of keys.         (it != null, defaultVal != null).
+     * 3) A stream of alternating serialized keys and values.
+     * (it == null, defaultVal == null).
+     * 4) A stream of serialized keys. (it == null, defaultVal != null).
+     * <p>
      * It is assumed that the comparator of the TreeMap is already set prior
      * to calling this method.
      *
-     * @param size the number of keys (or key-value pairs) to be read from
-     *        the iterator or stream.
-     * @param it If non-null, new entries are created from entries
-     *        or keys read from this iterator.
-     * @param str If non-null, new entries are created from keys and
-     *        possibly values read from this stream in serialized form.
-     *        Exactly one of it and str should be non-null.
+     * @param size       the number of keys (or key-value pairs) to be read from
+     *                   the iterator or stream.
+     * @param it         If non-null, new entries are created from entries
+     *                   or keys read from this iterator.
+     * @param str        If non-null, new entries are created from keys and
+     *                   possibly values read from this stream in serialized form.
+     *                   Exactly one of it and str should be non-null.
      * @param defaultVal if non-null, this default value is used for
-     *        each value in the map.  If null, each value is read from
-     *        iterator or stream, as described above.
-     * @throws IOException propagated from stream reads. This cannot
-     *         occur if str is null.
+     *                   each value in the map.  If null, each value is read from
+     *                   iterator or stream, as described above.
+     * @throws IOException            propagated from stream reads. This cannot
+     *                                occur if str is null.
      * @throws ClassNotFoundException propagated from readObject.
-     *         This cannot occur if str is null.
+     *                                This cannot occur if str is null.
      */
     private void buildFromSorted(int size, Iterator it,
-			 java.io.ObjectInputStream str,
-			 V defaultVal)
-        throws  java.io.IOException, ClassNotFoundException {
+                                 java.io.ObjectInputStream str,
+                                 V defaultVal)
+            throws java.io.IOException, ClassNotFoundException {
         this.size = size;
-        root = buildFromSorted(0, 0, size-1, computeRedLevel(size),
-			    it, str, defaultVal).data;
+        root = buildFromSorted(0, 0, size - 1, computeRedLevel(size),
+                it, str, defaultVal).data;
     }
 
     /**
@@ -1770,103 +1782,105 @@ public class LinkedTreeMap<K,V>
      * It is assumed that the comparator and size fields of the TreeMap are
      * already set prior to calling this method.  (It ignores both fields.)
      *
-     * @param level the current level of tree. Initial call should be 0.
-     * @param lo the first element index of this subtree. Initial should be 0.
-     * @param hi the last element index of this subtree.  Initial should be
-     *              size-1.
+     * @param level    the current level of tree. Initial call should be 0.
+     * @param lo       the first element index of this subtree. Initial should be 0.
+     * @param hi       the last element index of this subtree.  Initial should be
+     *                 size-1.
      * @param redLevel the level at which nodes should be red.
-     *        Must be equal to computeRedLevel for tree of this size.
+     *                 Must be equal to computeRedLevel for tree of this size.
      */
     private final ReturnSorted buildFromSorted(int level, int lo, int hi,
-			int redLevel, Iterator it, java.io.ObjectInputStream str,
-			V defaultVal) throws java.io.IOException, ClassNotFoundException {
-		/*
-		 * Strategy: The root is the middlemost element. To get to it, we have
-		 * to first recursively construct the entire left subtree, so as to grab
-		 * all of its elements. We can then proceed with right subtree.
-		 * 
-		 * The lo and hi arguments are the minimum and maximum indices to pull
-		 * out of the iterator or stream for current subtree. They are not
-		 * actually indexed, we just proceed sequentially, ensuring that items
-		 * are extracted in corresponding order.
-		 */
+                                               int redLevel, Iterator it, java.io.ObjectInputStream str,
+                                               V defaultVal) throws java.io.IOException, ClassNotFoundException {
+        /*
+         * Strategy: The root is the middlemost element. To get to it, we have
+         * to first recursively construct the entire left subtree, so as to grab
+         * all of its elements. We can then proceed with right subtree.
+         *
+         * The lo and hi arguments are the minimum and maximum indices to pull
+         * out of the iterator or stream for current subtree. They are not
+         * actually indexed, we just proceed sequentially, ensuring that items
+         * are extracted in corresponding order.
+         */
 
-		if (hi < lo)
-			return null;
+        if (hi < lo)
+            return null;
 
-		int mid = (lo + hi) / 2;
-		
-		Entry<K, V> left = null;
-		ReturnSorted ret = null;
-		
-		if (lo < mid) {
-			ret = 
-				buildFromSorted(level + 1, lo, mid - 1, redLevel, it, str,
-					defaultVal);
-			left = ret.data;
-		}
+        int mid = (lo + hi) / 2;
 
-		// extract key and/or value from iterator or stream
-		K key;
-		V value;
-		if (it != null) {
-			if (defaultVal == null) {
-				Map.Entry<K, V> entry = (Map.Entry<K, V>) it.next();
-				key = entry.getKey();
-				value = entry.getValue();
-			} else {
-				key = (K) it.next();
-				value = defaultVal;
-			}
-		} else { // use stream
-			key = (K) str.readObject();
-			value = (defaultVal != null ? defaultVal : (V) str.readObject());
-		}
+        Entry<K, V> left = null;
+        ReturnSorted ret = null;
 
-		Entry<K, V> middle = new Entry<K, V>(key, value, null);
-    	ReturnSorted st = new ReturnSorted();
-		st.leftMost = st.rightMost = middle;
-		
-		if (left != null) {
-			middle.left = left;
-			left.parent = middle;
-			
-			middle.previous = ret.rightMost;
-			ret.rightMost.next = middle;
-			st.leftMost = ret.leftMost;
-		}
+        if (lo < mid) {
+            ret =
+                    buildFromSorted(level + 1, lo, mid - 1, redLevel, it, str,
+                            defaultVal);
+            left = ret.data;
+        }
 
-		// color nodes in non-full bottom most level red
-		if (level == redLevel)
-			middle.color = RED;
-		
-		if (mid < hi) {
-			ret = buildFromSorted(level + 1, mid + 1, hi,
-					redLevel, it, str, defaultVal);
-			
-			Entry<K, V> right = ret.data;
-			middle.right = right;
-			right.parent = middle;
-			
-			st.rightMost = ret.rightMost;
-			middle.next = ret.leftMost;
-			ret.leftMost.previous = middle;
-		}
+        // extract key and/or value from iterator or stream
+        K key;
+        V value;
+        if (it != null) {
+            if (defaultVal == null) {
+                Map.Entry<K, V> entry = (Map.Entry<K, V>) it.next();
+                key = entry.getKey();
+                value = entry.getValue();
+            } else {
+                key = (K) it.next();
+                value = defaultVal;
+            }
+        } else { // use stream
+            key = (K) str.readObject();
+            value = (defaultVal != null ? defaultVal : (V) str.readObject());
+        }
 
-		st.data = middle;
-		return st;
-	}
+        Entry<K, V> middle = new Entry<K, V>(key, value, null);
+        ReturnSorted st = new ReturnSorted();
+        st.leftMost = st.rightMost = middle;
 
-    /** Class used only by the method above to return the leftmost and rightmost
+        if (left != null) {
+            middle.left = left;
+            left.parent = middle;
+
+            middle.previous = ret.rightMost;
+            ret.rightMost.next = middle;
+            st.leftMost = ret.leftMost;
+        }
+
+        // color nodes in non-full bottom most level red
+        if (level == redLevel)
+            middle.color = RED;
+
+        if (mid < hi) {
+            ret = buildFromSorted(level + 1, mid + 1, hi,
+                    redLevel, it, str, defaultVal);
+
+            Entry<K, V> right = ret.data;
+            middle.right = right;
+            right.parent = middle;
+
+            st.rightMost = ret.rightMost;
+            middle.next = ret.leftMost;
+            ret.leftMost.previous = middle;
+        }
+
+        st.data = middle;
+        return st;
+    }
+
+    /**
+     * Class used only by the method above to return the leftmost and rightmost
      * entries below a given entry in the tree
+     *
      * @author Marcos Dias de Assuncao
      */
     private class ReturnSorted {
-    	Entry<K, V> rightMost = null;
-    	Entry<K, V> data = null;
-    	Entry<K, V> leftMost = null;
+        Entry<K, V> rightMost = null;
+        Entry<K, V> data = null;
+        Entry<K, V> leftMost = null;
     }
-   
+
     /**
      * Find the level down to which to assign all nodes BLACK.  This is the
      * last `full' level of the complete binary tree produced by

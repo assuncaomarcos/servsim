@@ -66,37 +66,44 @@ public class DefaultResourcePool extends ResourcePool {
      * @param acceptLessResources defines whether less resources than
      *                            originally requested is allowed
      * @return a {@link ProfileEntry} with the start time provided and the
-     * ranges available at that time OR <code>null</code> if not enough resources are found.
+     * ranges available at that time OR <code>null</code>
+     * if not enough resources are found.
      */
-    public ProfileEntry checkAvailability(int reqRes, long startTime,
-            long duration, boolean acceptLessResources) {
-        return this.profile.checkAvailability(reqRes, startTime, duration, acceptLessResources);
+    public ProfileEntry checkAvailability(final int reqRes,
+                                          final long startTime,
+                                          final long duration,
+                                          final boolean acceptLessResources) {
+        return this.profile.checkAvailability(reqRes, startTime,
+                duration, acceptLessResources);
     }
 
     /**
-     * Selects an entry able to provide enough resources to handle a job. The method
-     * iterates the profile until it finds enough resources for the job, starting
-     * from the current simulation time.
+     * Selects an entry able to provide enough resources to handle a job.
+     * The method iterates the profile until it finds enough resources
+     * for the job, starting from the current simulation time.
      * @param reqRes the number of resources
      * @param duration the duration in seconds to execute the job
      * @return an {@link ProfileEntry} with the time at which the job can start
      * and the ranges available at that time.
      */
-    public ProfileEntry findStartTime(int reqRes, long duration) {
+    public ProfileEntry findStartTime(final int reqRes,
+                                      final long duration) {
         return findStartTime(reqRes, super.currentTime(), duration);
     }
 
     /**
-     * Selects an entry able to provide enough resources to handle a job. The method
-     * iterates the profile until it finds enough resources for the job, starting
-     * from the current simulation time.
+     * Selects an entry able to provide enough resources to handle a job.
+     * The method iterates the profile until it finds enough resources
+     * for the job, starting from the current simulation time.
      * @param reqRes the number of resources
      * @param readyTime the time before which a request cannot be scheduled
      * @param duration the duration in seconds to execute the job
      * @return an {@link ProfileEntry} with the time at which the job can start
      * and the ranges available at that time.
      */
-    public ProfileEntry findStartTime(int reqRes, long readyTime, long duration) {
+    public ProfileEntry findStartTime(final int reqRes,
+                                      final long readyTime,
+                                      final long duration) {
         return this.profile.findStartTime(reqRes, readyTime, duration);
     }
 
@@ -106,8 +113,11 @@ public class DefaultResourcePool extends ResourcePool {
      * @param selected the list of resource ranges selected
      * @param startTime the start time of the job/reservation
      */
-    public void allocateResources(WorkUnit task, RangeList selected, long startTime) {
-        allocateResources(selected, startTime, startTime + task.getDuration());
+    public void allocateResources(final WorkUnit task,
+                                  final RangeList selected,
+                                  final long startTime) {
+        allocateResources(selected, startTime,
+                startTime + task.getDuration());
     }
 
     /**
@@ -116,7 +126,9 @@ public class DefaultResourcePool extends ResourcePool {
      * @param startTime the start time of the job/reservation
      * @param finishTime the finish time of the job/reservation
      */
-    public void allocateResources(RangeList selected, long startTime, long finishTime) {
+    public void allocateResources(final RangeList selected,
+                                  final long startTime,
+                                  final long finishTime) {
         this.profile.allocateResourceRanges(selected, startTime, finishTime);
     }
 
@@ -127,9 +139,12 @@ public class DefaultResourcePool extends ResourcePool {
      * @param startTime the start time of the time slot.
      * @param finishTime the finish time of the time slot.
      * @param list the list of ranges of resources in the slot.
-     * @return <code>true</code> if the slot was included; <code>false</code> otherwise.
+     * @return <code>true</code> if the slot was included;
+     * <code>false</code> otherwise.
      */
-    public boolean releaseResources(long startTime, long finishTime, RangeList list) {
+    public boolean releaseResources(final long startTime,
+                                    final long finishTime,
+                                    final RangeList list) {
         return this.profile.addTimeSlot(startTime, finishTime, list);
     }
 
@@ -140,8 +155,10 @@ public class DefaultResourcePool extends ResourcePool {
      * @param endTime end time to consider when computing the units
      * @return the number of free resource units
      */
-    public long getNumberFreeUnits(long startTime, long endTime) {
-        Collection<ProfileEntry> avail = profile.getAvailability(startTime, endTime);
+    public long getNumberFreeUnits(final long startTime,
+                                   final long endTime) {
+        Collection<ProfileEntry> avail =
+                profile.getAvailability(startTime, endTime);
         long units = 0;
         Iterator<ProfileEntry> it = avail.iterator();
         ProfileEntry prev = it.next();
@@ -162,7 +179,8 @@ public class DefaultResourcePool extends ResourcePool {
             prev = curr;
         }
 
-        units += (endTime - Math.min(endTime, prev.getTime())) * prev.getNumResources();
+        units += (endTime - Math.min(endTime,
+                prev.getTime())) * prev.getNumResources();
         return units;
     }
 
@@ -173,8 +191,10 @@ public class DefaultResourcePool extends ResourcePool {
      * @param endTime end time to consider when computing the units
      * @return the number of used resource units
      */
-    public long getNumberUsedUnits(long startTime, long endTime) {
-        Collection<ProfileEntry> avail = profile.getAvailability(startTime, endTime);
+    public long getNumberUsedUnits(final long startTime,
+                                   final long endTime) {
+        Collection<ProfileEntry> avail =
+                profile.getAvailability(startTime, endTime);
         long units = 0;
         Iterator<ProfileEntry> it = avail.iterator();
         ProfileEntry prev = it.next();
@@ -202,40 +222,45 @@ public class DefaultResourcePool extends ResourcePool {
     }
 
     /**
-     * Returns the resource utilisation during a given period
+     * Returns the resource utilisation during a given period.
      * @param startTime the initial time
      * @param endTime the finish time
-     * @return the resource utilisation between <code>0.0</code> and <code>1.0</code>
+     * @return the resource utilisation between
+     * <code>0.0</code> and <code>1.0</code>
      */
-    public double getUtilization(long startTime, long endTime) {
+    public double getUtilization(final long startTime,
+                                 final long endTime) {
         long totalUnits = super.getCapacity() * (endTime - startTime);
         long usedUnits = totalUnits - getNumberFreeUnits(startTime, endTime);
         return ((double) usedUnits) / ((double) totalUnits);
     }
 
     /**
-     * Returns all the changes in resource usage over a specified period
+     * Returns all the changes in resource usage over a specified period.
      * @param startTime the start of the period for the query
      * @param finishTime the end time of the period for the query
      * @return a collection of resource usage entries
      * @see ResourceUsage
      */
-    public Collection<ResourceUsage> getPeakResourceUse(long startTime, long finishTime) {
-        Collection<ProfileEntry> avail = profile.getAvailability(startTime, finishTime);
+    public Collection<ResourceUsage> getPeakResourceUse(final long startTime,
+                                                        final long finishTime) {
+        Collection<ProfileEntry> avail =
+                profile.getAvailability(startTime, finishTime);
         ArrayList<ResourceUsage> usage = new ArrayList<>(avail.size());
 
         for (ProfileEntry e : avail) {
-            usage.add(new ResourceUsage(e.getTime(), super.getCapacity() - e.getNumResources()));
+            usage.add(new ResourceUsage(e.getTime(),
+                    super.getCapacity() - e.getNumResources()));
         }
         return usage;
     }
 
     /**
-     * Computes the number of resource units available in a set of slots
+     * Computes the number of resource units available in a set of slots.
      * @param slots the slot set
      * @return the number of units
      */
-    protected long getResourceUnits(Collection<TimeSlot> slots) {
+    protected long getResourceUnits(final Collection<TimeSlot> slots) {
         long units = 0;
         for (TimeSlot s : slots) {
             units += s.getDuration() * s.getNumResources();
