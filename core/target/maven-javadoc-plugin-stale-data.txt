@@ -1,0 +1,62 @@
+@options
+@packages
+-classpath
+'/home/marcosda/.m2/repository/org/apache/logging/log4j/log4j-api/2.20.0/log4j-api-2.20.0.jar:/home/marcosda/.m2/repository/org/apache/logging/log4j/log4j-core/2.20.0/log4j-core-2.20.0.jar:/home/marcosda/.m2/repository/com/google/guava/guava/32.1.1-jre/guava-32.1.1-jre.jar:/home/marcosda/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/marcosda/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/marcosda/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/marcosda/.m2/repository/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0.jar:/home/marcosda/.m2/repository/com/google/errorprone/error_prone_annotations/2.18.0/error_prone_annotations-2.18.0.jar:/home/marcosda/.m2/repository/com/google/j2objc/j2objc-annotations/2.8/j2objc-annotations-2.8.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/marcosda/Code/eclipse_workspace/servsim-github/core/src/main/java:/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2023. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'me.marcosassuncao.servsim:servsim-core 1.5 API'
+-use
+-version
+-windowtitle
+'me.marcosassuncao.servsim:servsim-core 1.5 API'
+me.marcosassuncao.servsim
+me.marcosassuncao.servsim.server
+me.marcosassuncao.servsim.profile
+me.marcosassuncao.servsim.function
+me.marcosassuncao.servsim.util
+me.marcosassuncao.servsim.scheduler
+me.marcosassuncao.servsim.job
+me.marcosassuncao.servsim.event
+/home/marcosda/.m2/repository/org/apache/logging/log4j/log4j-api/2.20.0/log4j-api-2.20.0.jar = 1688568089511
+/home/marcosda/.m2/repository/org/apache/logging/log4j/log4j-core/2.20.0/log4j-core-2.20.0.jar = 1688563217597
+/home/marcosda/.m2/repository/com/google/guava/guava/32.1.1-jre/guava-32.1.1-jre.jar = 1688560700028
+/home/marcosda/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar = 1686948233707
+/home/marcosda/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar = 1686948233707
+/home/marcosda/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar = 1686948233719
+/home/marcosda/.m2/repository/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0.jar = 1686948233735
+/home/marcosda/.m2/repository/com/google/errorprone/error_prone_annotations/2.18.0/error_prone_annotations-2.18.0.jar = 1686948233727
+/home/marcosda/.m2/repository/com/google/j2objc/j2objc-annotations/2.8/j2objc-annotations-2.8.jar = 1686948233739
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/src/main/java = 1689539142751
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/generated-sources/annotations = 1689543612271
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/index-all.html = 1689545484910
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/jquery-ui.overrides.css = 1689545484918
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/search.js = 1689545484918
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/allpackages-index.html = 1689545484854
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/serialized-form.html = 1689545484698
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/overview-tree.html = 1689545484806
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/module-search-index.js = 1689545484854
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/allclasses-index.html = 1689545484854
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/element-list = 1689545484650
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/stylesheet.css = 1689545484918
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/index.html = 1689545484810
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/help-doc.html = 1689545484914
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/member-search-index.js = 1689545484858
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/type-search-index.js = 1689545484858
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/constant-values.html = 1689545484686
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/script.js = 1689545484918
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/tag-search-index.js = 1689545484858
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/overview-summary.html = 1689545484914
+/home/marcosda/Code/eclipse_workspace/servsim-github/core/target/apidocs/package-search-index.js = 1689545484858

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"me.marcosassuncao.servsim.examples","l":"PingExample"},{"p":"me.marcosassuncao.servsim.examples","l":"ServerExample"}];updateSearchResults();
