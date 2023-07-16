@@ -1,4 +1,6 @@
 *.class
+core/target/*
+examples/target/*
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
