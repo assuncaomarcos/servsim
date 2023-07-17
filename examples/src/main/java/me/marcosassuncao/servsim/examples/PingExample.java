@@ -14,7 +14,7 @@ import me.marcosassuncao.servsim.Simulation;
  */
 public class PingExample {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         Simulation sim = new Simulation() {
             @Override
             public void onConfigure() {
@@ -32,7 +32,9 @@ public class PingExample {
     }
 }
 
-// Simple entity that received a task and returns it to sender
+/**
+ * Simple entity that receives a task and returns it to sender.
+ */
 class PongEntity extends SimEntity {
 
     PongEntity(final String name) throws IllegalArgumentException {
@@ -56,11 +58,19 @@ class PongEntity extends SimEntity {
     public void onShutdown() { }
 }
 
-// Simple entity that sends a task to another
+/**
+  * Simple entity that sends tasks to another entity.
+  */
 class PingEntity extends PongEntity {
-    private int dstEntity;
-    private long interval;
-    private int numberPing;
+
+    /** ID of the destination entity. */
+    private final int dstEntity;
+
+    /** Time interval between messages/events. */
+    private final long interval;
+
+    /** Number of messages to send. */
+    private final int numberPing;
 
     PingEntity(final String name, final int dstEntity,
                final long interval, final int numberPing)
